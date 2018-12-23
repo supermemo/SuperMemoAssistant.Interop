@@ -1,5 +1,4 @@
 ﻿#region License & Metadata
-
 // The MIT License (MIT)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -21,48 +20,16 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/06/01 15:25
-// Modified On:  2018/12/21 02:21
+// Created On:   2018/12/21 15:18
+// Modified On:  2018/12/21 15:18
 // Modified By:  Alexis
-
 #endregion
 
-
-
-
-using FlaUI.UIA3;
-using SuperMemoAssistant.Interop.Plugins;
-using SuperMemoAssistant.Interop.SuperMemo;
-using SuperMemoAssistant.Services.Configuration;
-using SuperMemoAssistant.Services.IO.Devices;
-using SuperMemoAssistant.Services.IO.FS;
-// ReSharper disable StaticMemberInGenericType
-// ReSharper disable UnusedTypeParameter
-
-namespace SuperMemoAssistant.Services
+namespace SuperMemoAssistant.Interop
 {
-  public static class Svc
+  public enum InjectLibMessages
   {
-    #region Constants & Statics
-
-    public static UIA3Automation UIAutomation { get; } = new UIA3Automation();
-
-    public static ISuperMemoAssistant SMA { get; set; }
-
-    #endregion
-  }
-
-  public static class Svc<T>
-  {
-    #region Constants & Statics
-
-    public static IKeyboardHotKeyService    KeyboardHotKeyLegacy { get; set; }
-    public static IKeyboardHookService      KeyboardHotKey       { get; set; }
-    public static PluginCollectionFSService CollectionFS         { get; set; }
-    public static ConfigurationService      Configuration        { get; set; }
-
-    public static ISMAPlugin PluginContext { get; set; }
-
-    #endregion
+    ExecuteOnMainThread = 9100101,
+    AttachDebugger = 9100199,
   }
 }
