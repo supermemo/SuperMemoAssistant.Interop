@@ -31,10 +31,11 @@
 
 
 using SuperMemoAssistant.Interop.SuperMemo.Components.Models;
+
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnassignedGetOnlyAutoProperty
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Components
+namespace SuperMemoAssistant.Interop.SuperMemo.Components.Builders
 {
   public abstract class ComponentBuilder
   {
