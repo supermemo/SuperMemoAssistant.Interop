@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/12/21 02:18
-// Modified On:  2018/12/31 00:43
+// Created On:   2018/12/30 14:34
+// Modified On:  2018/12/30 14:36
 // Modified By:  Alexis
 
 #endregion
@@ -31,17 +31,19 @@
 
 
 using System;
-using SuperMemoAssistant.Sys.IO.Devices;
+using Sentry;
 
-namespace SuperMemoAssistant.Services.IO.Devices
+namespace SuperMemoAssistant.Services
 {
-  public interface IKeyboardHookService
+  public static class Sentry
   {
-    event EventHandler<KeyboardHookEventArgs> KeyboardPressed;
+    #region Methods
 
-    void RegisterHotKey(HotKey hotkey,
-                        Action callback);
+    public static IDisposable Initialize()
+    {
+      return SentrySdk.Init("https://a63c3dad9552434598dae869d2026696@sentry.io/1362046");
+    }
 
-    bool UnregisterHotKey(HotKey hotkey);
+    #endregion
   }
 }
