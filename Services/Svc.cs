@@ -22,7 +22,7 @@
 // 
 // 
 // Created On:   2018/06/01 15:25
-// Modified On:  2018/12/30 15:48
+// Modified On:  2019/01/04 21:21
 // Modified By:  Alexis
 
 #endregion
@@ -31,6 +31,7 @@
 
 
 using FlaUI.UIA3;
+using Process.NET;
 using SuperMemoAssistant.Interop.Plugins;
 using SuperMemoAssistant.Interop.SuperMemo;
 using SuperMemoAssistant.Services.Configuration;
@@ -47,9 +48,10 @@ namespace SuperMemoAssistant.Services
     #region Constants & Statics
 
     public static ISuperMemoAssistant SMA { get; set; }
+    public static IProcess            SM => SMA.SMProcess;
 
     public static UIA3Automation UIAutomation { get; } = new UIA3Automation();
-    
+
     public static IKeyboardHotKeyService KeyboardHotKeyLegacy { get; set; }
     public static IKeyboardHookService   KeyboardHotKey       { get; set; }
 
