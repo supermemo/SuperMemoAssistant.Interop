@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/07/27 12:55
-// Modified On:  2018/12/09 17:30
+// Created On:   2019/01/12 19:00
+// Modified On:  2019/01/12 19:01
 // Modified By:  Alexis
 
 #endregion
@@ -30,14 +30,20 @@
 
 
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
+namespace SuperMemoAssistant.Interop.SuperMemo.Learning
 {
-  public enum ElementType
+  public enum LearningMode
   {
-    Topic        = 0,
-    Item         = 1,
-    Task         = 2,
-    Template     = 3,
-    ConceptGroup = 4,
+    None         = 0,
+    Standard     = 1,
+    Forced       = 2,
+    Neural       = 3,
+    Subset       = 4,
+    ForceSubset  = 5,
+    ForceTopics  = 6,
+    RandomTest   = 7,
+    DesignerTest = 8,
+    Pending      = 9,
+    Drill        = 10,
   }
 }

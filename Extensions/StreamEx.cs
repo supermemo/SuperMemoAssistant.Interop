@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/07/27 12:55
-// Modified On:  2018/12/09 17:30
+// Created On:   2019/01/14 19:52
+// Modified On:  2019/01/14 19:57
 // Modified By:  Alexis
 
 #endregion
@@ -30,14 +30,30 @@
 
 
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
+using System;
+using System.IO;
+
+namespace SuperMemoAssistant.Extensions
 {
-  public enum ElementType
+  public static class StreamEx
   {
-    Topic        = 0,
-    Item         = 1,
-    Task         = 2,
-    Template     = 3,
-    ConceptGroup = 4,
+    #region Methods
+
+    public static string ToBase64(this Stream stream,
+                                  long        seekOffset = 0,
+                                  SeekOrigin  seekOrigin = SeekOrigin.Begin)
+    {
+      using (var ms = new MemoryStream((int)stream.Length))
+      {
+        stream.CopyTo(ms);
+
+        ms.Seek(seekOffset,
+                seekOrigin);
+
+        return Convert.ToBase64String(ms.ToArray());
+      }
+    }
+
+    #endregion
   }
 }

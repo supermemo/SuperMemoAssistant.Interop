@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/07/27 12:55
-// Modified On:  2018/12/09 17:30
+// Created On:   2018/12/26 16:56
+// Modified On:  2018/12/26 16:59
 // Modified By:  Alexis
 
 #endregion
@@ -30,14 +30,28 @@
 
 
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+
+namespace SuperMemoAssistant.Extensions
 {
-  public enum ElementType
+  public static class ImageEx
   {
-    Topic        = 0,
-    Item         = 1,
-    Task         = 2,
-    Template     = 3,
-    ConceptGroup = 4,
+    #region Methods
+
+    public static string GetBase64(this Image  image,
+                                   ImageFormat format)
+    {
+      using (MemoryStream ms = new MemoryStream())
+      {
+        image.Save(ms,
+                   format);
+        return Convert.ToBase64String(ms.ToArray());
+      }
+    }
+
+    #endregion
   }
 }

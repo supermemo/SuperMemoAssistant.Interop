@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/07/27 12:55
-// Modified On:  2018/12/09 17:30
+// Created On:   2019/01/13 20:48
+// Modified On:  2019/01/13 20:48
 // Modified By:  Alexis
 
 #endregion
@@ -30,14 +30,17 @@
 
 
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
+namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
 {
-  public enum ElementType
+  public enum DisplayState
   {
-    Topic        = 0,
-    Item         = 1,
-    Task         = 2,
-    Template     = 3,
-    ConceptGroup = 4,
+    Edit           = 0,
+    Drag           = 1,
+    Display        = 2,
+    Unused1        = 3,
+    Unused2        = 4,
+    Question       = 5,
+    Grading        = 6,
+    NextRepetition = 7
   }
 }
