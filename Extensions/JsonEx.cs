@@ -1,4 +1,4 @@
-﻿#region License & Metadata
+#region License & Metadata
 
 // The MIT License (MIT)
 // 
@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/05/31 13:45
-// Modified On:  2019/01/21 14:41
+// Created On:   2019/01/21 14:42
+// Modified On:  2019/01/21 14:44
 // Modified By:  Alexis
 
 #endregion
@@ -30,29 +30,42 @@
 
 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using SuperMemoAssistant.Sys.IO;
 
 namespace SuperMemoAssistant.Extensions
 {
-  public static class ObjectEx
+  public static class JsonEx
   {
     #region Methods
 
-    public static T With<T>(this T    obj,
-                            Action<T> withAction)
+    public static string Serialize(this object obj,
+                                   Formatting  format = Formatting.None)
     {
-      withAction(obj);
-
-      return obj;
+      return JsonConvert.SerializeObject(obj, format);
     }
 
-    public static bool ContainedIn<T1, T2>(this T1         obj,
-                                           IEnumerable<T2> col)
-      where T2 : T1
+    public static T Deserialize<T>(string json)
     {
-      return col.Any(e => e?.Equals(obj) ?? false);
+      return JsonConvert.DeserializeObject<T>(json);
+    }
+
+    public static async Task SerializeToFileAsync(this object obj,
+                                             FilePath    filePath,
+                                             Formatting  format = Formatting.None)
+    {
+      using (var fs = File.Open(filePath.FullPath, FileMode.Create, FileAccess.Write))
+      using (var writer = new StreamWriter(fs))
+        await writer.WriteAsync(obj.Serialize(format));
+    }
+
+    public static async Task<T> DeserializeFromFileAsync<T>(FilePath filePath)
+    {
+      using (var fs = File.Open(filePath.FullPath, FileMode.Open, FileAccess.Read))
+      using (var reader = new StreamReader(fs))
+        return Deserialize<T>(await reader.ReadToEndAsync());
     }
 
     #endregion

@@ -1,4 +1,5 @@
 ﻿#region License & Metadata
+
 // The MIT License (MIT)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -20,28 +21,45 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/06/01 02:18
-// Modified On:  2018/06/01 02:18
+// Created On:   2019/01/20 08:36
+// Modified On:  2019/01/20 08:36
 // Modified By:  Alexis
+
 #endregion
 
 
 
 
-using LiteDB;
-using SuperMemoAssistant.Interop;
-using SuperMemoAssistant.Interop.Plugins;
-using SuperMemoAssistant.Interop.SuperMemo.Core;
+using System;
 
-namespace SuperMemoAssistant.Services.IO.FS
+namespace SuperMemoAssistant.Sys
 {
-  public static class DatabaseUtils
+  /// <summary>
+  ///   A disposable class that does nothing. Original from: https://github.com/Wyamio/Wyam/
+  ///   Copyright (c) 2014 Dave Glick
+  /// </summary>
+  public class EmptyDisposable : IDisposable
   {
-    public static LiteDatabase OpenDatabase(SMCollection collection, ISMAPlugin plugin)
-    {
-      var dbPath = collection.GetSMAPluginsFilePath(plugin, SMAConst.Files.CollectionPluginDatabaseFileName);
+    #region Constants & Statics
 
-      return new LiteDatabase(dbPath);
+#pragma warning disable SA1401 // Fields must be private
+    /// <summary>A singleton instance of the <see cref="EmptyDisposable" />.</summary>
+    public static readonly EmptyDisposable Instance = new EmptyDisposable();
+#pragma warning restore SA1401 // Fields must be private
+
+    #endregion
+
+
+
+
+    #region Constructors
+
+    /// <summary>Does nothing.</summary>
+    public void Dispose()
+    {
+      // Do nothing
     }
+
+    #endregion
   }
 }

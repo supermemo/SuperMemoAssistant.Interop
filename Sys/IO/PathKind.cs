@@ -20,9 +20,11 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 // 
+// https://github.com/Wyamio/Wyam/
+// Copyright (c) 2014 Dave Glick
 // 
-// Created On:   2018/12/30 14:34
-// Modified On:  2018/12/30 14:36
+// Created On:   2019/01/20 08:10
+// Modified On:  2019/01/20 08:12
 // Modified By:  Alexis
 
 #endregion
@@ -30,45 +32,18 @@
 
 
 
-using System;
-using DeviceId;
-using Sentry;
-using Sentry.Protocol;
-
-namespace SuperMemoAssistant.Services
+namespace SuperMemoAssistant.Sys.IO
 {
-  public static class Sentry
+  /// <summary>The kind of the path.</summary>
+  public enum PathKind
   {
-    public const string Id = "https://a63c3dad9552434598dae869d2026696@sentry.io/1362046";
-    #region Methods
+    /// <summary>The path is absolute.</summary>
+    Absolute,
 
-    public static IDisposable Initialize()
-    {
-      var ret = SentrySdk.Init(Id);
+    /// <summary>The path is relative.</summary>
+    Relative,
 
-      SentrySdk.ConfigureScope(s =>
-        {
-          s.User = new User
-          {
-            Username = System.Security.Principal.WindowsIdentity.GetCurrent().Name,
-            Id       = GetSystemFingerprint()
-          };
-        }
-      );
-
-      return ret;
-    }
-
-    private static string GetSystemFingerprint()
-    {
-      return new DeviceIdBuilder()
-             .AddMachineName()
-             .AddMacAddress()
-             .AddProcessorId()
-             .AddMotherboardSerialNumber()
-             .ToString();
-    }
-
-    #endregion
+    /// <summary>The path can be either relative or absolute.</summary>
+    RelativeOrAbsolute
   }
 }
