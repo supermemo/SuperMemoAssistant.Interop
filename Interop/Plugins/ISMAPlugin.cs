@@ -22,7 +22,7 @@
 // 
 // 
 // Created On:   2018/07/27 12:55
-// Modified On:  2019/01/01 14:31
+// Modified On:  2019/01/26 04:31
 // Modified By:  Alexis
 
 #endregion
@@ -38,10 +38,12 @@ namespace SuperMemoAssistant.Interop.Plugins
 {
   public interface ISMAPlugin : IDisposable
   {
-    Guid                           Id             { get; }
-    string                         Name           { get; }
-    string                         Version        { get; }
+    Guid   Id              { get; }
+    string Name            { get; }
+    string AssemblyName    { get; }
+    string AssemblyVersion { get; }
+
     List<INotifyPropertyChangedEx> SettingsModels { get; }
-    void SettingsSaved(object cfgObject);
+    void                           SettingsSaved(object cfgObject);
   }
 }
