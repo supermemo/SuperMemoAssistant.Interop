@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/01/20 08:10
-// Modified On:  2019/01/26 01:16
+// Created On:   2019/02/22 14:27
+// Modified On:  2019/02/22 14:28
 // Modified By:  Alexis
 
 #endregion
@@ -30,19 +30,25 @@
 
 
 
-namespace SuperMemoAssistant.Sys.IO
+using System;
+
+namespace SuperMemoAssistant.Sys
 {
-  /// <summary>The kind of the path.</summary>
-  /// https://github.com/Wyamio/Wyam/ Copyright (c) 2014 Dave Glick
-  public enum PathKind
+  [AttributeUsage(AttributeTargets.Assembly)]
+  public class ForceAssemblyReference : Attribute
   {
-    /// <summary>The path is absolute.</summary>
-    Absolute,
+    #region Constructors
 
-    /// <summary>The path is relative.</summary>
-    Relative,
+    public ForceAssemblyReference(Type forcedType)
+    {
+      void Noop(Type t)
+      {
+        System.Console.WriteLine(t.Name);
+      }
 
-    /// <summary>The path can be either relative or absolute.</summary>
-    RelativeOrAbsolute
+      Noop(forcedType);
+    }
+
+    #endregion
   }
 }
