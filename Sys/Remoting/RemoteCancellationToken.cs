@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/01/18 13:25
-// Modified On:  2019/01/18 20:51
+// Created On:   2019/02/23 02:19
+// Modified On:  2019/02/23 14:39
 // Modified By:  Alexis
 
 #endregion
@@ -31,31 +31,48 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Windows;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Contents;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Layout.XamlControls;
+using System.Threading;
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Content.Layout.XamlLayouts
+namespace SuperMemoAssistant.Sys.Remoting
 {
-  [Serializable]
-  public class XamlLayout
+  public static class RemoteCancellationTokenEx
   {
-    #region Properties & Fields - Public
+    #region Methods
 
-    public string          Name            { get; set; }
-    public ContentTypeFlag AcceptedContent { get; set; }
-    public string          Xaml            { get; set; }
-    public bool            IsDefault       { get; set; }
+    public static CancellationToken Token(this RemoteCancellationToken remoteCancellationToken)
+    {
+      CancellationTokenSource tokenSrc = new CancellationTokenSource();
+
+      remoteCancellationToken.Register(new ActionProxy(() => tokenSrc.Cancel()));
+
+      return tokenSrc.Token;
+    }
+
+    #endregion
+  }
+
+  public class RemoteCancellationToken : MarshalByRefObject
+  {
+    #region Properties & Fields - Non-Public
+
+    // ReSharper disable once NotAccessedField.Local
+    private readonly CancellationToken _token;
+    private          ActionProxy       _cancelledCallback;
 
     #endregion
 
 
 
 
-    #region Methods Impl
+    #region Constructors
 
-    public override string ToString() => Xaml;
+    /// <inheritdoc />
+    public RemoteCancellationToken(CancellationToken token)
+    {
+      _token = token;
+
+      token.Register(OnCancelled);
+    }
 
     #endregion
 
@@ -64,25 +81,14 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Content.Layout.XamlLayouts
 
     #region Methods
 
-    public string Build(List<ContentBase> contents)
+    private void OnCancelled()
     {
-      return Application.Current.Dispatcher.Invoke<string>(
-        () =>
-        {
-          var ctrlGroup = new XamlControlGroup();
+      _cancelledCallback?.Invoke();
+    }
 
-          try
-          {
-            ctrlGroup.LoadXaml(Xaml);
-
-            return ctrlGroup.ToString(contents);
-          }
-          finally
-          {
-            ctrlGroup.Unload();
-          }
-        }
-      );
+    public void Register(ActionProxy cancelledCallback)
+    {
+      _cancelledCallback = cancelledCallback;
     }
 
     #endregion

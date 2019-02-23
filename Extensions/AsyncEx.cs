@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/01/18 13:25
-// Modified On:  2019/01/18 20:51
+// Created On:   2019/01/26 03:40
+// Modified On:  2019/01/26 03:41
 // Modified By:  Alexis
 
 #endregion
@@ -31,58 +31,25 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Windows;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Contents;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Layout.XamlControls;
+using System.Threading.Tasks;
+using Nito.AsyncEx;
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Content.Layout.XamlLayouts
+namespace SuperMemoAssistant.Extensions
 {
-  [Serializable]
-  public class XamlLayout
+  public static class AsyncEx
   {
-    #region Properties & Fields - Public
-
-    public string          Name            { get; set; }
-    public ContentTypeFlag AcceptedContent { get; set; }
-    public string          Xaml            { get; set; }
-    public bool            IsDefault       { get; set; }
-
-    #endregion
-
-
-
-
-    #region Methods Impl
-
-    public override string ToString() => Xaml;
-
-    #endregion
-
-
-
-
     #region Methods
 
-    public string Build(List<ContentBase> contents)
+    public static async Task<bool> WaitAsync(this AsyncManualResetEvent waitHandle,
+                                             int                        timeoutMs)
     {
-      return Application.Current.Dispatcher.Invoke<string>(
-        () =>
-        {
-          var ctrlGroup = new XamlControlGroup();
+      if (waitHandle == null)
+        throw new ArgumentNullException(nameof(waitHandle));
 
-          try
-          {
-            ctrlGroup.LoadXaml(Xaml);
+      Task waitTask      = waitHandle.WaitAsync();
+      Task completedTask = await Task.WhenAny(Task.Delay(timeoutMs), waitHandle.WaitAsync());
 
-            return ctrlGroup.ToString(contents);
-          }
-          finally
-          {
-            ctrlGroup.Unload();
-          }
-        }
-      );
+      return completedTask == waitTask;
     }
 
     #endregion

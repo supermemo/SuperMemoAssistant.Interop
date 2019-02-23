@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/06/07 01:50
-// Modified On:  2019/01/18 20:48
+// Created On:   2019/02/23 13:50
+// Modified On:  2019/02/23 14:39
 // Modified By:  Alexis
 
 #endregion
@@ -31,14 +31,15 @@
 
 
 using System;
+using System.Threading;
 
-namespace SuperMemoAssistant.Sys
+namespace SuperMemoAssistant.Sys.Remoting
 {
-  public class ActionProxy<T> : SMMarshalByRefObject
+  public class RemoteCancellationTokenSource : IDisposable
   {
     #region Properties & Fields - Non-Public
 
-    private readonly Action<T> _action;
+    private readonly CancellationTokenSource _tokenSrc;
 
     #endregion
 
@@ -47,10 +48,28 @@ namespace SuperMemoAssistant.Sys
 
     #region Constructors
 
-    public ActionProxy(Action<T> action)
+    public RemoteCancellationTokenSource()
     {
-      _action = action;
+      _tokenSrc = new CancellationTokenSource();
+
+      Token = new RemoteCancellationToken(_tokenSrc.Token);
     }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+      _tokenSrc?.Dispose();
+    }
+
+    #endregion
+
+
+
+
+    #region Properties & Fields - Public
+
+    public bool                    IsCancellationRequested => _tokenSrc.IsCancellationRequested;
+    public RemoteCancellationToken Token                   { get; }
 
     #endregion
 
@@ -59,14 +78,24 @@ namespace SuperMemoAssistant.Sys
 
     #region Methods
 
-    public void Invoke(T args)
+    public static implicit operator CancellationTokenSource(RemoteCancellationTokenSource remoteTokenSrc)
     {
-      _action(args);
+      return remoteTokenSrc._tokenSrc;
     }
 
-    public static implicit operator Action<T>(ActionProxy<T> aProxy)
+    public void Cancel()
     {
-      return aProxy.Invoke;
+      _tokenSrc.Cancel();
+    }
+
+    public void CancelAfter(int millisecondDelay)
+    {
+      _tokenSrc.CancelAfter(millisecondDelay);
+    }
+
+    public void CancelAfter(TimeSpan delay)
+    {
+      _tokenSrc.CancelAfter(delay);
     }
 
     #endregion
