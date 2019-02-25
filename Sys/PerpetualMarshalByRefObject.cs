@@ -34,7 +34,7 @@ using System;
 
 namespace SuperMemoAssistant.Sys
 {
-  public abstract class SMMarshalByRefObject : MarshalByRefObject
+  public abstract class PerpetualMarshalByRefObject : MarshalByRefObject
   {
     #region Methods Impl
 

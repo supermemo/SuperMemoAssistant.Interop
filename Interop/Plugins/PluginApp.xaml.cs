@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/02/13 13:55
-// Modified On:  2019/02/25 06:46
+// Created On:   2019/02/23 16:51
+// Modified On:  2019/02/23 16:52
 // Modified By:  Alexis
 
 #endregion
@@ -30,21 +30,20 @@
 
 
 
-using System;
+using System.Windows;
 
 namespace SuperMemoAssistant.Interop.Plugins
 {
-  public interface ISMAPlugin : IDisposable
+  /// <summary>Interaction logic for App.xaml</summary>
+  public partial class PluginApp : Application
   {
-    string Name            { get; }
-    string AssemblyName    { get; }
-    string AssemblyVersion { get; }
-    string ChannelName     { get; }
-    bool   HasSettings     { get; }
+    #region Constructors
 
-    void OnInjected();
-    void OnServicePublished(string interfaceTypeName);
-    void OnServiceRevoked(string   interfaceTypeName);
-    void OnShowSettings();
+    public PluginApp()
+    {
+      ShutdownMode = ShutdownMode.OnExplicitShutdown;
+    }
+
+    #endregion
   }
 }
