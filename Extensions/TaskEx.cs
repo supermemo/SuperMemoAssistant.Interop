@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/01/18 13:25
-// Modified On:  2019/01/18 20:51
+// Created On:   2019/02/25 23:58
+// Modified On:  2019/02/25 23:59
 // Modified By:  Alexis
 
 #endregion
@@ -31,58 +31,27 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Windows;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Contents;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Layout.XamlControls;
+using System.Threading.Tasks;
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Content.Layout.XamlLayouts
+namespace SuperMemoAssistant.Extensions
 {
-  [Serializable]
-  public class XamlLayout
+  public static class TaskEx
   {
-    #region Properties & Fields - Public
-
-    public string          Name            { get; set; }
-    public ContentTypeFlag AcceptedContent { get; set; }
-    public string          Xaml            { get; set; }
-    public bool            IsDefault       { get; set; }
-
-    #endregion
-
-
-
-
-    #region Methods Impl
-
-    public override string ToString() => Xaml;
-
-    #endregion
-
-
-
-
     #region Methods
 
-    public string Build(List<ContentBase> contents)
+#pragma warning disable RECS0165 // Asynchronous methods should return a Task instead of void
+    public static async void RunAsync(this Task         task,
+                                                    Action<Exception> handler = null)
+#pragma warning restore RECS0165 // Asynchronous methods should return a Task instead of void
     {
-      return Application.Current.Dispatcher.Invoke<string>(
-        () =>
-        {
-          var ctrlGroup = new XamlControlGroup();
-
-          try
-          {
-            ctrlGroup.LoadXaml(Xaml);
-
-            return ctrlGroup.ToString(contents);
-          }
-          finally
-          {
-            ctrlGroup.Unload();
-          }
-        }
-      );
+      try
+      {
+        await task;
+      }
+      catch (Exception ex)
+      {
+        handler?.Invoke(ex);
+      }
     }
 
     #endregion

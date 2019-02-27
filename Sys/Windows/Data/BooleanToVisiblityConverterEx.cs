@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/02/13 13:55
-// Modified On:  2019/02/25 06:46
+// Created On:   2019/02/26 02:03
+// Modified On:  2019/02/27 13:15
 // Modified By:  Alexis
 
 #endregion
@@ -31,20 +31,37 @@
 
 
 using System;
+using System.Windows.Data;
 
-namespace SuperMemoAssistant.Interop.Plugins
+namespace SuperMemoAssistant.Sys.Windows.Data
 {
-  public interface ISMAPlugin : IDisposable
+  [ValueConversion(typeof(bool), typeof(bool))]
+  public class BooleanToVisiblityConverterEx : IValueConverter
   {
-    string Name            { get; }
-    string AssemblyName    { get; }
-    string AssemblyVersion { get; }
-    string ChannelName     { get; }
-    bool   HasSettings     { get; }
+    #region IValueConverter Members
 
-    void OnInjected();
-    void OnServicePublished(string interfaceTypeName);
-    void OnServiceRevoked(string   interfaceTypeName);
-    void ShowSettings();
+    public object Convert(object                           value,
+                          Type                             targetType,
+                          object                           parameter,
+                          System.Globalization.CultureInfo culture)
+    {
+      if (!(value is bool show))
+        throw new InvalidOperationException("Value must be of type bool");
+
+      if (!(parameter is bool negate))
+        negate = false;
+
+      return negate ? !show : show;
+    }
+
+    public object ConvertBack(object                           value,
+                              Type                             targetType,
+                              object                           parameter,
+                              System.Globalization.CultureInfo culture)
+    {
+      throw new NotSupportedException();
+    }
+
+    #endregion
   }
 }

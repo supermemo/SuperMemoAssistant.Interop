@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/01/01 18:04
-// Modified On:  2019/01/01 18:21
+// Created On:   2019/02/25 23:40
+// Modified On:  2019/02/25 23:40
 // Modified By:  Alexis
 
 #endregion
@@ -33,48 +33,12 @@
 using System;
 using System.Globalization;
 using System.Windows.Data;
-using SuperMemoAssistant.Interop.SuperMemo.Elements.Models;
 
-namespace SuperMemoAssistant.UI.Converters
+namespace SuperMemoAssistant.Sys.Windows.Data
 {
-  public class ElementIconConverter : IValueConverter
+  public abstract class OneWayValueConverter : IValueConverter
   {
-    #region Constants & Statics
-
-    private const string BasePath = "pack://application:,,,/SuperMemoAssistant.Interop;component/Resources/";
-
-    #endregion
-
-
-
-
     #region Methods Impl
-
-    /// <inheritdoc />
-    public object Convert(object      value,
-                          Type        targetType,
-                          object      parameter,
-                          CultureInfo culture)
-    {
-      if (value is ElementType == false)
-        return string.Empty;
-
-      var type = (ElementType)value;
-
-      switch (type)
-      {
-        case ElementType.Topic:
-          return BasePath + "topic_icon.jpg";
-
-        case ElementType.Item:
-          return BasePath + "item_icon.jpg";
-
-        case ElementType.ConceptGroup:
-          return BasePath + "concept_icon.jpg";
-      }
-
-      return string.Empty;
-    }
 
     /// <inheritdoc />
     public object ConvertBack(object      value,
@@ -84,6 +48,19 @@ namespace SuperMemoAssistant.UI.Converters
     {
       throw new NotImplementedException();
     }
+
+    #endregion
+
+
+
+
+    #region Methods Abs
+
+    /// <inheritdoc />
+    public abstract object Convert(object      value,
+                                   Type        targetType,
+                                   object      parameter,
+                                   CultureInfo culture);
 
     #endregion
   }

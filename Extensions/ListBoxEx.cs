@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/01/18 00:09
-// Modified On:  2019/01/18 20:51
+// Created On:   2019/02/27 15:05
+// Modified On:  2019/02/27 15:05
 // Modified By:  Alexis
 
 #endregion
@@ -30,57 +30,31 @@
 
 
 
-using System.Collections.Generic;
-using Resourcer;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Layout.XamlLayouts;
+using System.Windows.Controls;
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Content.Layout
+namespace SuperMemoAssistant.Extensions
 {
-  public class LayoutManager
+  public static class ListBoxEx
   {
-    #region Constants & Statics
-
-    public static LayoutManager Instance { get; } = new LayoutManager();
-
-    public static XamlLayout Generic => Instance.Layouts["Generic"];
-
-    #endregion
-
-
-
-
-    #region Properties & Fields - Non-Public
-
-    private Dictionary<string, XamlLayout> Layouts { get; } = new Dictionary<string, XamlLayout>();
-
-    #endregion
-
-
-
-
-    #region Constructors
-
-    private LayoutManager()
-    {
-      LoadDefaultLayouts();
-    }
-
-    #endregion
-
-
-
-
     #region Methods
 
-    private void LoadDefaultLayouts()
+    public static void SelectFirstItem(this ListBox lb)
     {
-      Layouts["Generic"] = new XamlLayout
+      if (lb.HasItems)
       {
-        Name            = "Generic",
-        AcceptedContent = Contents.ContentTypeFlag.TextAndMedia,
-        Xaml            = Resource.AsString("XamlLayouts.GenericLayout.xaml"),
-        IsDefault       = true,
-      };
+        var item = lb.ItemContainerGenerator.ContainerFromIndex(0);
+
+        if (item == null)
+        {
+          lb.UpdateLayout();
+          lb.ScrollIntoView(lb.Items[0]);
+        }
+        
+        item = lb.ItemContainerGenerator.ContainerFromIndex(0);
+
+        if (item is ListBoxItem lbi)
+          lbi.Focus();
+      }
     }
 
     #endregion

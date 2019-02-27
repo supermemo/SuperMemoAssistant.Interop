@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/02/25 16:57
-// Modified On:  2019/02/25 16:57
+// Created On:   2019/02/25 23:56
+// Modified On:  2019/02/26 02:49
 // Modified By:  Alexis
 
 #endregion
@@ -33,31 +33,19 @@
 using System;
 using System.Windows.Input;
 
-namespace SuperMemoAssistant.Sys.Windows
+namespace SuperMemoAssistant.Sys.Windows.Input
 {
   public class RelayCommand<T> : ICommand
   {
     #region Constructors
 
-    /// <summary>Initializes a new instance of <see cref="RelayCommand{T}" />.</summary>
-    /// <param name="execute">
-    ///   Delegate to execute when Execute is called on the command.  This can be
-    ///   null to just hook up a CanExecute delegate.
-    /// </param>
-    /// <remarks><seealso cref="CanExecute" /> will always return true.</remarks>
-    public RelayCommand(Action<T> execute)
-      : this(execute, null) { }
-
     /// <summary>Creates a new command.</summary>
     /// <param name="execute">The execution logic.</param>
     /// <param name="canExecute">The execution status logic.</param>
     public RelayCommand(Action<T>    execute,
-                        Predicate<T> canExecute)
+                        Predicate<T> canExecute = null)
     {
-      if (execute == null)
-        throw new ArgumentNullException("execute");
-
-      _execute    = execute;
+      _execute    = execute ?? throw new ArgumentNullException(nameof(execute));
       _canExecute = canExecute;
     }
 
@@ -89,14 +77,14 @@ namespace SuperMemoAssistant.Sys.Windows
     /// <returns>true if this command can be executed; otherwise, false.</returns>
     public bool CanExecute(object parameter)
     {
-      return _canExecute == null ? true : _canExecute((T)parameter);
+      return parameter != null && (_canExecute?.Invoke((T)parameter) ?? true);
     }
 
     /// <summary>Occurs when changes occur that affect whether or not the command should execute.</summary>
     public event EventHandler CanExecuteChanged
     {
-      add { CommandManager.RequerySuggested    += value; }
-      remove { CommandManager.RequerySuggested -= value; }
+      add => CommandManager.RequerySuggested += value;
+      remove => CommandManager.RequerySuggested -= value;
     }
 
     /// <summary>Defines the method to be called when the command is invoked.</summary>
