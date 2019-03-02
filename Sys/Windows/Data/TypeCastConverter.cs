@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/12/21 02:18
-// Modified On:  2018/12/31 00:43
+// Created On:   2019/03/01 15:33
+// Modified On:  2019/03/01 15:35
 // Modified By:  Alexis
 
 #endregion
@@ -31,17 +31,23 @@
 
 
 using System;
-using SuperMemoAssistant.Sys.IO.Devices;
+using System.Globalization;
 
-namespace SuperMemoAssistant.Services.IO.Devices
+namespace SuperMemoAssistant.Sys.Windows.Data
 {
-  public interface IKeyboardHookService
+  public class TypeCastConverter : OneWayValueConverter
   {
-    event EventHandler<KeyboardHookEventArgs> KeyboardPressed;
+    #region Methods Impl
 
-    void RegisterHotKey(HotKey hotkey,
-                        Action callback);
+    /// <inheritdoc />
+    public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+      if (!(parameter is Type castType))
+        throw new ArgumentException($"{nameof(parameter)} must be of type Type");
 
-    bool UnregisterHotKey(HotKey hotkey);
+      return System.Convert.ChangeType(value, castType);
+    }
+
+    #endregion
   }
 }

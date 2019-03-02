@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/02/22 13:14
-// Modified On:  2019/02/22 13:14
+// Created On:   2018/05/31 10:44
+// Modified On:  2018/05/31 10:45
 // Modified By:  Alexis
 
 #endregion
@@ -30,45 +30,14 @@
 
 
 
-using System.ComponentModel;
+using System;
+using SuperMemoAssistant.Sys.IO.Devices;
 
-namespace SuperMemoAssistant.Services.IO.Devices
+namespace SuperMemoAssistant.Services.IO.Keyboard
 {
-  public class KeyboardHookEventArgs : HandledEventArgs
+  public interface IKeyboardHotKeyService
   {
-    #region Constructors
-
-    public KeyboardHookEventArgs(
-      LowLevelKeyboardInputEvent keyboardData,
-      KeyboardState              keyboardState,
-      bool                       ctrl,
-      bool                       alt,
-      bool                       shift,
-      bool                       meta)
-    {
-      KeyboardData  = keyboardData;
-      KeyboardState = keyboardState;
-      Ctrl          = ctrl;
-      Alt           = alt;
-      Shift         = shift;
-      Meta          = meta;
-    }
-
-    #endregion
-
-
-
-
-    #region Properties & Fields - Public
-
-    public KeyboardState              KeyboardState { get; private set; }
-    public LowLevelKeyboardInputEvent KeyboardData  { get; private set; }
-
-    public bool Alt   { get; }
-    public bool Ctrl  { get; }
-    public bool Shift { get; }
-    public bool Meta  { get; }
-
-    #endregion
+    (bool success, HotKey usedBy) RegisterHotKey(HotKey   hotKey, Action callback);
+    bool                          UnregisterHotKey(HotKey hotKey);
   }
 }

@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/06/01 14:25
-// Modified On:  2019/02/27 22:31
+// Created On:   2019/02/22 13:14
+// Modified On:  2019/02/22 13:14
 // Modified By:  Alexis
 
 #endregion
@@ -30,29 +30,45 @@
 
 
 
-using System;
-using System.Windows.Input;
+using System.ComponentModel;
 
-namespace SuperMemoAssistant.Sys.IO.Devices
+namespace SuperMemoAssistant.Services.IO.Keyboard
 {
-  [Flags]
-  [Serializable]
-  public enum KeyModifiers
+  public class KeyboardHookEventArgs : HandledEventArgs
   {
-    None         = 0,
-    Alt          = ModifierKeys.Alt,
-    Ctrl         = ModifierKeys.Control,
-    Shift        = ModifierKeys.Shift,
-    Win          = ModifierKeys.Windows,
-    CtrlAlt      = Ctrl | Alt,
-    CtrlAltShift = CtrlAlt | Shift,
-    CtrlAltWin   = CtrlAlt | Win,
-    CtrlWin      = Ctrl | Win,
-    CtrlWinShift = CtrlWin | Shift,
-    CtrlShift    = Ctrl | Shift,
-    AltShift     = Alt | Shift,
-    AltWin       = Alt | Win,
-    AltWinShift  = AltWin | Shift,
-    WinShift     = Win | Shift,
+    #region Constructors
+
+    public KeyboardHookEventArgs(
+      LowLevelKeyboardInputEvent keyboardData,
+      KeyboardState              keyboardState,
+      bool                       ctrl,
+      bool                       alt,
+      bool                       shift,
+      bool                       meta)
+    {
+      KeyboardData  = keyboardData;
+      KeyboardState = keyboardState;
+      Ctrl          = ctrl;
+      Alt           = alt;
+      Shift         = shift;
+      Meta          = meta;
+    }
+
+    #endregion
+
+
+
+
+    #region Properties & Fields - Public
+
+    public KeyboardState              KeyboardState { get; private set; }
+    public LowLevelKeyboardInputEvent KeyboardData  { get; private set; }
+
+    public bool Alt   { get; }
+    public bool Ctrl  { get; }
+    public bool Shift { get; }
+    public bool Meta  { get; }
+
+    #endregion
   }
 }
