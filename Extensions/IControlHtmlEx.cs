@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/05/31 13:45
-// Modified On:  2018/12/13 13:04
+// Created On:   2019/04/24 14:57
+// Modified On:  2019/04/24 14:59
 // Modified By:  Alexis
 
 #endregion
@@ -30,30 +30,23 @@
 
 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-// ReSharper disable PossibleMultipleEnumeration
+using mshtml;
+using SuperMemoAssistant.Interop.SuperMemo.Content.Controls;
+using SuperMemoAssistant.Sys.COM.InternetExplorer;
 
 namespace SuperMemoAssistant.Extensions
 {
-  public static class IEnumerableEx
+  public static class IControlHtmlEx
   {
     #region Methods
 
-    public static bool None<T>(this IEnumerable<T> elements)
+    public static IHTMLDocument2 GetDocument(this IControlHtml ctrlHtml)
     {
-      return elements.Any() == false;
-    }
+      var hwnd = ctrlHtml.DocumentHwnd;
 
-    public static IEnumerable<T> ForEach<T>(this IEnumerable<T> elements,
-                                            Action<T>           action)
-    {
-      foreach (T elem in elements)
-        action(elem);
-
-      return elements;
+      return hwnd != null
+        ? IEComHelper.GetDocumentFromHwnd(hwnd.Value)
+        : null;
     }
 
     #endregion
