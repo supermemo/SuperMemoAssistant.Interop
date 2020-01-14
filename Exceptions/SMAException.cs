@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2020/01/13 16:38
-// Modified On:  2020/01/13 20:38
+// Created On:   2020/01/14 00:18
+// Modified On:  2020/01/14 00:20
 // Modified By:  Alexis
 
 #endregion
@@ -31,42 +31,23 @@
 
 
 using System;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Components;
-using SuperMemoAssistant.Interop.SuperMemo.Core;
-using SuperMemoAssistant.Interop.SuperMemo.Elements;
-using SuperMemoAssistant.Interop.SuperMemo.Registry.Types;
-using SuperMemoAssistant.Interop.SuperMemo.UI.Element;
+using System.Runtime.Serialization;
 
-namespace SuperMemoAssistant.Interop.SuperMemo
+namespace SuperMemoAssistant.Exceptions
 {
-  public interface ISuperMemo
+  [Serializable]
+  public class SMAException : Exception
   {
-    Version      AppVersion { get; }
-    SMCollection Collection { get; }
+    #region Constructors
 
-    int ProcessId { get; }
+    public SMAException() { }
 
-    bool IgnoreUserConfirmation { get; set; }
+    public SMAException(string message) : base(message) { }
 
-    ISuperMemoRegistry Registry { get; }
-    ISuperMemoUI       UI       { get; }
-  }
+    public SMAException(string message, Exception innerException) : base(message, innerException) { }
 
-  public interface ISuperMemoRegistry
-  {
-    IElementRegistry   Element   { get; }
-    IBinaryRegistry    Binary    { get; }
-    IComponentRegistry Component { get; }
-    IConceptRegistry   Concept   { get; }
-    ITextRegistry      Text      { get; }
-    IImageRegistry     Image     { get; }
-    ISoundRegistry     Sound     { get; }
-    IVideoRegistry     Video     { get; }
-    ITemplateRegistry  Template  { get; }
-  }
+    protected SMAException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-  public interface ISuperMemoUI
-  {
-    IElementWdw ElementWdw { get; }
+    #endregion
   }
 }
