@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -21,8 +21,7 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/01/17 14:35
-// Modified On:  2019/01/17 14:35
+// Modified On:  2020/02/02 22:51
 // Modified By:  Alexis
 
 #endregion
@@ -31,43 +30,29 @@
 
 
 using System;
-using System.Drawing;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Contents;
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Content.Layout.Legacy.Auto
+namespace SuperMemoAssistant.Sys.Windows.Search
 {
-  public partial class LayoutAuto : LayoutBase
+  [Serializable]
+  public class WindowsSearchResult
   {
     #region Constructors
 
-    public LayoutAuto(ContentTypeFlag    acceptedContents,
-                      Action<LayoutAuto> buildMethod) : base(acceptedContents) { }
+    public WindowsSearchResult() { }
 
     #endregion
 
 
 
 
-    #region Properties Impl - Public
+    #region Properties & Fields - Public
 
-    public override Size MinSize { get; }
+    public String            FileName { get; set; }
+    public String            FilePath { get; set; }
+    public WindowsSearchKind Kind     { get; set; }
+    public int               Rank     { get; set; }
 
-    #endregion
-
-
-
-
-    #region Methods Impl
-
-    public override void InitializeLayout()
-    {
-      throw new NotImplementedException();
-    }
-
-    public override void CalculateLayout(Rectangle cors)
-    {
-      throw new NotImplementedException();
-    }
+    public bool Touched { get; set; }
 
     #endregion
   }
