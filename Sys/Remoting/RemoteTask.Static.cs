@@ -21,7 +21,7 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Modified On:  2020/02/17 17:23
+// Modified On:  2020/02/17 17:46
 // Modified By:  Alexis
 
 #endregion
@@ -29,23 +29,30 @@
 
 
 
-using System;
-using SuperMemoAssistant.Sys.Remoting;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace SuperMemoAssistant.Interop.Plugins
+namespace SuperMemoAssistant.Sys.Remoting
 {
-  public interface ISMAPlugin : IDisposable
+  public partial class RemoteTask
   {
-    string Name            { get; }
-    string AssemblyName    { get; }
-    string AssemblyVersion { get; }
-    string ChannelName     { get; }
-    bool   HasSettings     { get; }
+    #region Methods
 
-    void               OnInjected();
-    void               OnServicePublished(string interfaceTypeName);
-    void               OnServiceRevoked(string   interfaceTypeName);
-    RemoteTask<object> OnMessage(PluginMessage   msg, params object[] parameters);
-    void               ShowSettings();
+    public static Task WhenAll(IEnumerable<RemoteTask> remoteTasks)
+    {
+      var tasks = remoteTasks.Select(rt => rt.GetTask());
+
+      return Task.WhenAll(tasks);
+    }
+
+    public static Task<T[]> WhenAll<T>(IEnumerable<RemoteTask<T>> remoteTasks)
+    {
+      var tasks = remoteTasks.Select(rt => rt.GetTask<T>());
+
+      return Task.WhenAll(tasks);
+    }
+
+    #endregion
   }
 }

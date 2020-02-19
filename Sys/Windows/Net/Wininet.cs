@@ -21,7 +21,7 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Modified On:  2020/02/17 17:23
+// Modified On:  2020/02/17 18:04
 // Modified By:  Alexis
 
 #endregion
@@ -29,23 +29,22 @@
 
 
 
-using System;
-using SuperMemoAssistant.Sys.Remoting;
+using System.Runtime.InteropServices;
 
-namespace SuperMemoAssistant.Interop.Plugins
+namespace SuperMemoAssistant.Sys.Windows.Net
 {
-  public interface ISMAPlugin : IDisposable
+  public static class Wininet
   {
-    string Name            { get; }
-    string AssemblyName    { get; }
-    string AssemblyVersion { get; }
-    string ChannelName     { get; }
-    bool   HasSettings     { get; }
+    #region Methods
 
-    void               OnInjected();
-    void               OnServicePublished(string interfaceTypeName);
-    void               OnServiceRevoked(string   interfaceTypeName);
-    RemoteTask<object> OnMessage(PluginMessage   msg, params object[] parameters);
-    void               ShowSettings();
+    [DllImport("wininet.dll")]
+    private static extern bool InternetGetConnectedState(out int description, int reservedValue);
+
+    public static bool HasNetworking()
+    {
+      return InternetGetConnectedState(out _, 0);
+    }
+
+    #endregion
   }
 }
