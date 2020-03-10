@@ -21,7 +21,7 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Modified On:  2020/03/05 13:51
+// Modified On:  2020/02/29 21:15
 // Modified By:  Alexis
 
 #endregion
@@ -29,56 +29,26 @@
 
 
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using PluginManager.Interop.Contracts;
-using PluginManager.Interop.PluginHost;
-using SuperMemoAssistant.Interop.SuperMemo;
+using System.Collections.ObjectModel;
 
-namespace SuperMemoAssistant.Interop.Plugins
+namespace SuperMemoAssistant.Extensions
 {
-  public class PluginHost : PluginHostBase<ISuperMemoAssistant>
+  public static class CollectionEx
   {
-    #region Properties & Fields - Non-Public
+    #region Methods
 
-    protected override HashSet<Type> CoreInterfaceTypes { get; } = new HashSet<Type>
+    public static bool Replace<TCol, T1, T2>(this Collection<TCol> col, T1 old, T2 @new)
+      where T1 : TCol
+      where T2 : TCol
     {
-      typeof(ISuperMemoAssistant)
-      // Insert subsequent versions here
-    };
+      int oldIdx = col.IndexOf(old);
 
-    protected override HashSet<Type> PluginMgrInterfaceTypes { get; } = new HashSet<Type>
-    {
-      typeof(IPluginManager<ISuperMemoAssistant>)
-      // Insert subsequent versions here
-    };
+      if (oldIdx < 0)
+        return false;
 
-    #endregion
+      col[oldIdx] = @new;
 
-
-
-
-    #region Constructors
-
-    public PluginHost(
-      string  pluginPackageName,
-      Guid    sessionGuid,
-      string  smaChannelName,
-      Process smaProcess,
-      bool    isDev)
-      : base(pluginPackageName, sessionGuid, smaChannelName, smaProcess, isDev) { }
-
-    #endregion
-
-
-
-
-    #region Methods Impl
-
-    protected override void MonitorPluginMgrProcess(object param)
-    {
-      base.MonitorPluginMgrProcess(param);
+      return true;
     }
 
     #endregion

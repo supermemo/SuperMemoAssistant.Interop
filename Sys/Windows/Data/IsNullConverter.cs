@@ -21,7 +21,7 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Modified On:  2020/03/05 13:51
+// Modified On:  2020/02/27 14:28
 // Modified By:  Alexis
 
 #endregion
@@ -30,55 +30,23 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using PluginManager.Interop.Contracts;
-using PluginManager.Interop.PluginHost;
-using SuperMemoAssistant.Interop.SuperMemo;
+using System.Globalization;
+using System.Windows.Data;
 
-namespace SuperMemoAssistant.Interop.Plugins
+namespace SuperMemoAssistant.Sys.Windows.Data
 {
-  public class PluginHost : PluginHostBase<ISuperMemoAssistant>
+  public class IsNullConverter : IValueConverter
   {
-    #region Properties & Fields - Non-Public
-
-    protected override HashSet<Type> CoreInterfaceTypes { get; } = new HashSet<Type>
-    {
-      typeof(ISuperMemoAssistant)
-      // Insert subsequent versions here
-    };
-
-    protected override HashSet<Type> PluginMgrInterfaceTypes { get; } = new HashSet<Type>
-    {
-      typeof(IPluginManager<ISuperMemoAssistant>)
-      // Insert subsequent versions here
-    };
-
-    #endregion
-
-
-
-
-    #region Constructors
-
-    public PluginHost(
-      string  pluginPackageName,
-      Guid    sessionGuid,
-      string  smaChannelName,
-      Process smaProcess,
-      bool    isDev)
-      : base(pluginPackageName, sessionGuid, smaChannelName, smaProcess, isDev) { }
-
-    #endregion
-
-
-
-
     #region Methods Impl
 
-    protected override void MonitorPluginMgrProcess(object param)
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-      base.MonitorPluginMgrProcess(param);
+      return value == null;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+      throw new InvalidOperationException("IsNullConverter can only be used OneWay.");
     }
 
     #endregion
