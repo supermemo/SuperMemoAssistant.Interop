@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="SuperMemoAssistant.Sdk.WindowsDesktop">
   <PropertyGroup Label="Build">
     <OutputType>Library</OutputType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Deterministic>true</Deterministic>
     <UseWPF>true</UseWPF>
-    <AssemblyVersion>2.0.4.10</AssemblyVersion>
-    <FileVersion>2.0.4.10</FileVersion>
+    <AssemblyVersion>2.0.4</AssemblyVersion>
+    <FileVersion>2.0.4</FileVersion>
     <Version>2.0.4</Version>
   </PropertyGroup>
   <PropertyGroup Label="Package">
@@ -14,8 +14,7 @@
     <Description>Enables interactions between SuperMemo Assistant and Plugins.</Description>
     <PackageProjectUrl>https://github.com/supermemo/SuperMemoAssistant</PackageProjectUrl>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <PackageTags>SuperMemo SuperMemoAssistant Plugin Plugins</PackageTags>
-    <PackageVersion>$(AssemblyVersion)</PackageVersion>
+    <PackageTags>SuperMemo,SuperMemoAssistant,Plugin,Plugins</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -38,7 +37,7 @@
   <ItemGroup>
     <PackageReference Include="Anotar.Serilog.Fody" Version="5.1.0" />
     <PackageReference Include="Extensions.System.IO" Version="0.1.0.3" />
-    <PackageReference Include="MSBuild.Tools" Version="0.2.41">
+    <PackageReference Include="MSBuild.Tools" Version="0.2.58">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
