@@ -40,7 +40,7 @@ namespace SuperMemoAssistant.Extensions
   {
     #region Methods
 
-    public static IHTMLDocument2 GetDocument(this IControlHtml ctrlHtml)
+    public static HTMLDocument GetDocument(this IControlHtml ctrlHtml)
     {
       var hwnd = ctrlHtml.DocumentHwnd;
 

@@ -42,11 +42,11 @@ namespace SuperMemoAssistant.Sys.COM.InternetExplorer
   {
     #region Methods
 
-    public static IHTMLDocument2 GetDocumentFromHwnd(IntPtr hWnd)
+    public static HTMLDocument GetDocumentFromHwnd(IntPtr hWnd)
     {
-      IHTMLDocument2 document = null;
+      HTMLDocument document = null;
       int            lngMsg   = RegisterWindowMessage("WM_HTML_GETOBJECT");
-
+    
       if (lngMsg != 0)
       {
         SendMessageTimeout(hWnd,
@@ -59,7 +59,7 @@ namespace SuperMemoAssistant.Sys.COM.InternetExplorer
 
         if (lRes != 0)
           ObjectFromLresult(lRes,
-                            ref GUID_IHTMLDocument,
+                            ref GUID_HTMLDocument,
                             0,
                             ref document);
       }
@@ -92,11 +92,12 @@ namespace SuperMemoAssistant.Sys.COM.InternetExplorer
     public static extern int ObjectFromLresult(int                lResult,
                                                ref Guid           riid,
                                                int                wParam,
-                                               ref IHTMLDocument2 ppvObject);
+                                               ref HTMLDocument ppvObject);
 
 
     public const  int  SMTO_ABORTIFHUNG   = 0x2;
     public static Guid GUID_IHTMLDocument = new Guid("626FC520-A41E-11CF-A731-00A0C9082637");
+    public static Guid GUID_HTMLDocument = new Guid("25336920-03F9-11CF-8FD0-00AA00686F13");
 
     #endregion
   }
