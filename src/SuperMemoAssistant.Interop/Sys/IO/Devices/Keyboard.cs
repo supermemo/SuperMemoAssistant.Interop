@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/05/31 03:56
-// Modified On:  2018/05/31 04:00
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 09:00
 // Modified By:  Alexis
 
 #endregion
@@ -30,12 +30,14 @@
 
 
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace SuperMemoAssistant.Sys.IO.Devices
 {
+  using System;
+  using System.Diagnostics.CodeAnalysis;
+  using System.Threading;
+  using System.Threading.Tasks;
+
+  [SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
   public static class Keyboard
   {
     #region Methods
@@ -45,7 +47,7 @@ namespace SuperMemoAssistant.Sys.IO.Devices
       return (Native.GetKeyState((int)vkey) & 0xF0) == 1;
     }
 
-    public static async Task<bool> SendSysKeysAsync(IntPtr hWnd, Keys keys, int delay = 10)
+    public static async Task<bool> SendSysKeysAsync(IntPtr hWnd, KeyCollection keys)
     {
       bool result = true;
 
@@ -68,7 +70,7 @@ namespace SuperMemoAssistant.Sys.IO.Devices
       return result;
     }
 
-    public static async Task<bool> SendKeysAsync(IntPtr hWnd, Keys keys, int delay = 10)
+    public static async Task<bool> SendKeysAsync(IntPtr hWnd, KeyCollection keys)
     {
       bool result = true;
 
@@ -93,7 +95,7 @@ namespace SuperMemoAssistant.Sys.IO.Devices
       return result;
     }
 
-    public static async Task<bool> PostSysKeysAsync(IntPtr hWnd, Keys keys, int delay = 10)
+    public static async Task<bool> PostSysKeysAsync(IntPtr hWnd, KeyCollection keys)
     {
       bool result = true;
 
@@ -123,7 +125,7 @@ namespace SuperMemoAssistant.Sys.IO.Devices
 #endif
     }
 
-    public static async Task<bool> PostKeysAsync(IntPtr hWnd, Keys keys, int delay = 10)
+    public static async Task<bool> PostKeysAsync(IntPtr hWnd, KeyCollection keys)
     {
       bool result = true;
 

@@ -83,6 +83,7 @@ namespace SuperMemoAssistant.Sys.Windows.Markup
     /// </summary>
     public Type InnerType { get; set; }
 
+
     /// <summary>
     /// The generic parameters. Use for generic types that accept two or more parameters.
     /// E.g. in Dictionary&gt;string, object&lt;, string and object are the Inner Types.
@@ -96,12 +97,14 @@ namespace SuperMemoAssistant.Sys.Windows.Markup
     /// InnerTypes="{StaticResource StringObjectParameters}"
     /// x:Key="DictionaryStringObjectType" /&gt;
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays",
+                                                     Justification = "Type is constrained by XAML")]
     public Type[] InnerTypes { get; set; }
 
     #endregion
 
 
-    
+
 
     #region Methods Impl
 

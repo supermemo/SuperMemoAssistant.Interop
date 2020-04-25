@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/06/01 14:25
-// Modified On:  2019/01/25 23:40
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 05:29
 // Modified By:  Alexis
 
 #endregion
@@ -30,26 +30,30 @@
 
 
 
-using System;
-using System.Runtime.InteropServices;
-
 // ReSharper disable InconsistentNaming
 
+// ReSharper disable IdentifierTypo
 namespace SuperMemoAssistant.Sys.IO.Devices
 {
+  using System;
+  using System.Runtime.InteropServices;
+  using System.Windows.Input;
+
   /// <summary>Class for messaging and key presses</summary>
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+                                                   Justification = "Windows naming")]
   public static class Native
   {
     #region Constants & Statics
 
-    public const int WH_KEYBOARD_LL = 13;
+    /// <summary>The windows LowLevel keyboard hook key</summary>
+    internal const int WH_KEYBOARD_LL = 13;
 
     /// <summary>Maps a virtual key to a key code with specified keyboard.</summary>
-    public const uint MAPVK_VK_TO_VSC_EX = 0x04;
+    internal const uint MAPVK_VK_TO_VSC_EX = 0x04;
 
     /// <summary>Code for if the key is pressed.</summary>
-    public const ushort KEY_PRESSED = 0xF000;
-    private const uint Lower16BitsMask = 0xFFFF;
+    internal const ushort KEY_PRESSED = 0xF000;
 
     #endregion
 
@@ -59,72 +63,164 @@ namespace SuperMemoAssistant.Sys.IO.Devices
     #region Methods
 
     [DllImport("user32.dll")]
-    public static extern ushort GetKeyState(int nVirtKey);
-
-    /// <summary>Gets the state of the entire keyboard.</summary>
-    /// <param name="lpKeyState">The byte array to receive all the keys states.</param>
-    /// <returns>Whether it succeed or failed.</returns>
-    [DllImport("user32.dll")]
-    public static extern bool GetKeyboardState(byte[] lpKeyState);
-
-    [DllImport("user32.dll")]
-    public static extern IntPtr GetForegroundWindow();
-
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool SetForegroundWindow(IntPtr hWnd);
+    internal static extern ushort GetKeyState(int nVirtKey);
 
     //[return: MarshalAs(UnmanagedType.Bool)]
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
-    public static extern int SendMessage(IntPtr hWnd,
-                                         int    wMsg,
-                                         uint   wParam,
-                                         uint   lParam);
+    internal static extern int SendMessage(IntPtr hWnd,
+                                           int    wMsg,
+                                           uint   wParam,
+                                           uint   lParam);
 
     [return: MarshalAs(UnmanagedType.Bool)]
     [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool PostMessage(IntPtr hWnd,
-                                          int    Msg,
-                                          uint   wParam,
-                                          uint   lParam);
+    internal static extern bool PostMessage(IntPtr hWnd,
+                                            int    Msg,
+                                            uint   wParam,
+                                            uint   lParam);
 
     [DllImport("user32.dll")]
-    public static extern uint MapVirtualKey(uint uCode,
-                                            uint uMapType);
+    internal static extern uint MapVirtualKey(uint uCode,
+                                              uint uMapType);
 
     [DllImport("user32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool SetKeyboardState([In] byte[] keyboardState);
+    internal static extern bool RegisterHotKey(IntPtr hWnd,
+                                               int    id,
+                                               uint   fsModifiers,
+                                               uint   vk);
 
     [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool RegisterHotKey(IntPtr hWnd,
-                                             int    id,
-                                             uint   fsModifiers,
-                                             uint   vk);
+    internal static extern bool UnregisterHotKey(IntPtr hWnd,
+                                                 int    id);
 
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool UnregisterHotKey(IntPtr hWnd,
-                                               int    id);
+    /// <summary>
+    ///   Retrieves a handle to the foreground window (the window with which the user is currently working). The system assigns
+    ///   a slightly higher priority to the thread that creates the foreground window than it does to other threads.
+    /// </summary>
+    /// <returns>
+    ///   The return value is a handle to the foreground window. The foreground window can be NULL in certain circumstances,
+    ///   such as when a window is losing activation.
+    /// </returns>
+    [DllImport("user32.dll")]
+    internal static extern IntPtr GetForegroundWindow();
 
-    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    public static extern int SetWindowsHookEx(int                 idHook,
-                                              KeyboardHookHandler lpfn,
-                                              IntPtr              hMod,
-                                              uint                dwThreadId);
+    /// <summary>
+    ///   Retrieves the identifier of the thread that created the specified window and, optionally, the identifier of the
+    ///   process that created the window.
+    /// </summary>
+    /// <param name="hWnd">A handle to the window.</param>
+    /// <param name="lpdwProcessId">
+    ///   [Out] A pointer to a variable that receives the process identifier. If this parameter is not <c>NULL</c>,
+    ///   <see cref="GetWindowThreadProcessId" /> copies the identifier of the process to the variable; otherwise, it does not.
+    /// </param>
+    /// <returns>The return value is the identifier of the thread that created the window.</returns>
+    [DllImport("user32.dll")]
+    internal static extern int GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
 
-    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool UnhookWindowsHookEx(int hhk);
+    /// <summary>Returns the handle for the given process's module name</summary>
+    /// <param name="lpModuleName"></param>
+    /// <returns></returns>
+    [DllImport("kernel32.dll", CharSet = CharSet.Auto, BestFitMapping = false, ThrowOnUnmappableChar = true, SetLastError = true)]
+    internal static extern IntPtr GetModuleHandle([MarshalAs(UnmanagedType.LPTStr)][In] string lpModuleName);
 
-    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    public static extern int CallNextHookEx(int             hhk,
-                                            int             nCode,
-                                            int             wParam,
-                                            KBDLLHOOKSTRUCT lParam);
+    /// <summary>
+    ///   The SetWindowsHookEx function installs an application-defined hook procedure into a hook chain. You would install a
+    ///   hook procedure to monitor the system for certain types of events. These events are associated either with a specific
+    ///   thread or with all threads in the same desktop as the calling thread.
+    /// </summary>
+    /// <param name="idHook">hook type</param>
+    /// <param name="lpfn">hook procedure</param>
+    /// <param name="hMod">handle to application instance</param>
+    /// <param name="dwThreadId">thread identifier</param>
+    /// <returns>If the function succeeds, the return value is the handle to the hook procedure.</returns>
+    [DllImport("user32.dll",
+               CharSet      = CharSet.Auto,
+               SetLastError = true)]
+    internal static extern IntPtr SetWindowsHookEx(int                 idHook,
+                                                   KeyboardHookHandler lpfn,
+                                                   IntPtr              hMod,
+                                                   int                 dwThreadId);
 
-    [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    public static extern IntPtr GetModuleHandle(string lpModuleName);
+    /// <summary>
+    ///   The UnhookWindowsHookEx function removes a hook procedure installed in a hook chain by the SetWindowsHookEx function.
+    /// </summary>
+    /// <param name="hHook">handle to hook procedure</param>
+    /// <returns>If the function succeeds, the return value is true.</returns>
+    [DllImport("user32.dll",
+               CharSet      = CharSet.Auto,
+               SetLastError = true)]
+    internal static extern bool UnhookWindowsHookEx(IntPtr hHook);
 
+    /// <summary>
+    ///   The CallNextHookEx function passes the hook information to the next hook procedure in the current hook chain. A hook
+    ///   procedure can call this function either before or after processing the hook information.
+    /// </summary>
+    /// <param name="hHook">handle to current hook</param>
+    /// <param name="code">hook code passed to hook procedure</param>
+    /// <param name="wParam">value passed to hook procedure</param>
+    /// <param name="lParam">value passed to hook procedure</param>
+    /// <returns>If the function succeeds, the return value is true.</returns>
+    [DllImport("user32.dll",
+               CharSet      = CharSet.Auto,
+               SetLastError = true)]
+    internal static extern IntPtr CallNextHookEx(IntPtr hHook,
+                                                 int    code,
+                                                 IntPtr wParam,
+                                                 IntPtr lParam);
+
+    [DllImport("user32.dll",
+               CharSet = CharSet.Auto)]
+    internal static extern short GetKeyState(System.Windows.Forms.Keys nVirtKey);
+
+    public static bool GetCapslock()
+    {
+      return Convert.ToBoolean(GetKeyState(System.Windows.Forms.Keys.CapsLock)) & true;
+    }
+
+    public static bool GetNumlock()
+    {
+      return Convert.ToBoolean(GetKeyState(System.Windows.Forms.Keys.NumLock)) & true;
+    }
+
+    public static bool GetScrollLock()
+    {
+      return Convert.ToBoolean(GetKeyState(System.Windows.Forms.Keys.Scroll)) & true;
+    }
+
+    public static bool GetCtrlPressed()
+    {
+      int state = GetKeyState(System.Windows.Forms.Keys.ControlKey);
+      if (state > 1 || state < -1) return true;
+
+      return false;
+    }
+
+    public static bool GetAltPressed()
+    {
+      int state = GetKeyState(System.Windows.Forms.Keys.Menu);
+      if (state > 1 || state < -1) return true;
+
+      return false;
+    }
+
+    public static bool GetShiftPressed()
+    {
+      int state = GetKeyState(System.Windows.Forms.Keys.ShiftKey);
+      if (state > 1 || state < -1) return true;
+
+      return false;
+    }
+
+    public static bool GetMetaPressed()
+    {
+      int state = GetKeyState(System.Windows.Forms.Keys.LWin);
+      if (state > 1 || state < -1) return true;
+
+      state = GetKeyState(System.Windows.Forms.Keys.RWin);
+      if (state > 1 || state < -1) return true;
+
+      return false;
+    }
 
     public static uint GetScanCode(VKey vkey)
     {
@@ -149,9 +245,9 @@ namespace SuperMemoAssistant.Sys.IO.Devices
       uint scanCode = GetScanCode(vkey);
 
       lParam += scanCode * 0x10000;
-      lParam += (uint)(extended * 0x1000000);
-      lParam += (uint)(contextCode * 2 * 0x10000000);
-      lParam += (uint)(previousState * 4 * 0x10000000);
+      lParam += (uint)(extended            * 0x1000000);
+      lParam += (uint)(contextCode * 2     * 0x10000000);
+      lParam += (uint)(previousState * 4   * 0x10000000);
       lParam += (uint)(transitionState * 8 * 0x10000000);
 
       return lParam;
@@ -161,36 +257,70 @@ namespace SuperMemoAssistant.Sys.IO.Devices
 
 
 
-
-    public delegate int KeyboardHookHandler(int             nCode,
-                                            int             wParam,
-                                            KBDLLHOOKSTRUCT lParam);
+    /// <summary>
+    /// Windows keyboard hook callback delegate
+    /// </summary>
+    /// <param name="nCode"></param>
+    /// <param name="wParam"></param>
+    /// <param name="lParam"></param>
+    /// <returns></returns>
+    public delegate IntPtr KeyboardHookHandler(int    nCode,
+                                               IntPtr wParam,
+                                               IntPtr lParam);
   }
 
+  /// <summary>Windows LL keyboard input structure</summary>
   [StructLayout(LayoutKind.Sequential)]
-  public class KBDLLHOOKSTRUCT
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types",
+                                                   Justification = "Don't use")]
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "<Pending>")]
+  public struct LowLevelKeyboardInputEvent
   {
-    #region Properties & Fields - Public
+    /// <summary>A virtual-key code. The code must be a value in the range 1 to 254.</summary>
+    public readonly int VirtualCode;
 
-    public UIntPtr   dwExtraInfo;
-    public HookFlags flags;
-    public uint      scanCode;
-    public uint      time;
-    public VKey      vkCode;
+    /// <summary>A hardware scan code for the key.</summary>
+    public readonly int HardwareScanCode;
 
-    #endregion
+    /// <summary>
+    ///   The extended-key flag, event-injected Flags, context code, and transition-state flag. This member is specified as
+    ///   follows. An application can use the following values to test the keystroke Flags. Testing LLKHF_INJECTED (bit 4) will
+    ///   tell you whether the event was injected. If it was, then testing LLKHF_LOWER_IL_INJECTED (bit 1) will tell you
+    ///   whether or not the event was injected from a process running at lower integrity level.
+    /// </summary>
+    public readonly int Flags;
+
+    /// <summary>
+    ///   The time stamp stamp for this message, equivalent to what GetMessageTime would return for this message.
+    /// </summary>
+    public readonly int TimeStamp;
+
+    /// <summary>Additional information associated with the message.</summary>
+    public readonly IntPtr AdditionalInformation;
+
+    /// <summary>Converts C/C++ Virtual Key code to C# Windows key</summary>
+    public Key Key => KeyInterop.KeyFromVirtualKey(VirtualCode);
   }
 
-  [Flags]
-  public enum HookFlags : uint
+  /// <summary>The keyboard button state</summary>
+  public enum KeyboardState
   {
-    LLKHF_EXTENDED = 0x01,
-    LLKHF_INJECTED = 0x10,
-    LLKHF_ALTDOWN  = 0x20,
-    LLKHF_UP       = 0x80,
+    /// <summary>Key is down</summary>
+    KeyDown = 0x0100,
+
+    /// <summary>Key is up</summary>
+    KeyUp = 0x0101,
+
+    /// <summary>Key is down with alt</summary>
+    SysKeyDown = 0x0104,
+
+    /// <summary>Key is up with alt</summary>
+    SysKeyUp = 0x0105
   }
 
-  public enum Message
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores",
+                                                   Justification = "MS naming convention")]
+  internal enum Message
   {
     KEY_DOWN      = 0x100, //Key down
     KEY_UP        = 0x101, //Key Up

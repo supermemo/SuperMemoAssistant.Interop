@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -19,58 +19,67 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2018/07/27 12:55
-// Modified On:  2018/11/26 10:29
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SuperMemoAssistant.Interop.SuperMemo.Elements.Types;
-
 namespace SuperMemoAssistant.Interop.SuperMemo.Registry.Members
 {
+  using System.Collections.Generic;
+  using Elements.Types;
+
+  /// <summary>
+  /// Determines a member (e.g. a text, image, sound, ..) in SM's registry
+  /// </summary>
   public interface IRegistryMember
   {
+    /// <summary>
+    /// The registry member's unique ID
+    /// </summary>
     int    Id       { get; }
+
+    /// <summary>
+    /// The registry member's registry name
+    /// </summary>
     string Name     { get; }
+
+    /// <summary>
+    /// Whether this member has been deleted
+    /// </summary>
     bool   Empty    { get; }
+
+    /// <summary>
+    /// The number of components referencing that member (not always reliable)
+    /// </summary>
     int    UseCount { get; }
-    
 
     /// <summary>Retrieve linked file path (HTML, Image, Audio, ...)</summary>
     /// <returns>File path or null</returns>
     string GetFilePath();
 
     /// <summary>Retrieve elements that are using this registry</summary>
-    /// <returns></returns>
+    /// <returns>All elements referencing that member</returns>
     IEnumerable<IElement> GetLinkedElements();
 
     /// <summary>
-    ///   Conveniency method. Will run UI automation to execute action. Delete current member
-    ///   from its registry.
+    /// Deletes the member from the registry
     /// </summary>
-    /// <returns>Waitable task yielding success result of the operation</returns>
-    Task<bool> DeleteAsync();
+    /// <returns>Success of operation</returns>
+    bool Delete();
 
     /// <summary>
-    ///   Conveniency method. Will run UI automation to execute action. Rename current member
-    ///   in registry with <paramref name="newName" />.
+    /// Renames the member
     /// </summary>
-    /// <returns>Waitable task yielding success result of the operation</returns>
-    Task<bool> RenameAsync(string newName);
+    /// <param name="newName"></param>
+    /// <returns>Success of operation</returns>
+    bool Rename(string newName);
 
     /// <summary>
-    ///   Conveniency method. Will run UI automation to execute action. Starts a neural review
-    ///   on given registry member.
+    /// Starts a neural review for the current member
     /// </summary>
-    /// <returns>Waitable task yielding success result of the operation</returns>
-    Task<bool> NeuralAsync();
+    /// <returns>Success of operation</returns>
+    bool Neural();
   }
 }

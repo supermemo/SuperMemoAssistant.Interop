@@ -21,7 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Modified On:  2020/02/25 15:26
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 14:18
 // Modified By:  Alexis
 
 #endregion
@@ -29,28 +30,38 @@
 
 
 
-using System;
-using System.Diagnostics;
-using System.Runtime.Remoting;
-using System.Threading.Tasks;
-using System.Windows;
-using Anotar.Serilog;
-using PluginManager.Interop.Plugins;
-using Serilog;
-using SuperMemoAssistant.Extensions;
-using SuperMemoAssistant.Interop.SuperMemo;
-using SuperMemoAssistant.Services;
-using SuperMemoAssistant.Services.Configuration;
-using SuperMemoAssistant.Services.IO.HotKeys;
-using SuperMemoAssistant.Services.IO.Keyboard;
-using SuperMemoAssistant.Services.IO.Logger;
-using SuperMemoAssistant.Sys.Remoting;
-
 namespace SuperMemoAssistant.Interop.Plugins
 {
+  using System;
+  using System.Runtime.Remoting;
+  using System.Threading.Tasks;
+  using System.Windows;
+  using Anotar.Serilog;
+  using Extensions;
+  using PluginManager.Interop.Plugins;
+  using Serilog;
+  using Services;
+  using Services.Configuration;
+  using Services.IO.Diagnostics;
+  using Services.IO.HotKeys;
+  using Services.IO.Keyboard;
+  using SuperMemo;
+  using Sys.Remoting;
+
+  /// <inheritdoc cref="SMAPluginBase{TPlugin}" />
   public abstract class SMAPluginBase<TPlugin> : PluginBase<TPlugin, ISMAPlugin, ISuperMemoAssistant>, ISMAPlugin
     where TPlugin : SMAPluginBase<TPlugin>
   {
+    #region Properties & Fields - Non-Public
+
+    /// <summary>Whether this object was disposed</summary>
+    protected bool IsDisposed { get; private set; }
+
+    #endregion
+
+
+
+
     #region Constructors
 
     static SMAPluginBase()
@@ -58,20 +69,12 @@ namespace SuperMemoAssistant.Interop.Plugins
       RemotingConfiguration.CustomErrorsMode = CustomErrorsModes.Off;
     }
 
-    protected SMAPluginBase(DebuggerAttachStrategy debuggerAttachStrategy = DebuggerAttachStrategy.Never)
+    /// <inheritdoc />
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2214:Do not call overridable methods in constructors",
+                                                     Justification = "<Pending>")]
+    protected SMAPluginBase()
       : base(RemotingServicesEx.GenerateIpcServerChannelName())
     {
-      switch (debuggerAttachStrategy)
-      {
-        case DebuggerAttachStrategy.Always:
-          Debugger.Launch();
-          break;
-
-        case DebuggerAttachStrategy.InDebugConfiguration:
-          AttachDebuggerIfDebug();
-          break;
-      }
-
       try
       {
         // Required for logging
@@ -81,23 +84,39 @@ namespace SuperMemoAssistant.Interop.Plugins
         Svc.Logger = LoggerFactory.Create(AssemblyName, Svc.SharedConfiguration, ConfigureLogger);
         ReloadAnotarLogger();
 
-        Svc.KeyboardHotKey       = KeyboardHookService.Instance;
+        Svc.KeyboardHotKey = KeyboardHookService.Instance;
+#pragma warning disable CS0618 // Type or member is obsolete
         Svc.KeyboardHotKeyLegacy = KeyboardHotKeyService.Instance;
-        Svc.Configuration        = new PluginConfigurationService(this);
-        Svc.HotKeyManager        = HotKeyManager.Instance.Initialize(Svc.Configuration, Svc.KeyboardHotKey);
+#pragma warning restore CS0618 // Type or member is obsolete
+        Svc.Configuration = new PluginConfigurationService(this);
+        Svc.HotKeyManager = HotKeyManager.Instance.Initialize(Svc.Configuration, Svc.KeyboardHotKey);
 
-        LogTo.Debug($"Plugin {AssemblyName} initialized");
+        LogTo.Debug("Plugin {AssemblyName} initialized", AssemblyName);
       }
       catch (Exception ex)
       {
-        LogTo.Error(ex, $"Exception while initializing {GetType().Name}");
+        LogTo.Error(ex, "Exception while initializing {Name}", GetType().Name);
         throw;
       }
     }
 
+
     /// <inheritdoc />
-    public override void Dispose()
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "<Pending>")]
+    public sealed override void Dispose()
     {
+      base.Dispose();
+      Dispose(true);
+      GC.SuppressFinalize(this);
+    }
+
+    /// <summary>Implements the cleanup logic</summary>
+    /// <param name="disposing">Whether this method is called by the <see cref="Dispose()" /> or the destructor</param>
+    protected virtual void Dispose(bool disposing)
+    {
+      if (IsDisposed)
+        return;
+
       try
       {
         KeyboardHotKeyService.Instance.Dispose();
@@ -111,7 +130,7 @@ namespace SuperMemoAssistant.Interop.Plugins
 
       Svc.Logger.Shutdown();
 
-      base.Dispose();
+      IsDisposed = true;
     }
 
     #endregion
@@ -121,6 +140,7 @@ namespace SuperMemoAssistant.Interop.Plugins
 
     #region Properties & Fields - Public
 
+    /// <summary>The SuperMemo Assistant remote service</summary>
     public ISuperMemoAssistant SMA => Service;
 
     #endregion
@@ -140,11 +160,13 @@ namespace SuperMemoAssistant.Interop.Plugins
 
     #region Methods Impl
 
+    /// <inheritdoc />
     protected override void LogError(Exception ex, string message)
     {
       LogTo.Error(ex, message);
     }
 
+    /// <inheritdoc />
     protected override void LogInformation(string message)
     {
       LogTo.Information(message);
@@ -176,10 +198,10 @@ namespace SuperMemoAssistant.Interop.Plugins
       switch (msg)
       {
         case PluginMessage.OnLoggerConfigUpdated:
-          return OnLoggerConfigUpdated();
+          return OnLoggerConfigUpdatedAsync();
 
         default:
-          LogTo.Debug($"Received unknown message {msg}. Is plugin up to date ?");
+          LogTo.Debug("Received unknown message {Msg}. Is plugin up to date ?", msg);
           break;
       }
 
@@ -199,11 +221,11 @@ namespace SuperMemoAssistant.Interop.Plugins
 
     #region Methods
 
-    private async Task<object> OnLoggerConfigUpdated()
+    private async Task<object> OnLoggerConfigUpdatedAsync()
     {
       try
       {
-        await Svc.Logger.ReloadConfigFromFile(Svc.SharedConfiguration);
+        await Svc.Logger.ReloadConfigFromFileAsync(Svc.SharedConfiguration).ConfigureAwait(false);
 
         return true;
       }
@@ -212,13 +234,6 @@ namespace SuperMemoAssistant.Interop.Plugins
         LogTo.Warning(ex, "Exception caught while reloading logger config");
         return false;
       }
-    }
-
-    [Conditional("DEBUG")]
-    [Conditional("DEBUG_IN_PROD")]
-    private void AttachDebuggerIfDebug()
-    {
-      Debugger.Launch();
     }
 
     // See https://github.com/Fody/Anotar/issues/114
@@ -231,11 +246,16 @@ namespace SuperMemoAssistant.Interop.Plugins
       Logger.ReloadAnotarLogger<TPlugin>();
     }
 
+    /// <summary>Creates the WPF application. Override to use a custom Application implementation</summary>
+    /// <returns></returns>
     protected virtual Application CreateApplication()
     {
       return new PluginApp();
     }
 
+    /// <summary>Configures the Logger. Override to customize the logger.</summary>
+    /// <param name="loggerConfiguration"></param>
+    /// <returns></returns>
     protected virtual LoggerConfiguration ConfigureLogger(LoggerConfiguration loggerConfiguration)
     {
       return loggerConfiguration;
@@ -248,10 +268,19 @@ namespace SuperMemoAssistant.Interop.Plugins
 
     #region Enums
 
+    /// <summary>
+    ///   Defines when to attach the debugger TODO: Debug condition is part the Interop library. Find a fix to use the DEBUG
+    ///   condition of the plugin
+    /// </summary>
     protected enum DebuggerAttachStrategy
     {
+      /// <summary>The debugger won't be automatically attached</summary>
       Never,
+
+      /// <summary>Automatically attach the debugger when plugin is in debug mode</summary>
       InDebugConfiguration,
+
+      /// <summary>Always attach the debugger</summary>
       Always
     }
 

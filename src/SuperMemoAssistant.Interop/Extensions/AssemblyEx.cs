@@ -37,6 +37,8 @@ using System.Runtime.InteropServices;
 
 namespace SuperMemoAssistant.Extensions
 {
+  using System.Reflection;
+
   public static class AssemblyEx
   {
     #region Methods
@@ -56,9 +58,9 @@ namespace SuperMemoAssistant.Extensions
     public static string GetAssemblyVersion(this Type typeInAssembly)
     {
       var assembly = typeInAssembly.Assembly;
-      var fvi      = FileVersionInfo.GetVersionInfo(assembly.Location);
+      var aivAttr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
 
-      return fvi.FileVersion;
+      return aivAttr.InformationalVersion;
     }
 
     public static string GetAssemblyName(this Type typeInAssembly)

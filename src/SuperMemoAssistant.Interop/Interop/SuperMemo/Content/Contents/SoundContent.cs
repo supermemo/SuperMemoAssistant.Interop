@@ -83,7 +83,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Content.Contents
 
     #region Properties Impl - Public
 
-    public override ContentTypeFlag ContentType => ContentTypeFlag.Sound;
+    public override ContentTypeFlags ContentType => ContentTypeFlags.Sound;
     public override Size            MinCompSize => new Size(2000, 800);
 
     #endregion

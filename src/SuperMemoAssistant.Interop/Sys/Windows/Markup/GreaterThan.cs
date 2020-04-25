@@ -83,7 +83,7 @@ namespace SuperMemoAssistant.Sys.Windows.Markup
     /// <inheritdoc />
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-      return System.Convert.ToDouble(value) > Operand;
+      return System.Convert.ToDouble(value, CultureInfo.InvariantCulture) > Operand;
     }
 
     /// <inheritdoc />

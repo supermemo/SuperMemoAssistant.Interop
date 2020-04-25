@@ -19,31 +19,27 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Modified On:  2020/02/28 23:47
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using SuperMemoAssistant.Extensions;
-
 namespace SuperMemoAssistant.Sys.Windows.Input
 {
+  using System;
+  using System.ComponentModel;
+  using System.Threading.Tasks;
+  using System.Windows.Input;
+  using Extensions;
+
   public class AsyncRelayCommand : IAsyncCommand
   {
     #region Properties & Fields - Non-Public
 
-    private readonly Func<bool>        _canExecute;
-    private readonly Action<Exception> _errorHandler;
-    private readonly Func<Task>        _execute;
+    private readonly Func<bool>            _canExecute;
+    private readonly Func<Exception, Task> _errorHandler;
+    private readonly Func<Task>            _execute;
 
     #endregion
 
@@ -53,9 +49,9 @@ namespace SuperMemoAssistant.Sys.Windows.Input
     #region Constructors
 
     public AsyncRelayCommand(
-      Func<Task>        execute,
-      Func<bool>        canExecute   = null,
-      Action<Exception> errorHandler = null)
+      Func<Task>            execute,
+      Func<bool>            canExecute   = null,
+      Func<Exception, Task> errorHandler = null)
     {
       _execute      = execute;
       _canExecute   = canExecute;
@@ -89,7 +85,7 @@ namespace SuperMemoAssistant.Sys.Windows.Input
         try
         {
           IsExecuting = true;
-          await _execute();
+          await _execute().ConfigureAwait(false);
         }
         finally
         {
@@ -106,7 +102,8 @@ namespace SuperMemoAssistant.Sys.Windows.Input
 
     #region Methods
 
-    public void RaiseCanExecuteChanged()
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1030:Use events where appropriate", Justification = "<Pending>")]
+    public static void RaiseCanExecuteChanged()
     {
       CommandManager.InvalidateRequerySuggested(); //?.Invoke(this, EventArgs.Empty);
     }
@@ -153,9 +150,9 @@ namespace SuperMemoAssistant.Sys.Windows.Input
   {
     #region Properties & Fields - Non-Public
 
-    private readonly Func<T, bool>     _canExecute;
-    private readonly Action<Exception> _errorHandler;
-    private readonly Func<T, Task>     _execute;
+    private readonly Func<T, bool>         _canExecute;
+    private readonly Func<Exception, Task> _errorHandler;
+    private readonly Func<T, Task>         _execute;
 
     #endregion
 
@@ -164,9 +161,9 @@ namespace SuperMemoAssistant.Sys.Windows.Input
 
     #region Constructors
 
-    public AsyncRelayCommand(Func<T, Task>     execute,
-                             Func<T, bool>     canExecute   = null,
-                             Action<Exception> errorHandler = null)
+    public AsyncRelayCommand(Func<T, Task>         execute,
+                             Func<T, bool>         canExecute   = null,
+                             Func<Exception, Task> errorHandler = null)
     {
       _execute      = execute;
       _canExecute   = canExecute;
@@ -200,7 +197,7 @@ namespace SuperMemoAssistant.Sys.Windows.Input
         try
         {
           IsExecuting = true;
-          await _execute(parameter);
+          await _execute(parameter).ConfigureAwait(false);
         }
         finally
         {
@@ -217,7 +214,10 @@ namespace SuperMemoAssistant.Sys.Windows.Input
 
     #region Methods
 
-    public void RaiseCanExecuteChanged()
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1030:Use events where appropriate", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types",
+                                                     Justification = "<Pending>")]
+    public static void RaiseCanExecuteChanged()
     {
       CommandManager.InvalidateRequerySuggested(); //?.Invoke(this, EventArgs.Empty);
     }

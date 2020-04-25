@@ -94,8 +94,8 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Content.Contents
 
     public override Size MinCompSize => new Size(1200, 1200);
 
-    public override ContentTypeFlag ContentType =>
-      Html ? ContentTypeFlag.Html : ContentTypeFlag.RawText;
+    public override ContentTypeFlags ContentType =>
+      Html ? ContentTypeFlags.Html : ContentTypeFlags.RawText;
 
     #endregion
   }

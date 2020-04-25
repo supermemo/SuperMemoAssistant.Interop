@@ -43,7 +43,7 @@ using Message = SuperMemoAssistant.Sys.IO.Devices.Message;
 namespace SuperMemoAssistant.Services.IO.Keyboard
 {
   /// <summary>https://stackoverflow.com/questions/1153009/how-can-i-convert-system-windows-input-key-to-system-windows-forms-keys</summary>
-  public class KeyboardHotKeyService 
+  public sealed class KeyboardHotKeyService
     : PerpetualMarshalByRefObject,
       IKeyboardHotKeyService, IDisposable
   {
@@ -86,16 +86,16 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
       messageLoop.Start();
     }
 
-    protected KeyboardHotKeyService() { }
+    private KeyboardHotKeyService() { }
 
     /// <inheritdoc />
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD001:Avoid legacy thread switching APIs", Justification = "<Pending>")]
     public void Dispose()
     {
       foreach (var hotKey in RegisteredHotKeys.Keys.ToList())
         UnregisterHotKey(hotKey);
 
-      _syncContext.Send(delegate { _wnd.Close(); },
-                        null);
+      _syncContext.Send(delegate { _wnd.Close(); }, null);
     }
 
     #endregion

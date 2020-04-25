@@ -41,6 +41,7 @@ namespace SuperMemoAssistant.Sys.Windows.Data
   {
     #region IValueConverter Members
 
+    /// <inheritdoc />
     public object Convert(object                           value,
                           Type                             targetType,
                           object                           parameter,
@@ -55,13 +56,14 @@ namespace SuperMemoAssistant.Sys.Windows.Data
       bool negate = false;
 
       if (parameter is string negateStr)
-        bool.TryParse(negateStr, out negate);
+        _ = bool.TryParse(negateStr, out negate);
 
       show = negate ? !show : show;
 
       return show ? Visibility.Visible : Visibility.Hidden;
     }
 
+    /// <inheritdoc />
     public object ConvertBack(object                           value,
                               Type                             targetType,
                               object                           parameter,

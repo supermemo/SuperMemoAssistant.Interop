@@ -36,10 +36,21 @@ using System.Linq;
 
 namespace SuperMemoAssistant.Extensions
 {
+  /// <summary>
+  /// Extension methods for <see cref="Object"/>
+  /// </summary>
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
   public static class ObjectEx
   {
     #region Methods
 
+    /// <summary>
+    /// Executes an action on <paramref name="obj"/> and then returns it. Allows chaining actions.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="obj"></param>
+    /// <param name="withAction"></param>
+    /// <returns></returns>
     public static T With<T>(this T    obj,
                             Action<T> withAction)
     {
@@ -48,6 +59,14 @@ namespace SuperMemoAssistant.Extensions
       return obj;
     }
 
+    /// <summary>
+    /// Checks whether <paramref name="obj"/> is contained within the collection <paramref name="col"/>
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <param name="obj"></param>
+    /// <param name="col"></param>
+    /// <returns></returns>
     public static bool ContainedIn<T1, T2>(this T1         obj,
                                            IEnumerable<T2> col)
       where T2 : T1

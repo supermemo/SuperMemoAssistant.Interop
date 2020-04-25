@@ -38,19 +38,34 @@ using System.Windows.Input;
 
 namespace SuperMemoAssistant.Sys.IO.Devices
 {
+  /// <summary>
+  /// Represents a sequence of keys
+  /// </summary>
   [Serializable]
-  public class Keys : List<(Key key, Task<bool> task)>
+  public class KeyCollection : List<(Key key, Task<bool> task)>
   {
     #region Constructors
 
-    public Keys(params Key[] keys)
+    /// <summary>
+    /// New instance with all modifiers set to false
+    /// </summary>
+    /// <param name="keys"></param>
+    public KeyCollection(params Key[] keys)
       : this(false,
              false,
              false,
              false,
              keys) { }
 
-    public Keys(bool         ctrl  = false,
+    /// <summary>
+    /// New instance
+    /// </summary>
+    /// <param name="ctrl"></param>
+    /// <param name="alt"></param>
+    /// <param name="shift"></param>
+    /// <param name="win"></param>
+    /// <param name="keys"></param>
+    public KeyCollection(bool         ctrl  = false,
                 bool         alt   = false,
                 bool         shift = false,
                 bool         win   = false,
@@ -64,14 +79,26 @@ namespace SuperMemoAssistant.Sys.IO.Devices
       Add(keys);
     }
 
-    public Keys(params (Key key, Task<bool> task)[] keys)
+    /// <summary>
+    /// New instance
+    /// </summary>
+    /// <param name="keys"></param>
+    public KeyCollection(params (Key key, Task<bool> task)[] keys)
       : this(false,
              false,
              false,
              false,
              keys) { }
 
-    public Keys(bool                                ctrl  = false,
+    /// <summary>
+    /// New instance
+    /// </summary>
+    /// <param name="ctrl"></param>
+    /// <param name="alt"></param>
+    /// <param name="shift"></param>
+    /// <param name="win"></param>
+    /// <param name="keys"></param>
+    public KeyCollection(bool                                ctrl  = false,
                 bool                                alt   = false,
                 bool                                shift = false,
                 bool                                win   = false,
@@ -97,7 +124,7 @@ namespace SuperMemoAssistant.Sys.IO.Devices
       AddRange(keys.Select(key => (key, (Task<bool>)null)));
     }
 
-    public static Keys operator +(Keys ks,
+    public static KeyCollection operator +(KeyCollection ks,
                                   Key  key)
     {
       ks.Add((key, null));
@@ -105,8 +132,8 @@ namespace SuperMemoAssistant.Sys.IO.Devices
       return ks;
     }
 
-    public static Keys operator +(Key  key,
-                                  Keys ks)
+    public static KeyCollection operator +(Key  key,
+                                  KeyCollection ks)
     {
       ks.Insert(0,
                 (key, null));
@@ -114,7 +141,7 @@ namespace SuperMemoAssistant.Sys.IO.Devices
       return ks;
     }
 
-    public static Keys operator +(Keys                           ks,
+    public static KeyCollection operator +(KeyCollection                           ks,
                                   (Key key, Task<bool> syncTask) vt)
     {
       ks.Add(vt);
@@ -122,8 +149,8 @@ namespace SuperMemoAssistant.Sys.IO.Devices
       return ks;
     }
 
-    public static Keys operator +((Key key, Task<bool> syncTask) vt,
-                                  Keys                           ks)
+    public static KeyCollection operator +((Key key, Task<bool> syncTask) vt,
+                                  KeyCollection                           ks)
     {
       ks.Insert(0,
                 vt);
@@ -151,10 +178,10 @@ namespace SuperMemoAssistant.Sys.IO.Devices
       return modifiers;
     }
 
-
-    public static implicit operator Keys(HotKey hotKey)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2225:Operator overloads have named alternates", Justification = "We only use C#")]
+    public static implicit operator KeyCollection(HotKey hotKey)
     {
-      return new Keys(
+      return new KeyCollection(
         hotKey.Ctrl,
         hotKey.Alt,
         hotKey.Shift,

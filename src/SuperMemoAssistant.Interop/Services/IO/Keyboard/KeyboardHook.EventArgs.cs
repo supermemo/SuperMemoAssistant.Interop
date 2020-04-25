@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/02/22 13:14
-// Modified On:  2019/02/22 13:14
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 05:30
 // Modified By:  Alexis
 
 #endregion
@@ -30,10 +30,11 @@
 
 
 
-using System.ComponentModel;
-
 namespace SuperMemoAssistant.Services.IO.Keyboard
 {
+  using System.ComponentModel;
+  using Sys.IO.Devices;
+
   public class KeyboardHookEventArgs : HandledEventArgs
   {
     #region Constructors
@@ -61,8 +62,8 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
 
     #region Properties & Fields - Public
 
-    public KeyboardState              KeyboardState { get; private set; }
-    public LowLevelKeyboardInputEvent KeyboardData  { get; private set; }
+    public KeyboardState              KeyboardState { get; }
+    public LowLevelKeyboardInputEvent KeyboardData  { get; }
 
     public bool Alt   { get; }
     public bool Ctrl  { get; }

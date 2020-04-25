@@ -68,6 +68,11 @@ namespace SuperMemoAssistant.Sys.Threading
 
     #region Methods
 
+    /// <summary>
+    /// Starts or delay the task by <paramref name="delayMs"/> milliseconds
+    /// </summary>
+    /// <param name="delayMs"></param>
+    /// <returns></returns>
     public DelayedTask Trigger(int delayMs)
     {
       if (delayMs <= 0)
@@ -78,12 +83,15 @@ namespace SuperMemoAssistant.Sys.Threading
         _next = DateTime.Now.AddMilliseconds(delayMs);
 
         if (_task == null)
-          _task = Task.Factory.StartNew(HandleAsync);
+          _task = Task.Factory.StartNew(Run, CancellationToken.None, TaskCreationOptions.None, TaskScheduler.Default);
 
         return this;
       }
     }
 
+    /// <summary>
+    /// Cancels the delayed task if it is running
+    /// </summary>
     public void Cancel()
     {
       lock (_lock)
@@ -93,7 +101,7 @@ namespace SuperMemoAssistant.Sys.Threading
       }
     }
 
-    private void HandleAsync()
+    private void Run()
     {
       while (true)
       {

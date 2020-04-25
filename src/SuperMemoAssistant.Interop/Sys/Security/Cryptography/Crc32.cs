@@ -48,8 +48,8 @@ namespace SuperMemoAssistant.Sys.Security.Cryptography
   {
     #region Constants & Statics
 
-    public const UInt32 DefaultPolynomial = 0xedb88320u;
-    public const UInt32 DefaultSeed       = 0xffffffffu;
+    private const UInt32 DefaultPolynomial = 0xedb88320u;
+    private const UInt32 DefaultSeed       = 0xffffffffu;
 
     private static UInt32[] _defaultTable;
 
@@ -70,10 +70,12 @@ namespace SuperMemoAssistant.Sys.Security.Cryptography
 
 
     #region Constructors
-
+    
+    /// <inheritdoc />
     public Crc32()
       : this(DefaultPolynomial, DefaultSeed) { }
-
+    
+    /// <inheritdoc />
     public Crc32(UInt32 polynomial,
                  UInt32 seed)
     {
@@ -88,7 +90,8 @@ namespace SuperMemoAssistant.Sys.Security.Cryptography
 
     #region Properties Impl - Public
 
-    public override int HashSize { get { return 32; } }
+    /// <inheritdoc />
+    public override int HashSize => 32;
 
     #endregion
 
@@ -96,19 +99,22 @@ namespace SuperMemoAssistant.Sys.Security.Cryptography
 
 
     #region Methods Impl
-
+    
+    /// <inheritdoc />
     public override void Initialize()
     {
       _hash = _seed;
     }
-
+    
+    /// <inheritdoc />
     protected override void HashCore(byte[] array,
                                      int    ibStart,
                                      int    cbSize)
     {
       _hash = CalculateHash(_table, _hash, array, ibStart, cbSize);
     }
-
+    
+    /// <inheritdoc />
     protected override byte[] HashFinal()
     {
       var hashBuffer = UInt32ToBigEndianBytes(~_hash);

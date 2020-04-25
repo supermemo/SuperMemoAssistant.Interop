@@ -38,7 +38,7 @@ namespace SuperMemoAssistant.Sys
   ///   A disposable class that does nothing. Original from: https://github.com/Wyamio/Wyam/
   ///   Copyright (c) 2014 Dave Glick
   /// </summary>
-  public class EmptyDisposable : IDisposable
+  public sealed class EmptyDisposable : IDisposable
   {
     #region Constants & Statics
 

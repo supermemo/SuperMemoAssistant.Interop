@@ -38,6 +38,8 @@ using static System.Double;
 
 namespace SuperMemoAssistant.Sys.IO
 {
+  using System.Globalization;
+
   public class IniValue
   {
     #region Constants & Statics
@@ -56,11 +58,11 @@ namespace SuperMemoAssistant.Sys.IO
 
     public IniValue(object value)
     {
-      var formattable = value as IFormattable;
-      if (formattable != null)
+      if (value is IFormattable formattable)
         _value = formattable.ToString(null, System.Globalization.CultureInfo.InvariantCulture);
+
       else
-        _value = value != null ? value.ToString() : null;
+        _value = value?.ToString();
     }
 
     public IniValue(string value)
@@ -288,11 +290,12 @@ namespace SuperMemoAssistant.Sys.IO
     #endregion
   }
 
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "More sensical given usage")]
   public class IniFile : IEnumerable<KeyValuePair<string, IniSection>>, IDictionary<string, IniSection>
   {
     #region Constants & Statics
 
-    public static IEqualityComparer<string> DefaultComparer = new CaseInsensitiveStringComparer();
+    public static readonly IEqualityComparer<string> DefaultComparer = new CaseInsensitiveStringComparer();
 
     #endregion
 
@@ -331,9 +334,9 @@ namespace SuperMemoAssistant.Sys.IO
 
     #region Properties & Fields - Public
 
-    public IEqualityComparer<string> StringComparer;
+    public IEqualityComparer<string> StringComparer { get; set; }
 
-    public bool SaveEmptySections;
+    public bool SaveEmptySections { get; set; }
 
     #endregion
 
@@ -464,9 +467,11 @@ namespace SuperMemoAssistant.Sys.IO
       foreach (var section in sections)
         if (section.Value.Count > 0 || SaveEmptySections)
         {
-          writer.WriteLine(string.Format("[{0}]", section.Key.Trim()));
+          writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "[{0}]", section.Key.Trim()));
+
           foreach (var kvp in section.Value)
-            writer.WriteLine(string.Format("{0}={1}", kvp.Key, kvp.Value));
+            writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}={1}", kvp.Key, kvp.Value));
+
           writer.WriteLine("");
         }
     }
@@ -520,7 +525,7 @@ namespace SuperMemoAssistant.Sys.IO
       }
     }
 
-    private bool LoadValue(string line, out string key, out IniValue val)
+    private static bool LoadValue(string line, out string key, out IniValue val)
     {
       var assignIndex = line.IndexOf('=');
       if (assignIndex <= 0)
@@ -587,7 +592,7 @@ namespace SuperMemoAssistant.Sys.IO
     {
       public bool Equals(string x, string y)
       {
-        return String.Compare(x, y, true) == 0;
+        return string.Compare(x, y, StringComparison.OrdinalIgnoreCase) == 0;
       }
 
       public int GetHashCode(string obj)
@@ -614,7 +619,8 @@ namespace SuperMemoAssistant.Sys.IO
 #endif
     }
   }
-
+  
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "More sensical given usage")]
   public class IniSection : IEnumerable<KeyValuePair<string, IniValue>>, IDictionary<string, IniValue>
   {
     #region Properties & Fields - Non-Public
@@ -1016,6 +1022,7 @@ namespace SuperMemoAssistant.Sys.IO
       return list;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
     public IniValue this[int index]
     {
       get

@@ -31,8 +31,14 @@
 
 namespace SuperMemoAssistant.Interop.Plugins
 {
+  /// <summary>
+  /// Defines the list of Plugin-PluginManager messages
+  /// </summary>
   public enum PluginMessage
   {
+    /// <summary>
+    /// The logger's share config file has been updated and needs to be reloaded
+    /// </summary>
     OnLoggerConfigUpdated = 1,
   }
 }

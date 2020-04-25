@@ -19,34 +19,36 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Modified On:  2020/01/28 18:02
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Contents;
-using SuperMemoAssistant.Interop.SuperMemo.Elements.Models;
-using SuperMemoAssistant.Interop.SuperMemo.Elements.Types;
-using SuperMemoAssistant.Interop.SuperMemo.Registry.Members;
-
 // ReSharper disable CollectionNeverQueried.Global
 
 namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
 {
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
+  using System.Text;
+  using Content.Contents;
+  using Models;
+  using Registry.Members;
+  using Types;
+
+  /// <summary>Defines a new element: its properties, its location in the knowledge tree, how to create it, ...</summary>
+  /// <seealso cref="IElementRegistry.Add(out System.Collections.Generic.List{SuperMemoAssistant.Interop.SuperMemo.Elements.Models.ElemCreationResult}, ElemCreationFlags, ElementBuilder[])" />
   [Serializable]
   public class ElementBuilder
   {
     #region Constructors
 
+    /// <summary>Defines a new element</summary>
+    /// <param name="type">What type of element</param>
+    /// <param name="layoutName">The <see cref="ISuperMemoAssistant.Layouts" /> to use when arranging components</param>
+    /// <param name="contents">The content (components) to add in this element</param>
     public ElementBuilder(ElementType          type,
                           string               layoutName = null,
                           params ContentBase[] contents)
@@ -59,7 +61,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
         Contents.AddRange(contents);
 
       ContentType = Contents.Aggregate(
-        ContentTypeFlag.None,
+        ContentTypeFlags.None,
         (typeAcc, content) => typeAcc | content.ContentType
       );
 
@@ -68,12 +70,19 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
       Title         = null;
     }
 
+    /// <summary>Defines a new element. Uses the default layout.</summary>
+    /// <param name="type">What type of element</param>
+    /// <param name="contents">The content (components) to add in this element</param>
     public ElementBuilder(ElementType          type,
                           params ContentBase[] contents)
       : this(type,
              null,
              contents) { }
 
+    /// <summary>Defines a new element. Uses the default layout.</summary>
+    /// <param name="type">What type of element</param>
+    /// <param name="content">The text content</param>
+    /// <param name="html">Whether the text content is html. Used for escaping content</param>
     public ElementBuilder(ElementType type,
                           string      content,
                           bool        html = true)
@@ -81,6 +90,11 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
              new TextContent(html,
                              content)) { }
 
+    /// <summary>Defines a new element. Uses the default layout.</summary>
+    /// <param name="type">What type of element</param>
+    /// <param name="content">The text content</param>
+    /// <param name="html">Whether the text content is html. Used for escaping content</param>
+    /// <param name="encoding">The text encoding (e.g. UTF-8)</param>
     public ElementBuilder(ElementType type,
                           string      content,
                           bool        html,
@@ -97,19 +111,50 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
 
     #region Properties & Fields - Public
 
-    public ElementType       Type               { get; }
-    public List<ContentBase> Contents           { get; } = new List<ContentBase>();
-    public ContentTypeFlag   ContentType        { get; }
-    public string            Layout             { get; private set; }
-    public string            Title              { get; private set; }
-    public References        Reference          { get; private set; }
-    public bool              ShouldDisplay      { get; private set; }
-    public double            Priority           { get; private set; }
-    public IElement          Parent             { get; private set; }
-    public IConcept          Concept            { get; private set; }
-    public ElementStatus     Status             { get; private set; }
-    public bool              ForceGenerateTitle { get; private set; }
-    public List<IConcept>    LinkedConcepts     { get; } = new List<IConcept>();
+    /// <summary>The kind of element (e.g. article, item, task, ...)</summary>
+    public ElementType Type { get; }
+
+    /// <summary>The content definitions (e.g. text, images, ...)</summary>
+    public List<ContentBase> Contents { get; } = new List<ContentBase>();
+
+    /// <summary>
+    ///   Aggregates all the defined content types to a single property using flags (i.e. a flag will be set for every type of
+    ///   content added to this element)
+    /// </summary>
+    public ContentTypeFlags ContentType { get; }
+
+    /// <summary>The <see cref="ISuperMemoAssistant.Layouts" /> to use when arranging components</summary>
+    public string Layout { get; private set; }
+
+    /// <summary>The element's title</summary>
+    public string Title { get; private set; }
+
+    /// <summary>The element's references (e.g. title, source, ...)</summary>
+    public References Reference { get; private set; }
+
+    /// <summary>
+    ///   Whether to display the element after creating it. If set to <see langword="false" />, the currently displayed element
+    ///   will still be displayed
+    /// </summary>
+    public bool ShouldDisplay { get; private set; }
+
+    /// <summary>Sets the element's priority (for the algorithm to determine the frequency of review)</summary>
+    public double Priority { get; private set; }
+
+    /// <summary>Determines the element's parent element -- a.k.a which branch should this element belong to</summary>
+    public IElement Parent { get; private set; }
+
+    /// <summary>Defines the element's concept</summary>
+    public IConcept Concept { get; private set; }
+
+    /// <summary>Defines in which queue (learning, pending, ...) should the element be inserted</summary>
+    public ElementStatus Status { get; private set; }
+
+    /// <summary>Forces SMA to automatically generate a title (i.e. will override the provided reference's title)</summary>
+    public bool ForceGenerateTitle { get; private set; }
+
+    /// <summary>Which concepts are associated this element</summary>
+    public List<IConcept> LinkedConcepts { get; } = new List<IConcept>();
 
     #endregion
 
@@ -118,54 +163,86 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
 
     #region Methods
 
+    /// <summary>Defines the element reference's title</summary>
+    /// <param name="title"></param>
+    /// <returns></returns>
     public ElementBuilder WithTitle(string title)
     {
       Title = title;
       return this;
     }
 
+    /// <summary>Defines which layout to use when arrange components</summary>
+    /// <see cref="ISuperMemoAssistant.Layouts" />
+    /// <param name="layoutName"></param>
+    /// <returns></returns>
     public ElementBuilder WithLayout(string layoutName)
     {
       Layout = layoutName;
       return this;
     }
 
+    /// <summary>Defines the element references</summary>
+    /// <param name="refBuilder"></param>
+    /// <returns></returns>
     public ElementBuilder WithReference(Func<References, References> refBuilder)
     {
       Reference = refBuilder(new References());
       return this;
     }
 
+    /// <summary>
+    ///   Whether to display the element after creating it. If set to <see langword="false" />, the currently displayed element
+    ///   will still be displayed
+    /// </summary>
+    /// <returns></returns>
     public ElementBuilder Display()
     {
       ShouldDisplay = true;
       return this;
     }
 
+    /// <summary>
+    ///   Do not display this element after creating it, the currently displayed element will still be displayed
+    /// </summary>
+    /// <returns></returns>
     public ElementBuilder DoNotDisplay()
     {
       ShouldDisplay = false;
       return this;
     }
 
+    /// <summary>Sets the element's priority (for the algorithm to determine the frequency of review)</summary>
+    /// <param name="priority"></param>
+    /// <returns></returns>
     public ElementBuilder WithPriority(double priority)
     {
       Priority = priority;
       return this;
     }
 
+    /// <summary>Determines the element's parent element -- a.k.a which branch should this element belong to</summary>
+    /// <param name="parent"></param>
+    /// <returns></returns>
     public ElementBuilder WithParent(IElement parent)
     {
       Parent = parent;
       return this;
     }
 
+    /// <summary>Defines the element's concept</summary>
+    /// <param name="concept"></param>
+    /// <returns></returns>
     public ElementBuilder WithConcept(IConcept concept)
     {
       Concept = concept;
       return this;
     }
 
+    /// <summary>Defines in which queue (learning, pending, ...) should the element be inserted</summary>
+    /// <param name="status"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException">The element cannot be <see cref="ElementStatus.Deleted" /></exception>
     public ElementBuilder WithStatus(ElementStatus status)
     {
       if (status == ElementStatus.Deleted)
@@ -175,18 +252,26 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
       return this;
     }
 
+    /// <summary>Forces SMA to automatically generate a title (i.e. will override the provided reference's title)</summary>
+    /// <returns></returns>
     public ElementBuilder WithForcedGeneratedTitle()
     {
       ForceGenerateTitle = true;
       return this;
     }
 
+    /// <summary>Associates this element with the given concepts</summary>
+    /// <param name="concepts"></param>
+    /// <returns></returns>
     public ElementBuilder AddLinkedConcepts(IEnumerable<IConcept> concepts)
     {
       LinkedConcepts.AddRange(concepts);
       return this;
     }
 
+    /// <summary>Associates this element with a concept</summary>
+    /// <param name="concept"></param>
+    /// <returns></returns>
     public ElementBuilder AddLinkedConcept(IConcept concept)
     {
       LinkedConcepts.Add(concept);

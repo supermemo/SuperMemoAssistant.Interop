@@ -34,6 +34,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 // https://github.com/Athari/Alba.Framework/blob/master/Alba.Framework/Collections/Collections/BiDictionary(TFirst%2CTSecond).cs
@@ -450,6 +451,7 @@ namespace SuperMemoAssistant.Sys.Collections
     }
   }
 
+  [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
   internal class DictionaryDebugView<TKey, TValue>
   {
     #region Properties & Fields - Non-Public

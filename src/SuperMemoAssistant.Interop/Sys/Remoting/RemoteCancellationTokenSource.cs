@@ -35,7 +35,7 @@ using System.Threading;
 
 namespace SuperMemoAssistant.Sys.Remoting
 {
-  public class RemoteCancellationTokenSource : IDisposable
+  public sealed class RemoteCancellationTokenSource : IDisposable
   {
     #region Properties & Fields - Non-Public
 

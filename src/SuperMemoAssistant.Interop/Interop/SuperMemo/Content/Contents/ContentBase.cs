@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -19,25 +19,20 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2019/01/16 15:54
-// Modified On:  2019/01/17 00:54
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using System;
-using System.ComponentModel;
-using System.Windows;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Models;
-using Size = System.Drawing.Size;
-
 namespace SuperMemoAssistant.Interop.SuperMemo.Content.Contents
 {
+  using System;
+  using System.ComponentModel;
+  using System.Windows;
+  using Models;
+  using Size = System.Drawing.Size;
+
   [Serializable]
   public abstract class ContentBase : INotifyPropertyChanged
   {
@@ -92,8 +87,8 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Content.Contents
 
     #region Methods Abs
 
-    public abstract ContentTypeFlag ContentType { get; }
-    public abstract Size MinCompSize { get; }
+    public abstract ContentTypeFlags ContentType { get; }
+    public abstract Size             MinCompSize { get; }
 
     #endregion
 

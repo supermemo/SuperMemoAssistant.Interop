@@ -19,29 +19,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2020/02/13 00:48
-// Modified On:  2020/02/13 14:37
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using System.Reflection;
-using System.Text.RegularExpressions;
-using Extensions.System.IO;
-
 namespace SuperMemoAssistant.Interop
 {
+  using System.Reflection;
+  using System.Text.RegularExpressions;
+  using global::Extensions.System.IO;
+
+  /// <summary>Contains information about the current executable's assembly</summary>
   public class SMAExecutableInfo
   {
     #region Constants & Statics
 
-    private const string EntryAssemblyRegexPattern = @"/app-([\d.]+|dev)/(SuperMemoAssistant(?:\.PluginHost)?.exe)";
+    private const string EntryAssemblyRegexPattern = @"/app-([\d.]+(?:-[\w\-]+)?|dev)/(SuperMemoAssistant(?:\.PluginHost)?.exe)";
 
+    /// <summary>The <see cref="SMAExecutableInfo" /> singleton</summary>
     public static SMAExecutableInfo Instance { get; } = new SMAExecutableInfo();
 
     #endregion
@@ -51,7 +48,7 @@ namespace SuperMemoAssistant.Interop
 
     #region Constructors
 
-    protected SMAExecutableInfo()
+    private SMAExecutableInfo()
     {
       var entryAssemblyFilePath = new FilePath(Assembly.GetEntryAssembly().Location);
       var regexPattern          = SMAFileSystem.AppRootDir.FullPath + EntryAssemblyRegexPattern;
@@ -89,18 +86,29 @@ namespace SuperMemoAssistant.Interop
 
     #region Properties & Fields - Public
 
-    public DirectoryPath     DirectoryPath      { get; }
-    public SMAExecutableType ExecutableType     { get; } = SMAExecutableType.Unknown;
-    public bool              IsDev              { get; } = false;
-    public bool              IsPathLocalAppData { get; } = false;
+    /// <summary>The directory which contains the executing assembly's exe</summary>
+    public DirectoryPath DirectoryPath { get; }
+
+    /// <summary>Which SMA executable is currently hosting this dll -- internal use only (PluginHost, SMA)</summary>
+    public SMAExecutableType ExecutableType { get; } = SMAExecutableType.Unknown;
+
+    /// <summary>Whether the current SMA executable is a development version</summary>
+    public bool IsDev { get; } = false;
+
+    /// <summary>Whether SMA is installed in %LocalAppData%</summary>
+    public bool IsPathLocalAppData { get; } = false;
 
     #endregion
   }
 
+  /// <summary>Defines the different type of executables for SMA (plugin, SMA core, ..)</summary>
   public enum SMAExecutableType
   {
+    /// <summary>Other executable</summary>
     Unknown,
+    /// <summary>SuperMemoAssistant.exe</summary>
     SuperMemoAssistant,
+    /// <summary>PluginHost.exe</summary>
     PluginHost,
   }
 }

@@ -32,12 +32,34 @@
 
 namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
 {
+  /// <summary>
+  /// Defines all the element types available in SM
+  /// </summary>
   public enum ElementType
   {
+    /// <summary>
+    /// A topic (a.k.a article) https://supermemopedia.com/wiki/Topic
+    /// </summary>
     Topic        = 0,
+
+    /// <summary>
+    /// An item https://supermemopedia.com/wiki/Item
+    /// </summary>
     Item         = 1,
+    
+    /// <summary>
+    /// A task https://supermemopedia.com/wiki/Task
+    /// </summary>
     Task         = 2,
+
+    /// <summary>
+    /// An element template https://supermemopedia.com/wiki/Template
+    /// </summary>
     Template     = 3,
+
+    /// <summary>
+    /// The element representing a concept in the knowledge tree https://supermemopedia.com/wiki/Concept
+    /// </summary>
     ConceptGroup = 4,
   }
 }

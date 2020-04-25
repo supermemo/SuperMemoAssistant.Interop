@@ -55,7 +55,7 @@ namespace SuperMemoAssistant.Sys.Windows.Data
       bool negate = false;
 
       if (parameter is string negateStr)
-        bool.TryParse(negateStr, out negate);
+        _ = bool.TryParse(negateStr, out negate);
 
       show = negate ? !show : show;
 

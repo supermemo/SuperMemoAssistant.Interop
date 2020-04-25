@@ -44,7 +44,7 @@ namespace SuperMemoAssistant.Extensions
     public static string GetErrorString(this List<ElemCreationResult> results)
     {
       StringBuilder errorStr = new StringBuilder();
-      var tooManyChildrenErrors = results.Where(r => r.Result.HasFlag(ElemCreationResultCode.ErrorTooManyChildren))
+      var tooManyChildrenErrors = results.Where(r => r.Result.HasFlag(ElemCreationResultCodes.ErrorTooManyChildren))
                                          .Select(r => r.Builder.Title.Truncate(40))
                                          .ToList();
       var unknownErrors = results.Where(r => r.Success == false)

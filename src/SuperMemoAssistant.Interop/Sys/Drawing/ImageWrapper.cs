@@ -59,8 +59,7 @@ namespace SuperMemoAssistant.Sys.Drawing
 
       using MemoryStream stream = new MemoryStream();
 
-      img.Save(stream,
-               ImageFormat.Png);
+      img.Save(stream, ImageFormat.Png);
       _bytes = stream.ToArray();
     }
 
@@ -73,13 +72,13 @@ namespace SuperMemoAssistant.Sys.Drawing
 
     public FileInfo ToFile(string filePath)
     {
-      return ToFile(filePath,
-                    ImageFormat.Png);
+      return ToFile(filePath, ImageFormat.Png);
     }
 
     public FileInfo ToFile(string filePath, ImageFormat fmt)
     {
-      ToBitmap().Save(filePath, fmt);
+      using (var bmp = ToBitmap())
+        bmp.Save(filePath, fmt);
 
       return new FileInfo(filePath);
     }

@@ -21,7 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Modified On:  2020/02/25 11:12
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/06 19:47
 // Modified By:  Alexis
 
 #endregion
@@ -29,16 +30,24 @@
 
 
 
-using PluginManager.Interop.Contracts;
-using SuperMemoAssistant.Sys.Remoting;
-
 namespace SuperMemoAssistant.Interop.Plugins
 {
+  using PluginManager.Interop.Contracts;
+  using Sys.Remoting;
+
+  /// <summary>SMA's plugins' interface</summary>
   public interface ISMAPlugin : IPluginBase
   {
+    /// <summary>Whether the plugin has a settings interface available</summary>
     bool HasSettings { get; }
 
+    /// <summary>General message callback</summary>
+    /// <param name="msg">The message type</param>
+    /// <param name="parameters">The parameters associated with this message</param>
+    /// <returns></returns>
     RemoteTask<object> OnMessage(PluginMessage msg, params object[] parameters);
-    void               ShowSettings();
+
+    /// <summary>Requests the plugin to show its settings dialog interface</summary>
+    void ShowSettings();
   }
 }
