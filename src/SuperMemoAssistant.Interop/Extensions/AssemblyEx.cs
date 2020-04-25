@@ -39,18 +39,6 @@ namespace SuperMemoAssistant.Extensions
   {
     #region Methods
 
-    public static Guid GetAssemblyGuid(this Type typeInAssembly)
-    {
-      var assembly = typeInAssembly.Assembly;
-      var guidAttr = assembly.GetCustomAttributes(typeof(GuidAttribute),
-                                                  true);
-
-      var guidStr = ((GuidAttribute)guidAttr.FirstOrDefault())?.Value
-        ?? throw new NullReferenceException("GUID can't be null");
-
-      return Guid.Parse(guidStr);
-    }
-
     public static string GetAssemblyVersion(this Type typeInAssembly)
     {
       var assembly = typeInAssembly.Assembly;
