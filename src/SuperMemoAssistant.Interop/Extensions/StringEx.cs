@@ -31,6 +31,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -45,15 +46,23 @@ namespace SuperMemoAssistant.Extensions
   {
     #region Methods
     
+    /// <summary>
+    /// Computes the CRC32 for the given string
+    /// </summary>
+    /// <param name="content"></param>
+    /// <returns></returns>
     public static string GetCrc32(this string content)
     {
-      Crc32  crc32 = new Crc32();
-      string hash  = string.Empty;
+      using (Crc32  crc32 = new Crc32())
+      {
+        string hash = string.Empty;
 
-      using (MemoryStream ms = new MemoryStream(Encoding.Default.GetBytes(content)))
-        foreach (byte b in crc32.ComputeHash(ms)) hash += b.ToString("x2").ToLower();
+        using (MemoryStream ms = new MemoryStream(Encoding.Default.GetBytes(content)))
+          foreach (byte b in crc32.ComputeHash(ms))
+            hash += b.ToString("x2", CultureInfo.InvariantCulture).ToLowerInvariant();
 
-      return hash;
+        return hash;
+      }
     }
 
     public static string[] SplitLines(this string str, StringSplitOptions options = StringSplitOptions.None)
@@ -166,7 +175,7 @@ namespace SuperMemoAssistant.Extensions
       {
         case null: throw new ArgumentNullException(nameof(str));
         case "":   throw new ArgumentException($"{nameof(str)} cannot be empty", nameof(str));
-        default:   return str.First().ToString().ToUpper() + str.Substring(1);
+        default:   return str.First().ToString(CultureInfo.InvariantCulture).ToUpperInvariant() + str.Substring(1);
       }
     }
 
@@ -198,10 +207,12 @@ namespace SuperMemoAssistant.Extensions
                         .ToString();
     }
 
+#pragma warning disable CA1055 // Uri return values should not be strings
     public static string UrlEncode(this string text)
     {
       return WebUtility.UrlDecode(text);
     }
+#pragma warning restore CA1055 // Uri return values should not be strings
 
     public static string Before(this string str, string separator)
     {

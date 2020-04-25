@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -19,21 +19,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2018/07/27 12:55
-// Modified On:  2019/01/16 17:33
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using SuperMemoAssistant.Interop.SuperMemo.Registry.Members;
-
 namespace SuperMemoAssistant.Interop.SuperMemo.Content.Components
 {
+  using Registry.Members;
+
   public interface IComponentHtml : IComponent
   {
     IText Text       { get; }

@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/12/07 13:56
-// Modified On:  2018/12/07 13:58
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 04:49
 // Modified By:  Alexis
 
 #endregion
@@ -30,13 +30,21 @@
 
 
 
-using SuperMemoAssistant.Interop.SuperMemo.Registry.Members;
-
 namespace SuperMemoAssistant.Interop.SuperMemo.Registry.Types
 {
+  using Members;
+
+  /// <summary>The <see cref="IBinary" /> registry</summary>
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
   public interface IBinaryRegistry : IRegistry<IBinary>
   {
-    int AddMember(string path,
-                  string registryName);
+    /// <summary>
+    ///   Adds a new file to the binary registry. If <paramref name="registryName" /> is already used, SM will automatically
+    ///   append an additional character to differentiate them
+    /// </summary>
+    /// <param name="filePath">The path to the file</param>
+    /// <param name="registryName">The name to use in the registry</param>
+    /// <returns>The created registry member id, or -1 if the operation failed</returns>
+    int Add(string filePath, string registryName);
   }
 }

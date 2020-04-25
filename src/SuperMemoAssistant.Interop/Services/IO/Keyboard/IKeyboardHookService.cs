@@ -42,7 +42,7 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
 
     void RegisterHotKey(HotKey hotkey,
                         Action callback,
-                        HotKeyScope scope = HotKeyScope.SM);
+                        HotKeyScopes scope = HotKeyScopes.SM);
 
     bool UnregisterHotKey(HotKey hotkey);
   }

@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2020/01/23 08:17
-// Modified On:  2020/02/12 23:41
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 06:43
 // Modified By:  Alexis
 
 #endregion
@@ -30,21 +30,22 @@
 
 
 
-using System;
-using Anotar.Serilog;
-using Serilog;
-using Serilog.Core;
-using Serilog.Exceptions;
-using SuperMemoAssistant.Interop;
-using SuperMemoAssistant.Services.Configuration;
-using Extensions.System.IO;
-
-namespace SuperMemoAssistant.Services.IO.Logger
+namespace SuperMemoAssistant.Services.IO.Diagnostics
 {
-  /*
-   * This is separate from Logger due to race condition with Fody's Anotar.Serilog
-   * See https://github.com/Fody/Anotar/issues/114
-   */
+  using System;
+  using Anotar.Serilog;
+  using Configuration;
+  using global::Extensions.System.IO;
+  using Interop;
+  using Serilog;
+  using Serilog.Core;
+  using Serilog.Exceptions;
+
+  /// <summary>
+  /// Factory to instantiate logger instances.
+  /// This is separate from Logger due to race condition with Fody's Anotar.Serilog
+  /// See https://github.com/Fody/Anotar/issues/114
+  /// </summary>
   public static class LoggerFactory
   {
     #region Constants & Statics
@@ -58,6 +59,12 @@ namespace SuperMemoAssistant.Services.IO.Logger
 
     #region Methods
 
+    /// <summary>Instantiates a new Serilog logger</summary>
+    /// <param name="appName">The app name used in the file name</param>
+    /// <param name="loggerCfg">Optional config</param>
+    /// <param name="levelSwitch">The minimum logging level switch</param>
+    /// <param name="configPredicate">A predicate to configure to the logger</param>
+    /// <returns>New Serilog logger instance</returns>
     public static ILogger CreateSerilog(
       string                appName,
       LoggerCfg             loggerCfg       = null,
@@ -96,7 +103,11 @@ namespace SuperMemoAssistant.Services.IO.Logger
       return loggerConfig.CreateLogger();
     }
 
-
+    /// <summary>Create a new SMA logger instance</summary>
+    /// <param name="appName">The app name used in the file name</param>
+    /// <param name="sharedConfig">The shared config service to load the logging configuration file</param>
+    /// <param name="configPredicate">A predicate to configure to the logger</param>
+    /// <returns>New logger instance</returns>
     public static Logger Create(
       string                   appName,
       ConfigurationServiceBase sharedConfig,
@@ -113,11 +124,14 @@ namespace SuperMemoAssistant.Services.IO.Logger
       return new Logger(config, levelSwitch);
     }
 
+    /// <summary>Loads the logging configuration</summary>
+    /// <param name="sharedConfig">The shared configuration service</param>
+    /// <returns></returns>
     public static LoggerCfg LoadConfig(ConfigurationServiceBase sharedConfig)
     {
       try
       {
-        return sharedConfig.Load<LoggerCfg>().Result ?? new LoggerCfg();
+        return sharedConfig.Load<LoggerCfg>() ?? new LoggerCfg();
       }
       catch (Exception ex)
       {
@@ -142,6 +156,9 @@ namespace SuperMemoAssistant.Services.IO.Logger
 
 
 
+    /// <summary>Customizes the logger configuration</summary>
+    /// <param name="config">The logger configuration</param>
+    /// <returns>The modified configuration object</returns>
     public delegate LoggerConfiguration LoggerConfigPredicate(LoggerConfiguration config);
   }
 }

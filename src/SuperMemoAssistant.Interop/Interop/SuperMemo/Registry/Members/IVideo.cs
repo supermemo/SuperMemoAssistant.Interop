@@ -32,5 +32,8 @@
 
 namespace SuperMemoAssistant.Interop.SuperMemo.Registry.Members
 {
+  /// <summary>
+  /// A video from the video registry
+  /// </summary>
   public interface IVideo : IRegistryMember { }
 }

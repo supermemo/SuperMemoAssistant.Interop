@@ -25,6 +25,7 @@ namespace SuperMemoAssistant.Sys.Collections
     ///   notification based change tracking for a collection navigation property.
     /// </summary>
     /// <typeparam name="T"> The type of elements in the hash set. </typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
     public class ObservableHashSet<T>
       : ISet<T>, IReadOnlyCollection<T>, INotifyCollectionChanged, INotifyPropertyChanged, INotifyPropertyChanging
     {

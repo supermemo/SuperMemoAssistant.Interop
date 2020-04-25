@@ -44,14 +44,14 @@ namespace SuperMemoAssistant.Sys.Windows.Behaviors
         "MaxLines",
         typeof(int),
         typeof(TextBlockEx),
-        new PropertyMetadata(default(int), OnMaxLinesPropertyChangedCallback));
+        new PropertyMetadata(default(int), OnMaxLinesChanged));
 
     public static readonly DependencyProperty MinLinesProperty =
       DependencyProperty.RegisterAttached(
         "MinLines",
         typeof(int),
         typeof(TextBlockEx),
-        new PropertyMetadata(default(int), OnMinLinesPropertyChangedCallback));
+        new PropertyMetadata(default(int), OnMinLinesChanged));
 
     #endregion
 
@@ -70,7 +70,7 @@ namespace SuperMemoAssistant.Sys.Windows.Behaviors
       return (int)element.GetValue(MaxLinesProperty);
     }
 
-    private static void OnMaxLinesPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnMaxLinesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
       if (d is TextBlock textBlock)
         textBlock.MaxHeight = GetLineHeight(textBlock) * GetMaxLines(textBlock);
@@ -89,7 +89,7 @@ namespace SuperMemoAssistant.Sys.Windows.Behaviors
       return (int)element.GetValue(MinLinesProperty);
     }
 
-    private static void OnMinLinesPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    private static void OnMinLinesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
       if (d is TextBlock textBlock)
         textBlock.MinHeight = GetLineHeight(textBlock) * GetMinLines(textBlock);

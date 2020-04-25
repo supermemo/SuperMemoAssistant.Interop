@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -19,46 +19,65 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2019/03/02 18:29
-// Modified On:  2019/04/11 18:13
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using System;
-using System.Threading.Tasks;
-
 namespace SuperMemoAssistant.Extensions
 {
+  using System;
+  using System.Diagnostics.CodeAnalysis;
+  using System.Threading.Tasks;
+
   public static class TaskEx
   {
     #region Methods
-
-#pragma warning disable RECS0165 // Asynchronous methods should return a Task instead of void
+    
+    [SuppressMessage("AsyncUsage", "AsyncFixer03:Avoid fire & forget async void methods")]
+    [SuppressMessage("Usage", "VSTHRD100:Avoid async void methods")]
+    [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods")]
+    [SuppressMessage("Usage", "VSTHRD003:Avoid awaiting foreign Tasks")]
     public static async void RunAsync(this Task         task,
                                       Action<Exception> handler = null)
-#pragma warning restore RECS0165 // Asynchronous methods should return a Task instead of void
     {
+      if (task == null)
+        throw new ArgumentNullException(nameof(task));
+
       try
       {
-        await task;
+        await task.ConfigureAwait(false);
       }
       catch (Exception ex)
       {
         handler?.Invoke(ex);
       }
     }
+    
+    [SuppressMessage("AsyncUsage", "AsyncFixer03:Avoid fire & forget async void methods")]
+    [SuppressMessage("Usage", "VSTHRD100:Avoid async void methods")]
+    [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods")]
+    [SuppressMessage("Usage", "VSTHRD003:Avoid awaiting foreign Tasks")]
+    public static async void RunAsync(this Task             task,
+                                      Func<Exception, Task> handler)
+    {
+      if (task == null)
+        throw new ArgumentNullException(nameof(task));
 
-    /// <summary>
-    /// Convenience task for async methods that aren't implemented
-    /// </summary>
+      try
+      {
+        await task.ConfigureAwait(false);
+      }
+      catch (Exception ex)
+      {
+        await (handler?.Invoke(ex)).ConfigureAwait(false);
+      }
+    }
+
+    /// <summary>Convenience task for async methods that aren't implemented</summary>
     /// <returns></returns>
-    public static Task ThrowNotImplementedException()
+    public static Task ThrowNotImplementedExceptionAsync()
     {
       throw new NotImplementedException();
     }

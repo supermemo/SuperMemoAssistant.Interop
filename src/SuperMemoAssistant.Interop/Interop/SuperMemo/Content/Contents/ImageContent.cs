@@ -75,7 +75,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Content.Contents
 
     #region Properties Impl - Public
 
-    public override ContentTypeFlag ContentType => ContentTypeFlag.Image;
+    public override ContentTypeFlags ContentType => ContentTypeFlags.Image;
     // TODO: Use image size
     public override Size MinCompSize => new Size(1200, 1200);
 

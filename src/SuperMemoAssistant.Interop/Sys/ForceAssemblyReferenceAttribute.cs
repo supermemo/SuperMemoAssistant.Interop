@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/04/16 13:29
-// Modified On:  2019/04/16 13:31
+// Created On:   2019/02/22 14:27
+// Modified On:  2019/02/22 14:28
 // Modified By:  Alexis
 
 #endregion
@@ -32,17 +32,27 @@
 
 using System;
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
+namespace SuperMemoAssistant.Sys
 {
-  [Serializable]
-  [Flags]
-  public enum ElemCreationResultCode
+  /// <summary>
+  /// Forces an assembly to be loaded by referencing it with this attribute in the dependent assembly
+  /// </summary>
+  [AttributeUsage(AttributeTargets.Assembly)]
+  public class ForceAssemblyReferenceAttribute : Attribute
   {
-    Success = 1,
-    
-    WarningConceptNotSet = 4,
+    #region Constructors
 
-    ErrorTooManyChildren = 64,
-    ErrorUnknown = 128
+    /// <inheritdoc />
+    public ForceAssemblyReferenceAttribute(Type forcedType)
+    {
+      void Noop(Type t)
+      {
+        System.Console.WriteLine(t.Name);
+      }
+
+      Noop(forcedType);
+    }
+
+    #endregion
   }
 }

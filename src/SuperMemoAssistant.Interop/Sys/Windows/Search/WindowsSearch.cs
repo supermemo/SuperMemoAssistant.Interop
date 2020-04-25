@@ -21,7 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Modified On:  2020/02/02 23:02
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 05:56
 // Modified By:  Alexis
 
 #endregion
@@ -29,42 +30,43 @@
 
 
 
-using System;
-using System.Collections.Generic;
-using System.Data.OleDb;
-using System.Linq;
-using System.Threading.Tasks;
-using SuperMemoAssistant.Extensions;
-
+// ReSharper disable StringLiteralTypo
 namespace SuperMemoAssistant.Sys.Windows.Search
 {
-  /// <summary>
-  /// https://github.com/shellscape/Lumen/blob/master/Application/Search/WindowsSearchProvider.cs
-  /// </summary>
-  public class WindowsSearch
+  using System;
+  using System.Collections.Generic;
+  using System.Data.OleDb;
+  using System.Linq;
+  using System.Threading.Tasks;
+  using Extensions;
+
+  /// <summary>Facilitates searching for data (files, contacts, ...) in the Windows index</summary>
+  /// <remarks>https://github.com/shellscape/Lumen/blob/master/Application/Search/WindowsSearchProvider.cs</remarks>
+  public sealed class WindowsSearch : IDisposable
   {
     #region Constants & Statics
 
-    // Shared connection used for any search index queries
-
-    private readonly OleDbConnection _connection;
-
-    /// <summary>Indicates if Winders Desktop Search is installed and enabled.</summary>
-    public bool IsAvailable => _connection != null;
+    /// <summary>The search singleton</summary>
+    public static WindowsSearch Instance { get; } = new WindowsSearch();
 
     #endregion
 
 
 
 
-    public static WindowsSearch Instance { get; } = new WindowsSearch();
+    #region Properties & Fields - Non-Public
+
+    // Shared connection used for any search index queries
+    private readonly OleDbConnection _connection;
+
+    #endregion
 
 
 
 
     #region Constructors
 
-    protected WindowsSearch()
+    private WindowsSearch()
     {
       try
       {
@@ -78,6 +80,23 @@ namespace SuperMemoAssistant.Sys.Windows.Search
       }
     }
 
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+      _connection?.Dispose();
+    }
+
+    #endregion
+
+
+
+
+    #region Properties & Fields - Public
+
+    /// <summary>Indicates if Winders Desktop Search is installed and enabled.</summary>
+    public bool IsAvailable => _connection != null;
+
     #endregion
 
 
@@ -85,10 +104,17 @@ namespace SuperMemoAssistant.Sys.Windows.Search
 
     #region Methods
 
-    public async Task<List<WindowsSearchResult>> Search(
-      string term,
-      WindowsSearchKind kind = WindowsSearchKind.All,
-      int limit = 1000)
+    /// <summary>Starts a search task for data matching <paramref name="term" /></summary>
+    /// <param name="term">The term to search for</param>
+    /// <param name="kind">The kind of data to search for</param>
+    /// <param name="limit">The maximum number of result to return</param>
+    /// <returns>List of search results</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities",
+                                                     Justification = "<Pending>")]
+    public async Task<List<WindowsSearchResult>> SearchAsync(
+      string             term,
+      WindowsSearchKinds kind  = WindowsSearchKinds.All,
+      int                limit = 1000)
     {
       var list = new List<WindowsSearchResult>();
 
@@ -98,9 +124,9 @@ namespace SuperMemoAssistant.Sys.Windows.Search
         from systemindex 
         where CONTAINS(""System.ItemNameDisplay"", '""*{term.Trim()}*""')";
 
-      if (kind != WindowsSearchKind.All)
-        sql += $"and System.Kind = '{kind.ToString().ToLower()}'";
-      
+      if (kind != WindowsSearchKinds.All)
+        sql += $"and System.Kind = '{kind.ToString().ToLowerInvariant()}'";
+
       sql += @"and System.FileAttributes <> ALL BITWISE 0x4 and System.FileAttributes <> ALL BITWISE 0x2
         order by System.Search.Rank";
 
@@ -109,8 +135,8 @@ namespace SuperMemoAssistant.Sys.Windows.Search
         command.Connection  = _connection;
         command.CommandText = sql;
 
-        using (var reader = await command.ExecuteReaderAsync())
-          while (await reader.ReadAsync())
+        using (var reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
+          while (await reader.ReadAsync().ConfigureAwait(false))
           {
             var result = new WindowsSearchResult()
             {
@@ -121,10 +147,10 @@ namespace SuperMemoAssistant.Sys.Windows.Search
 
             if (reader["System.Kind"] is string[] kinds && kinds.Length >= 1)
               foreach (var k in reader["System.Kind"] as string[])
-                result.Kind |= (WindowsSearchKind)Enum.Parse(typeof(WindowsSearchKind), k, true);
+                result.Kind |= (WindowsSearchKinds)Enum.Parse(typeof(WindowsSearchKinds), k, true);
 
             else
-              result.Kind = WindowsSearchKind.File;
+              result.Kind = WindowsSearchKinds.File;
 
             list.Add(result);
           }
@@ -135,17 +161,17 @@ namespace SuperMemoAssistant.Sys.Windows.Search
       return results;
     }
 
+
     /// <summary>
-    ///   Returns values from the search index for the given filename based on the supplied
-    ///   list of columns/properties
+    ///   Returns values from the search index for the given filename based on the supplied list of columns/properties
     /// </summary>
     /// <param name="columns">
-    ///   Comma-separated list of columns/properties
-    ///   (http://msdn2.microsoft.com/en-us/library/ms788673.aspx)
+    ///   Comma-separated list of columns/properties (http://msdn2.microsoft.com/en-us/library/ms788673.aspx)
     /// </param>
     /// <param name="filename">Filename about which to retrieve data</param>
     /// <returns>Key/value pairs for all requested columns/properties</returns>
-    /// <remarks></remarks>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities",
+                                                     Justification = "<Pending>")]
     public Dictionary<string, string> GetProperties(string columns, string filename)
     {
       Dictionary<string, string> items = new Dictionary<string, string>();
@@ -153,7 +179,7 @@ namespace SuperMemoAssistant.Sys.Windows.Search
       // The search provider does not support SQL parameters
       filename = filename.Replace("'", "''");
 
-      OleDbCommand cmd = new OleDbCommand
+      using OleDbCommand cmd = new OleDbCommand
       {
         Connection = _connection, CommandText = $"SELECT {columns} from systemindex WHERE System.ItemNameDisplay = '{filename}'"
       };
@@ -182,12 +208,13 @@ namespace SuperMemoAssistant.Sys.Windows.Search
               value = results.GetValue(i).ToString();
             }
 
-            if (key.StartsWith("System."))
+            if (key.StartsWith("System.", StringComparison.InvariantCultureIgnoreCase))
               key = key.Substring(7);
+
             items.Add(key, value);
           }
 
-          i = i + 1;
+          i++;
         }
       }
 

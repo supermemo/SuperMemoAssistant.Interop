@@ -32,8 +32,16 @@
 
 namespace SuperMemoAssistant.Interop.SuperMemo.Registry.Members
 {
+  /// <summary>
+  /// A binary from the binary registry
+  /// </summary>
   public interface IBinary : IRegistryMember
   {
-    string GetFilePath(string extension);
+    /// <summary>
+    /// Gets the path to the binary file
+    /// </summary>
+    /// <param name="extension">The optional file extension</param>
+    /// <returns>The binary file path or null</returns>
+    string GetFilePath(string extension = null);
   }
 }

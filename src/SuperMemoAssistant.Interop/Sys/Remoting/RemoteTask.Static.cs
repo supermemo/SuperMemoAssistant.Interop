@@ -36,6 +36,7 @@ using SuperMemoAssistant.Extensions;
 
 namespace SuperMemoAssistant.Sys.Remoting
 {
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
   public partial class RemoteTask
   {
     #region Methods

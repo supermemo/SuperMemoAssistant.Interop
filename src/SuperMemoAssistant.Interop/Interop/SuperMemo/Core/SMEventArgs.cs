@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/07/27 12:55
-// Modified On:  2019/01/19 01:23
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 00:30
 // Modified By:  Alexis
 
 #endregion
@@ -30,23 +30,25 @@
 
 
 
-using System;
-using System.Diagnostics;
-using SuperMemoAssistant.Interop.SuperMemo.Content;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Components;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Models;
-using SuperMemoAssistant.Interop.SuperMemo.Elements.Models;
-using SuperMemoAssistant.Interop.SuperMemo.Elements.Types;
-using SuperMemoAssistant.Interop.SuperMemo.Registry.Members;
-
 namespace SuperMemoAssistant.Interop.SuperMemo.Core
 {
+  using System;
+  using System.Diagnostics;
+  using Content;
+  using Content.Components;
+  using Content.Models;
+  using Elements.Models;
+  using Elements.Types;
+  using Registry.Members;
+
   /// <summary>Base event, contains a SM management instance</summary>
   [Serializable]
   public class SMEventArgs : EventArgs
   {
     #region Constructors
 
+    /// <summary>New instance</summary>
+    /// <param name="smMgmt"></param>
     public SMEventArgs(ISuperMemo smMgmt)
     {
       SMMgmt = smMgmt;
@@ -59,6 +61,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
     #region Properties & Fields - Public
 
+    /// <summary>The SM service</summary>
     public ISuperMemo SMMgmt { get; set; }
 
     #endregion
@@ -66,12 +69,15 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
   /// <summary>SuperMemo App Process-related events, contains a definition of its Process</summary>
   [Serializable]
-  public class SMProcessArgs : SMEventArgs
+  public class SMProcessEventArgs : SMEventArgs
   {
     #region Constructors
 
-    public SMProcessArgs(ISuperMemo smMgmt,
-                         Process   process)
+    /// <summary>Instantiate</summary>
+    /// <param name="smMgmt"></param>
+    /// <param name="process"></param>
+    public SMProcessEventArgs(ISuperMemo smMgmt,
+                              Process    process)
       : base(smMgmt)
     {
       Process = process;
@@ -84,6 +90,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
     #region Properties & Fields - Public
 
+    /// <summary>The SuperMemo process</summary>
     public Process Process { get; }
 
     #endregion
@@ -91,13 +98,17 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
   /// <summary>Element-related events</summary>
   [Serializable]
-  public class SMDisplayedElementChangedArgs : SMEventArgs
+  public class SMDisplayedElementChangedEventArgs : SMEventArgs
   {
     #region Constructors
 
-    public SMDisplayedElementChangedArgs(ISuperMemo smMgmt,
-                                         IElement   newElement,
-                                         IElement   oldElement)
+    /// <summary>New instance</summary>
+    /// <param name="smMgmt"></param>
+    /// <param name="newElement"></param>
+    /// <param name="oldElement"></param>
+    public SMDisplayedElementChangedEventArgs(ISuperMemo smMgmt,
+                                              IElement   newElement,
+                                              IElement   oldElement)
       : base(smMgmt)
     {
       NewElement = newElement;
@@ -111,7 +122,10 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
     #region Properties & Fields - Public
 
+    /// <summary>The new element being displayed</summary>
     public IElement NewElement { get; }
+
+    /// <summary>The old element displayed before</summary>
     public IElement OldElement { get; }
 
     #endregion
@@ -119,12 +133,15 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
   /// <summary>Element-related events</summary>
   [Serializable]
-  public class SMElementArgs : SMEventArgs
+  public class SMElementEventArgs : SMEventArgs
   {
     #region Constructors
 
-    public SMElementArgs(ISuperMemo smMgmt,
-                         IElement   element)
+    /// <summary>New instance</summary>
+    /// <param name="smMgmt"></param>
+    /// <param name="element"></param>
+    public SMElementEventArgs(ISuperMemo smMgmt,
+                              IElement   element)
       : base(smMgmt)
     {
       Element = element;
@@ -137,6 +154,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
     #region Properties & Fields - Public
 
+    /// <summary>The element</summary>
     public IElement Element { get; }
 
     #endregion
@@ -144,13 +162,17 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
   /// <summary>Element change-related events</summary>
   [Serializable]
-  public class SMElementChangedArgs : SMEventArgs
+  public class SMElementChangedEventArgs : SMEventArgs
   {
     #region Constructors
 
-    public SMElementChangedArgs(ISuperMemo        smMgmt,
-                                IElement          element,
-                                ElementFieldFlags changedFields)
+    /// <summary>New instance</summary>
+    /// <param name="smMgmt"></param>
+    /// <param name="element"></param>
+    /// <param name="changedFields"></param>
+    public SMElementChangedEventArgs(ISuperMemo        smMgmt,
+                                     IElement          element,
+                                     ElementFieldFlags changedFields)
       : base(smMgmt)
     {
       Element       = element;
@@ -164,7 +186,10 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
     #region Properties & Fields - Public
 
-    public IElement          Element       { get; }
+    /// <summary>The element which changed</summary>
+    public IElement Element { get; }
+
+    /// <summary>Defines which fields have changed</summary>
     public ElementFieldFlags ChangedFields { get; }
 
     #endregion
@@ -172,13 +197,16 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
   /// <summary>Registry member-related events</summary>
   [Serializable]
-  public class SMRegistryArgs<T> : SMEventArgs
+  public class SMRegistryEventArgs<T> : SMEventArgs
     where T : IRegistryMember
   {
     #region Constructors
 
-    public SMRegistryArgs(ISuperMemo smMgmt,
-                          T          member)
+    /// <summary>New instance</summary>
+    /// <param name="smMgmt"></param>
+    /// <param name="member"></param>
+    public SMRegistryEventArgs(ISuperMemo smMgmt,
+                               T          member)
       : base(smMgmt)
     {
       Member = member;
@@ -191,6 +219,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
     #region Properties & Fields - Public
 
+    /// <summary>The registry member</summary>
     public T Member { get; }
 
     #endregion
@@ -198,13 +227,17 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
   /// <summary>Component-related events</summary>
   [Serializable]
-  public class SMComponentChangedArgs : SMEventArgs
+  public class SMComponentChangedEventArgs : SMEventArgs
   {
     #region Constructors
 
-    public SMComponentChangedArgs(ISuperMemo          smMgmt,
-                                  IComponent          component,
-                                  ComponentFieldFlags changedFields)
+    /// <summary>New instance</summary>
+    /// <param name="smMgmt"></param>
+    /// <param name="component"></param>
+    /// <param name="changedFields"></param>
+    public SMComponentChangedEventArgs(ISuperMemo          smMgmt,
+                                       IComponent          component,
+                                       ComponentFieldFlags changedFields)
       : base(smMgmt)
     {
       Component     = component;
@@ -218,7 +251,10 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
     #region Properties & Fields - Public
 
-    public IComponent          Component     { get; }
+    /// <summary>The changed component</summary>
+    public IComponent Component { get; }
+
+    /// <summary>Defines which fields got changed</summary>
     public ComponentFieldFlags ChangedFields { get; }
 
     #endregion
@@ -226,12 +262,15 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
   /// <summary>Component group-related events</summary>
   [Serializable]
-  public class SMComponentGroupArgs : SMEventArgs
+  public class SMComponentGroupEventArgs : SMEventArgs
   {
     #region Constructors
 
-    public SMComponentGroupArgs(ISuperMemo      smMgmt,
-                                IComponentGroup componentGroup)
+    /// <summary>New instance</summary>
+    /// <param name="smMgmt"></param>
+    /// <param name="componentGroup"></param>
+    public SMComponentGroupEventArgs(ISuperMemo      smMgmt,
+                                     IComponentGroup componentGroup)
       : base(smMgmt)
     {
       ComponentGroup = componentGroup;
@@ -244,6 +283,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
     #region Properties & Fields - Public
 
+    /// <summary>The component group</summary>
     public IComponentGroup ComponentGroup { get; }
 
     #endregion

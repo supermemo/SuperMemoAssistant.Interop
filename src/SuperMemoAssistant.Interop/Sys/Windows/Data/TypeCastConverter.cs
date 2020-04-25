@@ -45,7 +45,7 @@ namespace SuperMemoAssistant.Sys.Windows.Data
       if (!(parameter is Type castType))
         throw new ArgumentException($"{nameof(parameter)} must be of type Type");
 
-      return System.Convert.ChangeType(value, castType);
+      return System.Convert.ChangeType(value, castType, CultureInfo.InvariantCulture);
     }
 
     #endregion

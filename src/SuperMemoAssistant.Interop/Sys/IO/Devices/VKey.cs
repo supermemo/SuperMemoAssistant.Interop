@@ -38,6 +38,7 @@ using System;
 namespace SuperMemoAssistant.Sys.IO.Devices
 {
   [Serializable]
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1707:Identifiers should not contain underscores", Justification = "MS naming convention")]
   public enum VKey
   {
     KEY_0         = 0x30, //0 key 

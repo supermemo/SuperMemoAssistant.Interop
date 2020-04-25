@@ -32,6 +32,7 @@
 
 namespace SuperMemoAssistant.Sys
 {
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2225:Operator overloads have named alternates", Justification = "<Pending>")]
   public class Index2D
   {
     #region Constructors

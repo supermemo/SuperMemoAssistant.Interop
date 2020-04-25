@@ -47,7 +47,7 @@ namespace SuperMemoAssistant.Extensions
 
     public static void CollapseAll(this TreeView tv)
     {
-      tv.ForEach(tvi => tvi.IsExpanded = false);
+      tv.ForEach(tvi => tvi.SetCurrentValue(TreeViewItem.IsExpandedProperty, false));
     }
 
     public static TreeViewItem GetTreeViewItem(this TreeView tv,

@@ -49,7 +49,7 @@ namespace SuperMemoAssistant.Sys.Windows.Search
 
     public String            FileName { get; set; }
     public String            FilePath { get; set; }
-    public WindowsSearchKind Kind     { get; set; }
+    public WindowsSearchKinds Kind     { get; set; }
     public int               Rank     { get; set; }
 
     public bool Touched { get; set; }

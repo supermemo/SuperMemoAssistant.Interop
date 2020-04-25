@@ -37,6 +37,7 @@ using Extensions.System.IO;
 
 namespace SuperMemoAssistant.Extensions
 {
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
   public static class JsonEx
   {
     #region Methods
@@ -52,14 +53,14 @@ namespace SuperMemoAssistant.Extensions
       return JsonConvert.DeserializeObject<T>(json);
     }
 
-    public static async Task SerializeToFileAsync(this object obj,
+    public static Task SerializeToFileAsync(this object obj,
                                              FilePath    filePath,
                                              Formatting  format = Formatting.None)
     {
       using var fs = File.Open(filePath.FullPath, FileMode.Create, FileAccess.Write);
       using var writer = new StreamWriter(fs);
 
-      await writer.WriteAsync(obj.Serialize(format));
+      return writer.WriteAsync(obj.Serialize(format));
     }
 
     public static async Task<T> DeserializeFromFileAsync<T>(this FilePath filePath)
@@ -67,7 +68,7 @@ namespace SuperMemoAssistant.Extensions
       using var fs = File.Open(filePath.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
       using var reader = new StreamReader(fs);
 
-      return Deserialize<T>(await reader.ReadToEndAsync());
+      return Deserialize<T>(await reader.ReadToEndAsync().ConfigureAwait(false));
     }
 
     #endregion

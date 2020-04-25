@@ -120,7 +120,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
       if (_config != null)
         throw new InvalidOperationException($"{nameof(HotKeyManager)} is already initialized");
 
-      _config = _cfgSvc.Load<HotKeyCfg>().Result ?? new HotKeyCfg();
+      _config = _cfgSvc.Load<HotKeyCfg>() ?? new HotKeyCfg();
 
       foreach (var kvp in _config.HotKeyMap)
         if (_userHotKeyMap.Reverse.ContainsKey(kvp.Value) == false)
@@ -131,12 +131,12 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
 
     public HotKeyManager RegisterGlobal(string      id,
                                         string      description,
-                                        HotKeyScope scope,
+                                        HotKeyScopes scopes,
                                         HotKey      defaultHotKey,
                                         Action      callback,
                                         bool        enabled = true)
     {
-      Register(id, description, scope, defaultHotKey, callback, enabled);
+      Register(id, description, scopes, defaultHotKey, callback, enabled);
 
       return this;
     }
@@ -166,7 +166,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
       if (hkData.IsGlobal)
         _kbHookSvc.RegisterHotKey(hkData.ActualHotKey, hkData.Callback);
 
-      LogTo.Debug($"Hotkey {id} is now enabled.");
+      LogTo.Debug("Hotkey {Id} is now enabled.", id);
 
       return this;
     }
@@ -189,7 +189,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
       if (hkData.IsGlobal)
         _kbHookSvc.UnregisterHotKey(hkData.ActualHotKey);
 
-      LogTo.Debug($"Hotkey {id} is now disabled.");
+      LogTo.Debug("Hotkey {Id} is now disabled.", id);
 
       return this;
     }
@@ -226,7 +226,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
           _kbHookSvc.RegisterHotKey(actualAfter, hkData.Callback);
       }
 
-      LogTo.Debug($"Hotkey {hkData.Id} is now bound to {actualAfter}.");
+      LogTo.Debug("Hotkey {Id} is now bound to {ActualAfter}.", hkData.Id, actualAfter);
 
       _delayedTask.Trigger(1000);
     }
@@ -234,7 +234,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
     private void Register(
       string       id,
       string       description,
-      HotKeyScope? scope,
+      HotKeyScopes? scope,
       HotKey       defaultHotKey,
       Action       callback,
       bool         enabled)
@@ -259,7 +259,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
       if (enabled && scope != null)
         _kbHookSvc.RegisterHotKey(hkData.ActualHotKey, callback, scope.Value);
 
-      LogTo.Debug($"Assigned default hotkey {defaultHotKey} to {id} ({description}).");
+      LogTo.Debug("Assigned default hotkey {DefaultHotKey} to {Id} ({Description}).", defaultHotKey, id, description);
     }
 
     private HotKeyData CreateHotKeyData(
@@ -296,7 +296,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
     {
       _config.HotKeyMap = new Dictionary<string, HotKey>(_userHotKeyMap);
 
-      _cfgSvc.Save(_config).Wait();
+      _cfgSvc.Save(_config);
     }
 
     #endregion

@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/09/03 18:15
-// Modified On:  2020/01/17 10:45
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 07:07
 // Modified By:  Alexis
 
 #endregion
@@ -30,24 +30,39 @@
 
 
 
-using System;
-using System.Linq;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Ipc;
-using System.Runtime.Serialization.Formatters;
-using System.Security.AccessControl;
-using System.Security.Cryptography;
-using System.Security.Principal;
-using System.Text;
-using Anotar.Serilog;
+
+
+// ReSharper disable IdentifierTypo
 
 namespace SuperMemoAssistant.Extensions
 {
+  using System;
+  using System.Linq;
+  using System.Runtime.Remoting;
+  using System.Runtime.Remoting.Channels;
+  using System.Runtime.Remoting.Channels.Ipc;
+  using System.Runtime.Serialization.Formatters;
+  using System.Security.AccessControl;
+  using System.Security.Cryptography;
+  using System.Security.Principal;
+  using System.Text;
+  using Anotar.Serilog;
+
+  /// <summary>Extension methods for <see cref="System.Runtime.Remoting" /></summary>
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix",
+                                                   Justification = "Extending services")]
   public static class RemotingServicesEx
   {
     #region Methods
 
+    /// <summary>
+    ///   Creates a proxy to the given service. Always return a non-null value, even if the server isn't reachable. Connection
+    ///   is attempted on the first call to one of <typeparamref name="IService" /> properties or methods
+    /// </summary>
+    /// <typeparam name="IService"></typeparam>
+    /// <param name="channelName"></param>
+    /// <param name="channelPort"></param>
+    /// <returns></returns>
     public static IService ConnectToIpcServer<IService>(
       string channelName,
       string channelPort = null)
@@ -57,6 +72,16 @@ namespace SuperMemoAssistant.Extensions
         "ipc://" + channelName + "/" + (channelPort ?? channelName));
     }
 
+    /// <summary>
+    ///   Publishes the <paramref name="service" /> service with interface contract <typeparamref name="IService" />.
+    /// </summary>
+    /// <typeparam name="IService"></typeparam>
+    /// <typeparam name="TService"></typeparam>
+    /// <param name="service"></param>
+    /// <param name="channelName"></param>
+    /// <param name="portName"></param>
+    /// <param name="aclSid"></param>
+    /// <returns></returns>
     public static IpcServerChannel CreateIpcServer<IService, TService>(
       TService         service,
       string           channelName = null,
@@ -108,11 +133,14 @@ namespace SuperMemoAssistant.Extensions
       return ipcServer;
     }
 
+    /// <summary>Generates a random name for the IPC server</summary>
+    /// <returns></returns>
     public static string GenerateIpcServerChannelName()
     {
-      RNGCryptoServiceProvider rnd     = new RNGCryptoServiceProvider();
-      var                      data    = new byte[30];
-      StringBuilder            builder = new StringBuilder();
+      using RNGCryptoServiceProvider rnd = new RNGCryptoServiceProvider();
+
+      var data    = new byte[30];
+      var builder = new StringBuilder();
 
       rnd.GetBytes(data);
 
@@ -131,6 +159,14 @@ namespace SuperMemoAssistant.Extensions
       return builder.ToString();
     }
 
+    /// <summary>
+    /// Safely raises the <paramref name="event"/> event. If a target from the invocation list throws a <see cref="RemotingException"/> it is forcefully unsubscribed for the event.
+    /// </summary>
+    /// <typeparam name="TParam1"></typeparam>
+    /// <param name="event">The event to raise</param>
+    /// <param name="eventName">Friendly name for the event</param>
+    /// <param name="p1">The event argument</param>
+    /// <param name="unsubscribeDelegate">The action to run to unsubscribe the given delegate from the <paramref name="event"/></param>
     public static void InvokeRemote<TParam1>(
       this Action<TParam1>    @event,
       string                  eventName,
@@ -144,16 +180,16 @@ namespace SuperMemoAssistant.Extensions
         }
         catch (RemotingException remoteEx)
         {
-          LogTo.Warning(remoteEx, $"{eventName}: Remoting exception while notifying remote service - forcing unsubscribe");
+          LogTo.Warning(remoteEx, "{EventName}: Remoting exception while notifying remote service - forcing unsubscribe", eventName);
           unsubscribeDelegate?.Invoke(handler);
         }
         catch (NullReferenceException)
         {
-          LogTo.Warning($"Null handler called for event {eventName}.");
+          LogTo.Warning("Null handler called for event {EventName}.", eventName);
         }
         catch (Exception ex)
         {
-          LogTo.Error(ex, $"{eventName}: Exception while notifying remote service");
+          LogTo.Error(ex, "{EventName}: Exception while notifying remote service", eventName);
         }
     }
 

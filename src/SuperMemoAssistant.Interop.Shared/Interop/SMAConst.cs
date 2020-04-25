@@ -29,8 +29,14 @@
 
 
 
+// ReSharper disable InvalidXmlDocComment
 namespace SuperMemoAssistant.Interop
 {
+  using System.Diagnostics.CodeAnalysis;
+
+  /// <summary>
+  /// Contains SMA-related constants (not to be mixed up with <see cref="SMConst"/>)
+  /// </summary>
   public static class SMAConst
   {
     #region Constants & Statics
@@ -50,6 +56,7 @@ namespace SuperMemoAssistant.Interop
 
 
     /// <summary>Assemblies data</summary>
+    [SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
     public static class Assembly
     {
       #region Constants & Statics

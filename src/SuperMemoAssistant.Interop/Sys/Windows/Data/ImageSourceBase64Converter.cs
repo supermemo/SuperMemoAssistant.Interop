@@ -95,11 +95,11 @@ namespace SuperMemoAssistant.Sys.Windows.Data
       }
       catch (FormatException ex)
       {
-        LogTo.Warning(ex, $"the provided value is not in a valid base64 format: '{base64.Truncate(30)}'");
+        LogTo.Warning(ex, "the provided value is not in a valid base64 format: '{V}'", base64.Truncate(30));
       }
       catch (NotSupportedException ex)
       {
-        LogTo.Warning(ex, $"Failed to convert image from base64: '{base64.Truncate(30)}'");
+        LogTo.Warning(ex, "Failed to convert image from base64: '{V}'", base64.Truncate(30));
       }
 
       return null;

@@ -43,6 +43,7 @@ namespace SuperMemoAssistant.Sys.IO.Devices {
       Native.PostMessage(hWnd, (int)Message.MOUSEMOVE, 0, Native.GetLParam(x, y));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1806:Do not ignore method results", Justification = "<Pending>")]
     public static void MouseClick(IntPtr hWnd, VKey vkey, int x, int y, int delay = 10)
     {
       switch (vkey)

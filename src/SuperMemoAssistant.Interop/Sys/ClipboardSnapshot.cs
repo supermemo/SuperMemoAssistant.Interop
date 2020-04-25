@@ -37,7 +37,8 @@ using System.Windows;
 
 namespace SuperMemoAssistant.Sys
 {
-  public class ClipboardSnapshot : IDisposable
+
+  public sealed class ClipboardSnapshot : IDisposable
   {
     #region Properties & Fields - Non-Public
 

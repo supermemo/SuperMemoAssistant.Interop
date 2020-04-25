@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/02/23 02:15
-// Modified On:  2019/02/24 00:32
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 06:17
 // Modified By:  Alexis
 
 #endregion
@@ -30,16 +30,29 @@
 
 
 
-using System;
-using System.Threading.Tasks;
-using Nito.AsyncEx;
+
+
+// ReSharper disable CommentTypo
+// ReSharper disable IdentifierTypo
 
 namespace SuperMemoAssistant.Extensions
 {
-  public static class AsyncEx
+  using System;
+  using System.Threading.Tasks;
+  using Nito.AsyncEx;
+
+  /// <summary>Extension methods for Nito.AsyncEx</summary>
+  public static class NitoAsyncEx
   {
     #region Methods
 
+    /// <summary>
+    ///   Asynchronously waits for the <paramref name="waitHandle" /> to signal. Cancels after <paramref name="timeoutMs" />
+    ///   milliseconds
+    /// </summary>
+    /// <param name="waitHandle">The event to wait on</param>
+    /// <param name="timeoutMs">The maximum amount of time to wait for, in milliseconds</param>
+    /// <returns><see langword="true" /> if the event was signaled, false if it timed out.</returns>
     public static async Task<bool> WaitAsync(this AsyncManualResetEvent waitHandle,
                                              int                        timeoutMs)
     {
@@ -47,11 +60,18 @@ namespace SuperMemoAssistant.Extensions
         throw new ArgumentNullException(nameof(waitHandle));
 
       Task waitTask      = waitHandle.WaitAsync();
-      Task completedTask = await Task.WhenAny(Task.Delay(timeoutMs), waitHandle.WaitAsync());
+      Task completedTask = await Task.WhenAny(Task.Delay(timeoutMs), waitHandle.WaitAsync()).ConfigureAwait(false);
 
       return completedTask == waitTask;
     }
 
+    /// <summary>
+    ///   Asynchronously waits for the <paramref name="waitHandle" /> to signal. Cancels after <paramref name="timeoutMs" />
+    ///   milliseconds
+    /// </summary>
+    /// <param name="waitHandle">The event to wait on</param>
+    /// <param name="timeoutMs">The maximum amount of time to wait for, in milliseconds</param>
+    /// <returns><see langword="true" /> if the event was signaled, false if it timed out.</returns>
     public static async Task<bool> WaitAsync(this AsyncAutoResetEvent waitHandle,
                                              int                      timeoutMs)
     {
@@ -59,7 +79,7 @@ namespace SuperMemoAssistant.Extensions
         throw new ArgumentNullException(nameof(waitHandle));
 
       Task waitTask      = waitHandle.WaitAsync();
-      Task completedTask = await Task.WhenAny(Task.Delay(timeoutMs), waitHandle.WaitAsync());
+      Task completedTask = await Task.WhenAny(Task.Delay(timeoutMs), waitHandle.WaitAsync()).ConfigureAwait(false);
 
       return completedTask == waitTask;
     }

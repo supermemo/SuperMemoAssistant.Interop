@@ -30,59 +30,130 @@
 
 
 using System;
+// ReSharper disable CommentTypo
 
 namespace SuperMemoAssistant.Sys.Windows.Search
 {
+  /// <summary>
+  /// The content type to look for
+  /// </summary>
   [Flags]
   [Serializable]
-  public enum WindowsSearchKind
+  public enum WindowsSearchKinds
   {
-    // KIND_CALENDAR
+    /// <summary>
+    /// KIND_CALENDAR
+    /// </summary>
     Calendar = 1,
-    // KIND_COMMUNICATION
+
+    /// <summary>
+    /// KIND_COMMUNICATION
+    /// </summary>
     Communication = 2,
-    // KIND_CONTACT
+
+    /// <summary>
+    /// KIND_CONTACT
+    /// </summary>
     Contact = 4,
-    // KIND_DOCUMENT
+
+    /// <summary>
+    /// KIND_DOCUMENT
+    /// </summary>
     Document = 8,
-    // KIND_EMAIL
+
+    /// <summary>
+    /// KIND_EMAIL
+    /// </summary>
     Email = 16,
-    // KIND_FEED
+
+    /// <summary>
+    /// KIND_FEED
+    /// </summary>
     Feed = 32,
-    // KIND_FOLDER
+
+    /// <summary>
+    /// KIND_FOLDER
+    /// </summary>
     Folder = 64,
-    // KIND_GAME
+
+    /// <summary>
+    /// KIND_GAME
+    /// </summary>
     Game = 128,
-    // KIND_INSTANTMESSAGE
+
+    /// <summary>
+    /// KIND_INSTANTMESSAGE
+    /// </summary>
     InstantMessage = 256,
-    // KIND_JOURNAL
+
+    /// <summary>
+    /// KIND_JOURNAL
+    /// </summary>
     Journal = 512,
-    // KIND_LINK
+
+    /// <summary>
+    /// KIND_LINK
+    /// </summary>
     Link = 1024,
-    // KIND_MOVIE
+
+    /// <summary>
+    /// KIND_MOVIE
+    /// </summary>
     Movie = 2048,
-    // KIND_MUSIC
+
+    /// <summary>
+    /// KIND_MUSIC
+    /// </summary>
     Music = 4096,
-    // KIND_NOTE
+
+    /// <summary>
+    /// KIND_NOTE
+    /// </summary>
     Note = 8192,
-    // KIND_PICTURE
+
+    /// <summary>
+    /// KIND_PICTURE
+    /// </summary>
     Picture = 16384,
-    // KIND_PROGRAM
+
+    /// <summary>
+    /// KIND_PROGRAM
+    /// </summary>
     Program = 32768,
-    // KIND_RECORDEDTV
+
+    /// <summary>
+    /// KIND_RECORDEDTV
+    /// </summary>
     RecordedTv = 131072,
-    // KIND_SEARCHFOLDER
+
+    /// <summary>
+    /// KIND_SEARCHFOLDER
+    /// </summary>
     SearchFolder = 262144,
-    // KIND_TASK
+
+    /// <summary>
+    /// KIND_TASK
+    /// </summary>
     Task = 524288,
-    // KIND_VIDEO
+
+    /// <summary>
+    /// KIND_VIDEO
+    /// </summary>
     Video = 1048576,
-    // KIND_WEBHISTORY
+
+    /// <summary>
+    /// KIND_WEBHISTORY
+    /// </summary>
     WebHistory = 2097152,
 
-    // other
+    /// <summary>
+    /// Other
+    /// </summary>
     File = 4194304,
 
+    /// <summary>
+    /// Include all types
+    /// </summary>
     All = int.MaxValue
   }
 }

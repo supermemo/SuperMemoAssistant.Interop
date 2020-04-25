@@ -19,29 +19,36 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Modified On:  2020/02/10 10:46
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using System.IO;
-
 namespace SuperMemoAssistant.Interop.SuperMemo.Core
 {
+  using System.IO;
+
+  /// <summary>Extension methods for <see cref="SMCollection" /></summary>
   public static class SMCollectionEx
   {
     #region Methods
 
+    /// <summary>
+    ///   Gets the root directory which contains the collection data (not the folder which contains the .kno)
+    /// </summary>
+    /// <param name="collection"></param>
+    /// <returns></returns>
     public static string GetRootDirPath(this SMCollection collection)
     {
       return Path.Combine(collection.Path, collection.Name);
     }
 
+    /// <summary>Combines the given path with the root directory of the collection</summary>
+    /// <seealso cref="GetRootDirPath(SMCollection)" />
+    /// <param name="collection"></param>
+    /// <param name="paths"></param>
+    /// <returns></returns>
     public static string CombinePath(
       this   SMCollection collection,
       params string[]     paths)
@@ -51,32 +58,29 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
                           Path.Combine(paths));
     }
 
+    /// <summary>Combines the given path with the collection's element folder</summary>
+    /// <param name="collection"></param>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
     public static string GetElementFilePath(
       this SMCollection collection,
       string            filePath)
     {
-      return collection.CombinePath(SMConst.Paths.ElementsFolder,
-                                    filePath);
+      return collection.CombinePath(SMConst.Paths.ElementsFolder, filePath);
     }
 
+    /// <summary>Returns the path to the SMA folder under the collection's root folder</summary>
+    /// <param name="collection"></param>
+    /// <returns></returns>
     public static string GetSMAFolder(
       this SMCollection collection)
     {
       return collection.CombinePath(SMAFileSystem.CollectionSMAFolder);
     }
 
-    public static string GetSMAElementsFolder(
-      this SMCollection collection,
-      int               elementId = 0)
-    {
-      return elementId == 0
-        ? collection.CombinePath(SMAFileSystem.CollectionSMAFolder,
-                                 SMAFileSystem.CollectionElementsFolder,
-                                 elementId.ToString())
-        : collection.CombinePath(SMAFileSystem.CollectionSMAFolder,
-                                 SMAFileSystem.CollectionElementsFolder);
-    }
-
+    /// <summary>Returns the config folder path under the sma collection folder</summary>
+    /// <param name="collection"></param>
+    /// <returns></returns>
     public static string GetSMAConfigsFolder(
       this SMCollection collection)
     {
@@ -84,6 +88,11 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
                                     SMAFileSystem.ConfigsFolder);
     }
 
+
+    /// <summary>Returns a plugin's config folder path under the sma collection config folder</summary>
+    /// <param name="collection"></param>
+    /// <param name="subFolder"></param>
+    /// <returns></returns>
     public static string GetSMAConfigsSubFolder(
       this SMCollection collection,
       string            subFolder)
@@ -93,18 +102,26 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
                                     subFolder);
     }
 
+    /// <summary>Returns the path to the .kno file for this collection</summary>
+    /// <param name="collection"></param>
+    /// <returns></returns>
     public static string GetKnoFilePath(this SMCollection collection)
     {
       return Path.Combine(collection.Path,
                           collection.Name + ".Kno");
     }
 
+    /// <summary>Makes <paramref name="absolutePath" /> relative to the collection's path</summary>
+    /// <seealso cref="GetRootDirPath(SMCollection)" />
+    /// <param name="collection"></param>
+    /// <param name="absolutePath"></param>
+    /// <returns></returns>
     public static string MakeRelative(this SMCollection collection,
                                       string            absolutePath)
     {
       string basePath = collection.CombinePath();
 
-      return absolutePath.StartsWith(basePath)
+      return absolutePath.StartsWith(basePath, System.StringComparison.InvariantCultureIgnoreCase)
         ? absolutePath.Substring(basePath.Length).TrimStart('\\', '/')
         : absolutePath;
     }

@@ -38,6 +38,7 @@ using Nito.AsyncEx;
 
 namespace SuperMemoAssistant.Sys.Remoting
 {
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "This class is extending task objects")]
   public static class RemoteTaskEx
   {
     #region Methods
@@ -59,7 +60,7 @@ namespace SuperMemoAssistant.Sys.Remoting
 
       async Task WaitForSignal()
       {
-        await taskCompletedEvent.WaitAsync();
+        await taskCompletedEvent.WaitAsync().ConfigureAwait(false);
       }
 
       remoteTask.SetCallback(new ActionProxy<Exception>(Signal));
@@ -98,7 +99,7 @@ namespace SuperMemoAssistant.Sys.Remoting
       async Task<T> WaitForSignal()
       {
         var cts = new CancellationTokenSource(60000);
-        await taskCompletedEvent.WaitAsync(cts.Token);
+        await taskCompletedEvent.WaitAsync(cts.Token).ConfigureAwait(false);
 
         return ret;
       }
@@ -113,6 +114,7 @@ namespace SuperMemoAssistant.Sys.Remoting
       return remoteTask.GetTask().GetAwaiter();
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "This is the intended implementation")]
     public static T GetResult<T>(this RemoteTask<T> remoteTask)
     {
       return remoteTask.GetAwaiter().GetResult();

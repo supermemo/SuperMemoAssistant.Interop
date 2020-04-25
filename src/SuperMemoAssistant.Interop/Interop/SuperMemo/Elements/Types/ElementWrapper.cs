@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/04/11 19:55
-// Modified On:  2019/04/11 20:03
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 06:23
 // Modified By:  Alexis
 
 #endregion
@@ -30,21 +30,27 @@
 
 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using SuperMemoAssistant.Interop.SuperMemo.Content;
-using SuperMemoAssistant.Interop.SuperMemo.Core;
-using SuperMemoAssistant.Interop.SuperMemo.Elements.Models;
-using SuperMemoAssistant.Interop.SuperMemo.Registry.Members;
-
 namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
 {
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
+  using Content;
+  using Core;
+  using Models;
+  using Registry.Members;
+
+  /// <summary>
+  /// Wraps an element for purpose or avoid remoting exceptions
+  /// </summary>
   public class ElementWrapper : IElement
   {
     #region Constructors
 
+    /// <summary>
+    /// New instance
+    /// </summary>
+    /// <param name="element"></param>
     public ElementWrapper(IElement element)
     {
       Original = element;
@@ -57,6 +63,9 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
 
     #region Properties & Fields - Public
 
+    /// <summary>
+    /// The wrapped element
+    /// </summary>
     public IElement Original { get; }
 
     #endregion
@@ -77,7 +86,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
     /// <inheritdoc />
     public IComponentGroup ComponentGroup => Original.ComponentGroup;
     /// <inheritdoc />
-    public IElement Template => new ElementWrapper(Original.Template);
+    public ITemplate Template => Original.Template;
     /// <inheritdoc />
     public IConcept Concept => Original.Concept;
     /// <inheritdoc />
@@ -105,16 +114,16 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
     #region Methods Impl
 
     /// <inheritdoc />
-    public Task<bool> Display() => Original.Display();
+    public bool Display() => Original.Display();
 
     /// <inheritdoc />
-    public Task<bool> MoveTo(IConceptGroup newParent) => Original.MoveTo(newParent);
+    public bool MoveTo(IElement newParent) => Original.MoveTo(newParent);
 
     /// <inheritdoc />
-    public Task<bool> Delete() => Original.Delete();
+    public bool Delete() => Original.Delete();
 
     /// <inheritdoc />
-    public Task<bool> Done() => Original.Done();
+    public bool Done() => Original.Done();
 
     #endregion
 
@@ -124,7 +133,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
     #region Events
 
     /// <inheritdoc />
-    public event Action<SMElementChangedArgs> OnChanged;
+    public event Action<SMElementChangedEventArgs> OnChanged;
 
     #endregion
   }
