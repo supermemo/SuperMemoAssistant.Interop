@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/02/22 14:27
-// Modified On:  2019/02/22 14:28
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 05:05
 // Modified By:  Alexis
 
 #endregion
@@ -30,25 +30,25 @@
 
 
 
-using System;
-
-namespace SuperMemoAssistant.Sys
+namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
 {
-  [AttributeUsage(AttributeTargets.Assembly)]
-  public class ForceAssemblyReference : Attribute
+  using System;
+
+  /// <summary>Defines the success or failure of the element creation operation</summary>
+  [Serializable]
+  [Flags]
+  public enum ElemCreationResultCodes
   {
-    #region Constructors
+    /// <summary>The element was successfully created</summary>
+    Success = 1,
 
-    public ForceAssemblyReference(Type forcedType)
-    {
-      void Noop(Type t)
-      {
-        System.Console.WriteLine(t.Name);
-      }
+    /// <summary>The concept is not set</summary>
+    WarningConceptNotSet = 4,
 
-      Noop(forcedType);
-    }
+    /// <summary>The parent branch has reached its maximum children capacity</summary>
+    ErrorTooManyChildren = 64,
 
-    #endregion
+    /// <summary>An unknown error occured, check the logs for more information</summary>
+    ErrorUnknown = 128
   }
 }

@@ -1,11 +1,12 @@
 ﻿#region License & Metadata
+
 // The MIT License (MIT)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -20,18 +21,42 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/06/18 11:50
-// Modified On:  2018/06/18 11:50
+// Created On:   2020/04/07 04:38
+// Modified On:  2020/04/07 04:42
 // Modified By:  Alexis
+
 #endregion
 
-using mshtml;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Controls;
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Components.Controls
+
+
+namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
 {
-  public interface IControlWeb : IControlTextBase
+  /// <summary>The element display state (e.g. Ctrl+E in element window)</summary>
+  public enum ElementDisplayState
   {
-    IHTMLDocument2 Document { get; }
+    /// <summary>"Edit" mode</summary>
+    Edit = 0,
+
+    /// <summary>"Drag and Size" mode</summary>
+    Drag = 1,
+
+    /// <summary>"Presentation" mode</summary>
+    Display = 2,
+
+    /// <summary>Unknown</summary>
+    Unused1 = 3,
+
+    /// <summary>Unknown</summary>
+    Unused2 = 4,
+
+    /// <summary>Shows the show answer button</summary>
+    Question = 5,
+
+    /// <summary>Shows the grading buttons</summary>
+    Grading = 6,
+
+    /// <summary>Shows the next repetition button</summary>
+    NextRepetition = 7,
   }
 }

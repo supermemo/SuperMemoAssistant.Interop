@@ -21,7 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Modified On:  2020/03/05 13:51
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 09:05
 // Modified By:  Alexis
 
 #endregion
@@ -29,25 +30,30 @@
 
 
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using PluginManager.Interop.Contracts;
-using PluginManager.Interop.PluginHost;
-using SuperMemoAssistant.Interop.SuperMemo;
-
 namespace SuperMemoAssistant.Interop.Plugins
 {
+  using System;
+  using System.Collections.Generic;
+  using System.Diagnostics;
+  using System.Diagnostics.CodeAnalysis;
+  using PluginManager.Interop.Contracts;
+  using PluginManager.Interop.PluginHost;
+  using SuperMemo;
+
+  /// <inheritdoc />
+  [SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
   public class PluginHost : PluginHostBase<ISuperMemoAssistant>
   {
     #region Properties & Fields - Non-Public
 
+    /// <inheritdoc />
     protected override HashSet<Type> CoreInterfaceTypes { get; } = new HashSet<Type>
     {
       typeof(ISuperMemoAssistant)
       // Insert subsequent versions here
     };
 
+    /// <inheritdoc />
     protected override HashSet<Type> PluginMgrInterfaceTypes { get; } = new HashSet<Type>
     {
       typeof(IPluginManager<ISuperMemoAssistant>)
@@ -61,6 +67,7 @@ namespace SuperMemoAssistant.Interop.Plugins
 
     #region Constructors
 
+    /// <inheritdoc />
     public PluginHost(
       string  pluginPackageName,
       Guid    sessionGuid,
@@ -68,18 +75,6 @@ namespace SuperMemoAssistant.Interop.Plugins
       Process smaProcess,
       bool    isDev)
       : base(pluginPackageName, sessionGuid, smaChannelName, smaProcess, isDev) { }
-
-    #endregion
-
-
-
-
-    #region Methods Impl
-
-    protected override void MonitorPluginMgrProcess(object param)
-    {
-      base.MonitorPluginMgrProcess(param);
-    }
 
     #endregion
   }

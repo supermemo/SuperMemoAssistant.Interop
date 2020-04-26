@@ -30,12 +30,12 @@
 
 
 
-using System.ComponentModel;
-using Serilog.Events;
-using SuperMemoAssistant.Sys.ComponentModel;
-
-namespace SuperMemoAssistant.Services.IO.Logger
+namespace SuperMemoAssistant.Services.IO.Diagnostics
 {
+  using System.ComponentModel;
+  using Serilog.Events;
+  using Sys.ComponentModel;
+
   public class LoggerCfg : INotifyPropertyChangedEx
   {
     #region Properties & Fields - Public

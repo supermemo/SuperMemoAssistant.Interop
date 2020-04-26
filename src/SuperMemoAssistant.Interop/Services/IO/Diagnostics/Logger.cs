@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2020/01/22 09:58
-// Modified On:  2020/01/22 10:16
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 06:55
 // Modified By:  Alexis
 
 #endregion
@@ -30,27 +30,28 @@
 
 
 
-using System;
-using System.Reflection;
-using System.Runtime.ExceptionServices;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
-using Anotar.Serilog;
-using Serilog;
-using Serilog.Core;
-using Serilog.Events;
-using SuperMemoAssistant.Extensions;
-using SuperMemoAssistant.Services.Configuration;
-
-namespace SuperMemoAssistant.Services.IO.Logger
+namespace SuperMemoAssistant.Services.IO.Diagnostics
 {
+  using System;
+  using System.Reflection;
+  using System.Runtime.ExceptionServices;
+  using System.Threading.Tasks;
+  using System.Windows;
+  using System.Windows.Threading;
+  using Anotar.Serilog;
+  using Configuration;
+  using Extensions;
+  using Serilog;
+  using Serilog.Core;
+  using Serilog.Events;
+
+  /// <summary>Contains logic for the Logger</summary>
   public sealed class Logger
   {
     #region Properties & Fields - Non-Public
 
-    private LoggingLevelSwitch LevelSwitch { get; set; }
-    private bool IsLogFirstChangeRegistered {get;set;}= false;
+    private LoggingLevelSwitch LevelSwitch                { get; }
+    private bool               IsLogFirstChangeRegistered { get; set; }
 
     #endregion
 
@@ -59,7 +60,10 @@ namespace SuperMemoAssistant.Services.IO.Logger
 
     #region Constructors
 
-    public Logger(LoggerCfg config, LoggingLevelSwitch levelSwitch)
+    /// <summary>Instantiates a new logger</summary>
+    /// <param name="config">The logger's config</param>
+    /// <param name="levelSwitch">The logging level switcher</param>
+    internal Logger(LoggerCfg config, LoggingLevelSwitch levelSwitch)
     {
       Config      = config;
       LevelSwitch = levelSwitch;
@@ -76,6 +80,7 @@ namespace SuperMemoAssistant.Services.IO.Logger
 
     #region Properties & Fields - Public
 
+    /// <summary>The config for the current logger</summary>
     public LoggerCfg Config { get; private set; }
 
     #endregion
@@ -85,6 +90,8 @@ namespace SuperMemoAssistant.Services.IO.Logger
 
     #region Methods
 
+    /// <summary>Shutdowns the current logger and flush out the pending content to file</summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
     public void Shutdown()
     {
       try
@@ -97,9 +104,7 @@ namespace SuperMemoAssistant.Services.IO.Logger
       }
     }
 
-    /// <summary>
-    /// Update logger settings with new <see cref="Config"/> parameters.
-    /// </summary>
+    /// <summary>Update logger settings with new <see cref="Config" /> parameters.</summary>
     public void ReloadConfig()
     {
       SetMinimumLevel(Config.LogLevel);
@@ -111,19 +116,22 @@ namespace SuperMemoAssistant.Services.IO.Logger
         UnregisterFirstChanceExceptionLogger();
     }
 
-    internal async Task ReloadConfigFromFile(ConfigurationServiceBase cfgService)
+    internal async Task ReloadConfigFromFileAsync(ConfigurationServiceBase cfgService)
     {
-      Config = await cfgService.Load<LoggerCfg>();
+      Config = await cfgService.LoadAsync<LoggerCfg>().ConfigureAwait(false);
 
       ReloadConfig();
     }
 
+    /// <summary>Changes the minimum logging level written to file</summary>
+    /// <param name="level">The new minimum logging level</param>
+    /// <returns></returns>
     public LogEventLevel SetMinimumLevel(LogEventLevel level)
     {
       var oldLevel = LevelSwitch.MinimumLevel;
       LevelSwitch.MinimumLevel = level;
 
-      LogTo.Information($"Logging level changed from {oldLevel.Name()} to {level.Name()}");
+      LogTo.Information("Logging level changed from {V} to {V1}", oldLevel.Name(), level.Name());
 
       return oldLevel;
     }
@@ -138,7 +146,7 @@ namespace SuperMemoAssistant.Services.IO.Logger
       if (Config.LogFirstChanceExceptions)
         RegisterFirstChanceExceptionLogger();
 
-      LogTo.Debug($"Exception loggers registered (first-chance logging: {(Config.LogFirstChanceExceptions ? "on" : "off")})");
+      LogTo.Debug("Exception loggers registered (first-chance logging: {V})", Config.LogFirstChanceExceptions ? "on" : "off");
     }
 
     private void RegisterFirstChanceExceptionLogger()
@@ -146,7 +154,7 @@ namespace SuperMemoAssistant.Services.IO.Logger
       if (IsLogFirstChangeRegistered)
         return;
 
-      IsLogFirstChangeRegistered = true;
+      IsLogFirstChangeRegistered                   =  true;
       AppDomain.CurrentDomain.FirstChanceException += LogFirstChanceException;
     }
 
@@ -155,10 +163,11 @@ namespace SuperMemoAssistant.Services.IO.Logger
       if (IsLogFirstChangeRegistered == false)
         return;
 
-      IsLogFirstChangeRegistered = false;
+      IsLogFirstChangeRegistered                   =  false;
       AppDomain.CurrentDomain.FirstChanceException -= LogFirstChanceException;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "Serilog004:Constant MessageTemplate verifier", Justification = "<Pending>")]
     private void LogUnhandledException(object _, UnhandledExceptionEventArgs e)
     {
       if (e.ExceptionObject is Exception ex)
@@ -188,18 +197,20 @@ namespace SuperMemoAssistant.Services.IO.Logger
     {
       LogTo.Error(e.Exception, "First chance exception");
     }
-    
-    // See https://github.com/Fody/Anotar/issues/114
+
+    /// <summary>See https://github.com/Fody/Anotar/issues/114</summary>
+    /// <typeparam name="T"></typeparam>
     public static void ReloadAnotarLogger<T>()
     {
       ReloadAnotarLogger(typeof(T));
     }
-    
-    // See https://github.com/Fody/Anotar/issues/114
+
+    /// <summary>See https://github.com/Fody/Anotar/issues/114</summary>
+    /// <param name="classType"></param>
     public static void ReloadAnotarLogger(Type classType)
     {
       FieldInfo field;
-      
+
       if ((field = classType.GetField("AnotarLogger", BindingFlags.NonPublic | BindingFlags.Static)) != null)
       {
         var logger = Log.ForContext(classType);

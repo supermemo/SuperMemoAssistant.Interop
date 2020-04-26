@@ -32,11 +32,29 @@
 
 namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
 {
+  /// <summary>
+  /// Defines all the possible status an element can have
+  /// </summary>
   public enum ElementStatus
   {
+    /// <summary>
+    /// The element is not in the learning queue but will be inserted once the learning queue has been processed
+    /// </summary>
     Pending   = 0,
+
+    /// <summary>
+    /// The element is in the learning queue and will be reviewed in time
+    /// </summary>
     Memorized = 1,
+
+    /// <summary>
+    /// The element is forgotten: neither in learning queue nor in the pending queue
+    /// </summary>
     Dismissed = 2,
+
+    /// <summary>
+    /// This element doesn't exist anymore -- this is only a placeholder
+    /// </summary>
     Deleted   = 3
   }
 }

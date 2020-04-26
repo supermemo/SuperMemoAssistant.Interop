@@ -1,11 +1,12 @@
 ﻿#region License & Metadata
+
 // The MIT License (MIT)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -20,30 +21,43 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/06/03 03:31
-// Modified On:  2018/06/03 03:31
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 07:11
 // Modified By:  Alexis
+
 #endregion
 
 
 
 
-using System.IO;
-using SuperMemoAssistant.Sys.Security.Cryptography;
-
 namespace SuperMemoAssistant.Extensions
 {
+  using System.Globalization;
+  using System.IO;
+  using global::Extensions.System.IO;
+  using Sys.Security.Cryptography;
+
   public static class FileEx
   {
-    public static string GetCrc32(string filePath)
+    #region Methods
+
+    /// <summary>Computes the CRC32 for the given file</summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
+    public static string GetCrc32(FilePath filePath)
     {
-      Crc32  crc32 = new Crc32();
-      string hash  = string.Empty;
+      using (var crc32 = new Crc32())
+      {
+        var hash = string.Empty;
 
-      using (FileStream fs = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-        foreach (byte b in crc32.ComputeHash(fs)) hash += b.ToString("x2").ToLower();
+        using (var fs = File.Open(filePath.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+          foreach (byte b in crc32.ComputeHash(fs))
+            hash += b.ToString("x2", CultureInfo.InvariantCulture).ToLowerInvariant();
 
-      return hash;
+        return hash;
+      }
     }
+
+    #endregion
   }
 }

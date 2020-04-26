@@ -34,11 +34,16 @@ using System.Windows;
 
 namespace SuperMemoAssistant.Interop.Plugins
 {
-  /// <summary>Interaction logic for App.xaml</summary>
+  /// <summary>
+  /// Default implementation of the <see cref="Application"/> for plugins
+  /// </summary>
   public partial class PluginApp : Application
   {
     #region Constructors
 
+    /// <summary>
+    /// New instance
+    /// </summary>
     public PluginApp()
     {
       ShutdownMode = ShutdownMode.OnExplicitShutdown;

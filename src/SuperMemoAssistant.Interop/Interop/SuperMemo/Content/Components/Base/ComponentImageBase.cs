@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -19,29 +19,23 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2019/01/16 17:37
-// Modified On:  2019/01/16 17:37
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using System.Drawing;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Models;
-using SuperMemoAssistant.Interop.SuperMemo.Registry.Members;
-
 namespace SuperMemoAssistant.Interop.SuperMemo.Content.Components.Base
 {
+  using System.Drawing;
+  using Models;
+  using Registry.Members;
+
   public abstract class ComponentImageBase : IComponentImage
   {
-    #region Properties Impl - Public
+    #region Properties & Fields - Public
 
-    public Size MinSize { get; } = new Size(100,
-                                            100);
+    public Size MinSize { get; } = new Size(100, 100);
 
     #endregion
 
@@ -50,13 +44,13 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Content.Components.Base
 
     #region Methods Abs
 
-    public abstract short            Left       { get; }
-    public abstract short            Top        { get; }
-    public abstract short            Width      { get; }
-    public abstract short            Height     { get; }
-    public abstract AtFlags          DisplayAt  { get; }
-    public abstract IImage           Image      { get; }
-    public abstract ImageStretchMode Stretch    { get; }
+    public abstract short            Left      { get; }
+    public abstract short            Top       { get; }
+    public abstract short            Width     { get; }
+    public abstract short            Height    { get; }
+    public abstract AtFlags          DisplayAt { get; }
+    public abstract IImage           Image     { get; }
+    public abstract ImageStretchMode Stretch   { get; }
 
     #endregion
   }

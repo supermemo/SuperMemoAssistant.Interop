@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2020/01/13 16:38
-// Modified On:  2020/01/22 16:29
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 06:28
 // Modified By:  Alexis
 
 #endregion
@@ -30,27 +30,23 @@
 
 
 
-using System;
+
 // ReSharper disable NonReadonlyMemberInGetHashCode
 
 namespace SuperMemoAssistant.Interop.SuperMemo.Core
 {
-  /// <summary>
-  /// Represents a SuperMemo collection on disk
-  /// </summary>
+  using System;
+
+  /// <summary>Represents a SuperMemo collection on disk</summary>
   [Serializable]
   public class SMCollection : IEquatable<SMCollection>
   {
     #region Constructors
 
-    /// <summary>
-    /// Instantiates a new SM collection
-    /// </summary>
+    /// <summary>Instantiates a new SM collection</summary>
     public SMCollection() { }
 
-    /// <summary>
-    /// Instantiates a new SM collection. Name is inferred from the .kno file name
-    /// </summary>
+    /// <summary>Instantiates a new SM collection. Name is inferred from the .kno file name</summary>
     /// <param name="knoFilePath">File path to a .kno SuperMemo collection file</param>
     /// <param name="lastOpen">The last time that collection was open (usually DateTime.Now for a newly imported collection)</param>
     public SMCollection(string   knoFilePath,
@@ -60,12 +56,10 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
       Path     = System.IO.Path.GetDirectoryName(knoFilePath);
       LastOpen = lastOpen;
     }
-    
-    /// <summary>
-    /// Instantiates a new SM collection
-    /// </summary>
+
+    /// <summary>Instantiates a new SM collection</summary>
     /// <param name="name">The .kno file name (without the .kno extension)</param>
-    /// <param name="dirPath">Directory path to where a <paramref name="name"/> .kno SuperMemo collection file is located</param>
+    /// <param name="dirPath">Directory path to where a <paramref name="name" /> .kno SuperMemo collection file is located</param>
     /// <param name="lastOpen">The last time that collection was open (usually DateTime.Now for a newly imported collection)</param>
     public SMCollection(string   name,
                         string   dirPath,
@@ -83,19 +77,13 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
     #region Properties & Fields - Public
 
-    /// <summary>
-    /// The collection's name (equals the .kno filename without extension)
-    /// </summary>
-    public string   Name     { get; set; }
+    /// <summary>The collection's name (equals the .kno filename without extension)</summary>
+    public string Name { get; set; }
 
-    /// <summary>
-    /// The collection's path
-    /// </summary>
-    public string   Path     { get; set; }
+    /// <summary>The collection's path</summary>
+    public string Path { get; set; }
 
-    /// <summary>
-    /// When was the last time this collection was open in SMA
-    /// </summary>
+    /// <summary>When was the last time this collection was open in SMA</summary>
     public DateTime LastOpen { get; set; }
 
     #endregion
@@ -135,7 +123,8 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
       if (ReferenceEquals(this, other))
         return true;
 
-      return string.Equals(Name, other.Name) && string.Equals(Path, other.Path);
+      return string.Equals(Name, other.Name, StringComparison.InvariantCultureIgnoreCase)
+        && string.Equals(Path, other.Path, StringComparison.InvariantCultureIgnoreCase);
     }
 
     #endregion
@@ -145,9 +134,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
 
     #region Methods
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <summary>Equality comparer</summary>
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>
@@ -157,9 +144,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
       return Equals(left, right);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <summary>Inequality comparer</summary>
     /// <param name="left"></param>
     /// <param name="right"></param>
     /// <returns></returns>

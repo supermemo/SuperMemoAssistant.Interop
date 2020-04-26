@@ -6,7 +6,7 @@
 // copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation
 // the rights to use, copy, modify, merge, publish, distribute, sublicense,
-// and/or sell copies of the Software, and to permit persons to whom the 
+// and/or sell copies of the Software, and to permit persons to whom the
 // Software is furnished to do so, subject to the following conditions:
 // 
 // The above copyright notice and this permission notice shall be included in
@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2018/07/27 12:55
-// Modified On:  2018/12/13 13:09
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 04:59
 // Modified By:  Alexis
 
 #endregion
@@ -30,13 +30,20 @@
 
 
 
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-
 namespace SuperMemoAssistant.Interop.SuperMemo.Registry.Types
 {
+  using System.Collections.Generic;
+  using System.Text.RegularExpressions;
+
+  /// <summary>Represents an instance of a SuperMemo registry for the given type <typeparamref name="IType" />.</summary>
+  /// <typeparam name="IType">The registry members' type</typeparam>
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix",
+                                                   Justification = "SM naming convention")]
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix",
+                                                   Justification = "Interface type")]
   public interface IRegistry<out IType> : IEnumerable<IType>
   {
+    /// <summary>The number of members in this registry</summary>
     int Count { get; }
 
     /// <summary>Retrieve registry element from memory at given <paramref name="id" /></summary>
@@ -44,8 +51,19 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Registry.Types
     /// <returns>Element or null if invalid index (deleted, out of bound, ...)</returns>
     IType this[int id] { get; }
 
-    IEnumerable<IType> FindByName(Regex            regex);
-    IType              FirstOrDefaultByName(Regex  regex);
-    IType              FirstOrDefaultByName(string exactName);
+    /// <summary>Find registry members by their name</summary>
+    /// <param name="regex">A regex to match the name</param>
+    /// <returns>The matched members</returns>
+    IEnumerable<IType> FindByName(Regex regex);
+
+    /// <summary>Returns the first element which name's matches <paramref name="regex" /></summary>
+    /// <param name="regex">A regex to match the name</param>
+    /// <returns>The first match or null</returns>
+    IType FirstOrDefaultByName(Regex regex);
+
+    /// <summary>Returns the first element which name's matches <paramref name="exactName" /></summary>
+    /// <param name="exactName">the exact name of the registry member</param>
+    /// <returns>The first match or null</returns>
+    IType FirstOrDefaultByName(string exactName);
   }
 }

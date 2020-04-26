@@ -60,6 +60,6 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Content
     //
     // Events
 
-    event Action<SMComponentGroupArgs> OnChanged;
+    event Action<SMComponentGroupEventArgs> OnChanged;
   }
 }

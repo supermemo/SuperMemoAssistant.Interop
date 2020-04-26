@@ -35,6 +35,11 @@ using System.Windows;
 
 namespace SuperMemoAssistant.Extensions
 {
+  using System;
+
+  /// <summary>
+  /// Extension methods for System.Windows.Window
+  /// </summary>
   public static class WindowEx
   {
     #region Methods
@@ -49,19 +54,19 @@ namespace SuperMemoAssistant.Extensions
     {
       return string.IsNullOrEmpty(name)
         ? Application.Current.Windows.OfType<T>().Any()
-        : Application.Current.Windows.OfType<T>().Any(w => w.Name.Equals(name));
+        : Application.Current.Windows.OfType<T>().Any(w => w.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
     }
 
     public static void ForceActivate(this Window wdw)
     {
       if (wdw.WindowState == WindowState.Minimized)
       {
-        wdw.WindowState = WindowState.Normal;
+        wdw.SetCurrentValue(Window.WindowStateProperty, WindowState.Normal);
       }
 
       wdw.Activate();
-      wdw.Topmost = true;  // important
-      wdw.Topmost = false; // important
+      wdw.SetCurrentValue(Window.TopmostProperty, true);  // important
+      wdw.SetCurrentValue(Window.TopmostProperty, false); // important
       wdw.Focus();         // important
     }
 

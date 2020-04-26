@@ -34,9 +34,12 @@ using System;
 
 namespace SuperMemoAssistant.Interop.SuperMemo.Content.Contents
 {
+  /// <summary>
+  /// The content type
+  /// </summary>
   [Flags]
   [Serializable]
-  public enum ContentTypeFlag
+  public enum ContentTypeFlags
   {
     None            = 0,
     RawText         = 1,

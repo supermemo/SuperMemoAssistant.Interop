@@ -39,6 +39,7 @@ using System.Collections.Generic;
 
 namespace SuperMemoAssistant.Sys
 {
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
   public class Span<T> : Span
   {
     #region Constructors
@@ -77,6 +78,7 @@ namespace SuperMemoAssistant.Sys
 
     #region Properties & Fields - Public
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
     public T Object { get; set; }
 
     #endregion

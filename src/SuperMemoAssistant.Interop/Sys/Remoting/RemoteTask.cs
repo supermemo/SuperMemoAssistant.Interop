@@ -56,7 +56,7 @@ namespace SuperMemoAssistant.Sys.Remoting
     {
       _task               = task;
       _onExceptionHandler = onExceptionHandler;
-      task.ContinueWith(OnTaskCompleted);
+      _ = task.ContinueWith(OnTaskCompleted, TaskScheduler.Default);
     }
 
     #endregion
@@ -132,7 +132,7 @@ namespace SuperMemoAssistant.Sys.Remoting
     {
       _task               = task;
       _onExceptionHandler = onExceptionHandler;
-      task.ContinueWith(OnTaskCompleted);
+      _ = task.ContinueWith(OnTaskCompleted, TaskScheduler.Default);
     }
 
     #endregion
@@ -150,6 +150,7 @@ namespace SuperMemoAssistant.Sys.Remoting
         OnTaskCompleted(_task);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD002:Avoid problematic synchronous waits", Justification = "<Pending>")]
     private void OnTaskCompleted(Task<T> completedTask)
     {
       lock (_task)

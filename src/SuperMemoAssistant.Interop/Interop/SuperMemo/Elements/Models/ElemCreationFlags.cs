@@ -34,10 +34,16 @@ using System;
 
 namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
 {
+  /// <summary>
+  /// Defines available options when creating a new element with SMA
+  /// </summary>
   [Flags]
   [Serializable]
   public enum ElemCreationFlags
   {
+    /// <summary>
+    /// Default (no option)
+    /// </summary>
     None = 0,
 
     /// <summary>

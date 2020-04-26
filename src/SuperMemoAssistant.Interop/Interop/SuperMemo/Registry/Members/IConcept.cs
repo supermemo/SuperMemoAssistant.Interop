@@ -19,23 +19,23 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Modified On:  2020/01/28 22:12
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using SuperMemoAssistant.Interop.SuperMemo.Elements.Types;
-
 namespace SuperMemoAssistant.Interop.SuperMemo.Registry.Members
 {
+  using Elements.Types;
+
+  /// <summary>A concept from the concept registry</summary>
   public interface IConcept : IRegistryMember
   {
-    int           ElementId    { get; }
+    /// <summary>The concept group id (the element representing that concept in the knowledge tree)</summary>
+    int ElementId { get; }
+
+    /// <summary>The concept group (the element representing that concept in the knowledge tree)</summary>
     IConceptGroup ConceptGroup { get; }
   }
 }

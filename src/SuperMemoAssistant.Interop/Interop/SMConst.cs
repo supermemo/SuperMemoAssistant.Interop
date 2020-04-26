@@ -21,8 +21,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 // 
-// Created On:   2019/09/03 18:15
-// Modified On:  2020/01/13 21:02
+// Created On:   2020/03/29 00:21
+// Modified On:  2020/04/07 01:00
 // Modified By:  Alexis
 
 #endregion
@@ -30,66 +30,84 @@
 
 
 
-using System.Windows.Media;
+
 
 // ReSharper disable PossibleNullReferenceException
 // ReSharper disable InconsistentNaming
 
 namespace SuperMemoAssistant.Interop
 {
+  using System;
+  using System.Diagnostics.CodeAnalysis;
+  using System.Windows.Media;
+
+  /// <summary>Contains SM-related constants (not to be mixed up with to <see cref="SMAConst" />)</summary>
   public static class SMConst
   {
-    #region Constants & Statics
-
-    public const string AppName = "SuperMemoAssistant";
-
-    #endregion
-
-
-
-
+    /// <summary>SuperMemo stylesheet well-known values</summary>
     public static class Stylesheet
     {
       #region Constants & Statics
 
-      public static readonly Color
-        ExtractClozedColor = (Color)ColorConverter.ConvertFromString("#E67300"); // ColorTranslator.FromHtml("#E67300");
-      public static readonly Color ExtractColor            = (Color)ColorConverter.ConvertFromString("#44C2FF");
+      /// <summary>
+      ///   The background color of the text after it has been used to create a cloze (not to be mixed up with [...])
+      /// </summary>
+      public static readonly Color ExtractClozedBackgroundColor = (Color)ColorConverter.ConvertFromString("#E67300");
+
+      /// <summary>The background color used for text after it has been extracted</summary>
+      public static readonly Color ExtractBackgroundColor = (Color)ColorConverter.ConvertFromString("#44C2FF");
+
+      /// <summary>The background color used for text after it has been extracted, with transparency</summary>
       public static readonly Color ExtractTransparentColor = (Color)ColorConverter.ConvertFromString("#8044C2FF");
-      public static readonly Color IgnoreColor             = (Color)ColorConverter.ConvertFromString("#DAB6B6");
+
+      /// <summary>The background color used for text that has been ignored</summary>
+      public static readonly Color IgnoreColor = (Color)ColorConverter.ConvertFromString("#DAB6B6");
 
       #endregion
     }
 
-
+    /// <summary>Elements-related SM well-known values</summary>
+    [SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
     public static class Elements
     {
       #region Constants & Statics
 
+      /// <summary>The default number children a node can withstand before overflowing</summary>
       public const int DefaultChildrenPerNode = 100;
 
+      /// <summary>
+      ///   Template for the reference html. Use <see cref="O:string.Format()" /> with a single string containing the reference
+      ///   items
+      /// </summary>
       public const string ReferenceFormat =
         @"<br><br><hr SuperMemo><SuperMemoReference><H5 dir=ltr align=left><FONT style=""COLOR: transparent"" size=1>#SuperMemo Reference:</FONT><BR><FONT class=reference>{0}</FONT></SuperMemoReference>";
 
       #endregion
     }
 
-
+    /// <summary>SM well-known folder names</summary>
     public static class Paths
     {
       #region Constants & Statics
 
+      /// <summary>The elements folder. Contains html and other documents</summary>
       public const string ElementsFolder = "elements";
-      public const string InfoFolder     = "info";
+
+      /// <summary>The info folder. Contains data about the element tree, repetition history, etc.</summary>
+      public const string InfoFolder = "info";
+
+      /// <summary>
+      ///   The registry folder. Contains all the registry members (excluding elements, which are in <see cref="InfoFolder" />
+      /// </summary>
       public const string RegistryFolder = "registry";
 
       #endregion
     }
 
+    /// <summary>SM well-known file names</summary>
     public static class Files
     {
-      #region Constants & Statics
-
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
       public const string BinaryMemFileName    = "program.mem";
       public const string BinaryRtxFileName    = "program.rtx";
       public const string ConceptMemFileName   = "concept.mem";
@@ -107,18 +125,26 @@ namespace SuperMemoAssistant.Interop
       public const string TextRtxFileName      = "text.rtx";
       public const string VideoMemFileName     = "video.mem";
       public const string VideoRtxFileName     = "video.rtx";
-
-      #endregion
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     }
 
+    /// <summary>SM well known UI values</summary>
+    [SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
     public static class UI
     {
       #region Constants & Statics
 
+      /// <summary>The ElementData window class name</summary>
       public const string ElementDataWindowClassName = "TElDataWind";
-      public const string ElementWindowClassName     = "TElWind";
-      public const string SMMainClassName            = "TSMMain";
 
+      /// <summary>The element window class name</summary>
+      public const string ElementWindowClassName = "TElWind";
+
+      /// <summary>The tree view class name (which coincides with the main window)</summary>
+      public const string SMMainClassName = "TSMMain";
+
+      /// <summary>The main menu class name, unreliable</summary>
+      [Obsolete("Unreliable")]
       public const string MainMenuItemClassName = "#32768";
 
       #endregion
