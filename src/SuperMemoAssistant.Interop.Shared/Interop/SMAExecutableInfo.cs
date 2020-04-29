@@ -36,7 +36,7 @@ namespace SuperMemoAssistant.Interop
   {
     #region Constants & Statics
 
-    private const string EntryAssemblyRegexPattern = @"/app-([\d.]+(?:-[\w\-]+)?|dev)/(SuperMemoAssistant(?:\.PluginHost)?.exe)";
+    private const string EntryAssemblyRegexPattern = @"/app-([\d.]+(?:-[\w\-\.]+)?|dev)/(SuperMemoAssistant(?:\.PluginHost)?.exe)";
 
     /// <summary>The <see cref="SMAExecutableInfo" /> singleton</summary>
     public static SMAExecutableInfo Instance { get; } = new SMAExecutableInfo();
