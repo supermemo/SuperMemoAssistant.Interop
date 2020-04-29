@@ -37,7 +37,7 @@
   <ItemGroup>
     <PackageReference Include="Anotar.Serilog.Fody" Version="5.1.0" PrivateAssets="All" />
     <PackageReference Include="Extensions.System.IO" Version="0.1.0.3" />
-    <PackageReference Include="MSBuild.Tools" Version="0.2.60">
+    <PackageReference Include="MSBuild.Tools" Version="0.2.61">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
