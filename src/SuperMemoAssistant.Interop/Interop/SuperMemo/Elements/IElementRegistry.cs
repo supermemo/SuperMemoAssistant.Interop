@@ -52,7 +52,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements
     /// <param name="options">Defines optional settings for creating the elements</param>
     /// <param name="builders">The new elements' definitions</param>
     /// <returns>Success of operation</returns>
-    bool Add(out List<ElemCreationResult> failed, ElemCreationFlags options, params ElementBuilder[] builders);
+    bool Add(out List<ElemCreationResult> results, ElemCreationFlags options, params ElementBuilder[] builders);
 
     /// <summary>Deletes the element <paramref name="element" /></summary>
     /// <param name="element"></param>

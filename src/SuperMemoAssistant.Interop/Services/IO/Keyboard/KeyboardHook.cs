@@ -254,54 +254,57 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
           if (MainCallback != null && hk.Modifiers != KeyModifiers.None)
             MainCallback(hk);
 
-          if (hkReg != null)
+          if (hkReg == null)
+            return Native.CallNextHookEx(_windowsHookHandle,
+                                         nCode,
+                                         wParam,
+                                         lParam);
+
+          bool scopeMatches = true;
+
+          if (hkReg.Scopes != HotKeyScopes.Global)
           {
-            bool scopeMatches = true;
+            var foregroundWdwHandle = Native.GetForegroundWindow();
 
-            if (hkReg.Scopes != HotKeyScopes.Global)
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (foregroundWdwHandle == null || foregroundWdwHandle == IntPtr.Zero)
             {
-              var foregroundWdwHandle = Native.GetForegroundWindow();
-
-              // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-              if (foregroundWdwHandle == null || foregroundWdwHandle == IntPtr.Zero)
-              {
-                scopeMatches = false;
-              }
-
-              // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-              else if (_elWdwHandle == null || _elWdwHandle == IntPtr.Zero)
-              {
-                LogTo.Warning("KeyboardHook: HotKey {0} requested with scope {1}, but _elWdwHandle is {2}. Trying to refresh.",
-                              hk, Enum.GetName(typeof(HotKeyScopes), hkReg.Scopes), _elWdwHandle);
-
-                OnElementWindowAvailable();
-
-                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-                if (_elWdwHandle == null || _elWdwHandle == IntPtr.Zero)
-                  scopeMatches = false;
-              }
-
-              else if (hkReg.Scopes == HotKeyScopes.SMBrowser && foregroundWdwHandle != _elWdwHandle)
-              {
-                scopeMatches = false;
-              }
-
-              else if (hkReg.Scopes == HotKeyScopes.SM)
-              {
-                _ = Native.GetWindowThreadProcessId(foregroundWdwHandle, out var foregroundProcId);
-
-                if (foregroundProcId != _smProcessId)
-                  scopeMatches = false;
-              }
+              scopeMatches = false;
             }
 
-            if (scopeMatches)
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            else if (_elWdwHandle == null || _elWdwHandle == IntPtr.Zero)
             {
-              TriggeredCallbacks.Enqueue(hkReg.Callback);
-              TriggeredEvent.Set();
+              LogTo.Warning("KeyboardHook: HotKey {0} requested with scope {1}, but _elWdwHandle is {2}. Trying to refresh.",
+                            hk, Enum.GetName(typeof(HotKeyScopes), hkReg.Scopes), _elWdwHandle);
 
-              return (IntPtr)1;
+              OnElementWindowAvailable();
+
+              // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+              if (_elWdwHandle == null || _elWdwHandle == IntPtr.Zero)
+                scopeMatches = false;
             }
+
+            else if (hkReg.Scopes == HotKeyScopes.SMBrowser && foregroundWdwHandle != _elWdwHandle)
+            {
+              scopeMatches = false;
+            }
+
+            else if (hkReg.Scopes == HotKeyScopes.SM)
+            {
+              _ = Native.GetWindowThreadProcessId(foregroundWdwHandle, out var foregroundProcId);
+
+              if (foregroundProcId != _smProcessId)
+                scopeMatches = false;
+            }
+          }
+
+          if (scopeMatches)
+          {
+            TriggeredCallbacks.Enqueue(hkReg.Callback);
+            TriggeredEvent.Set();
+
+            return (IntPtr)1;
           }
         }
       }
@@ -314,11 +317,10 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
 
     private void OnSMAAvailable(Interop.SuperMemo.ISuperMemoAssistant sma)
     {
+      sma.SM.UI.ElementWdw.OnAvailable += new ActionProxy(OnElementWindowAvailable);
+
       if (sma.SM.UI.ElementWdw.IsAvailable)
         OnElementWindowAvailable();
-
-      else
-        sma.SM.UI.ElementWdw.OnAvailable += new ActionProxy(OnElementWindowAvailable);
     }
 
     private void OnElementWindowAvailable()

@@ -28,6 +28,7 @@
 namespace SuperMemoAssistant.Interop.SuperMemo.Core
 {
   using System.IO;
+  using global::Extensions.System.IO;
 
   /// <summary>Extension methods for <see cref="SMCollection" /></summary>
   public static class SMCollectionEx
@@ -124,6 +125,30 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Core
       return absolutePath.StartsWith(basePath, System.StringComparison.InvariantCultureIgnoreCase)
         ? absolutePath.Substring(basePath.Length).TrimStart('\\', '/')
         : absolutePath;
+    }
+
+    /// <summary>
+    /// Checks whether the collection exists or not.
+    /// </summary>
+    /// <param name="collection">The collection to check</param>
+    /// <returns>Whether the collection exists or not.</returns>
+    public static bool Exists(this SMCollection collection)
+    {
+      var knoFilePath = new FilePath(collection.GetKnoFilePath());
+
+      return knoFilePath.Exists() && Directory.Exists(collection.GetRootDirPath());
+    }
+
+    /// <summary>
+    /// Checks whether the collection is locked or not.
+    /// </summary>
+    /// <param name="collection">The collection to check</param>
+    /// <returns>Whether the collection is locked or not.</returns>
+    public static bool IsLocked(this SMCollection collection)
+    {
+      var knoFilePath = new FilePath(collection.GetKnoFilePath());
+
+      return knoFilePath.IsLocked();
     }
 
     #endregion
