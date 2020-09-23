@@ -164,10 +164,13 @@ namespace SuperMemoAssistant.Sys.Collections
           return false;
 
         OnCountPropertyChanging();
+        
+        var list = _set.ToList();
+        var idx = list.IndexOf(item);
 
         _set.Remove(item);
 
-        OnCollectionChanged(NotifyCollectionChangedAction.Remove, item);
+        OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, idx);
 
         OnCountPropertyChanged();
 
@@ -422,6 +425,10 @@ namespace SuperMemoAssistant.Sys.Collections
       [SuppressPropertyChangedWarnings]
       private void OnCollectionChanged(NotifyCollectionChangedAction action, object item)
         => OnCollectionChanged(new NotifyCollectionChangedEventArgs(action, item));
+
+      [SuppressPropertyChangedWarnings]
+      private void OnCollectionChanged(NotifyCollectionChangedAction action, object item, int idx)
+        => OnCollectionChanged(new NotifyCollectionChangedEventArgs(action, item, idx));
       
       [SuppressPropertyChangedWarnings]
       private void OnCollectionChanged(IList newItems, IList oldItems)
