@@ -179,5 +179,19 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     /// <param name="adjustPriority">Whether to adjust the priority on the interval</param>
     /// <returns>Success of operation</returns>
     bool ForceRepetitionAndResume(int interval, bool adjustPriority);
+
+    /// <summary>
+    ///   Uses the LockWindowUpdate function in the Win32 API to lock the UI. This is used by SM when you create a new element 
+    ///   - SM locks the UI and switches to the new element in the background while the window is locked.
+    /// </summary>
+    /// <returns>Success of operation</returns>
+    public bool EnterSMUpdateLock()
+
+    /// <summary>
+    ///   Uses the LockWindowUpdate function in the Win32 API to release the UI lock. This is used by SM when you create a new element 
+    ///   - SM locks the UI and switches to the new element in the background while the window is locked.
+    /// </summary>
+    /// <returns>Success of operation</returns>
+    public bool QuitSMUpdateLock()
   }
 }
