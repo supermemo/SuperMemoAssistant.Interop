@@ -185,13 +185,13 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     ///   - SM locks the UI and switches to the new element in the background while the window is locked.
     /// </summary>
     /// <returns>Success of operation</returns>
-    public bool EnterSMUpdateLock()
+    public bool EnterSMUpdateLock();
 
     /// <summary>
     ///   Uses the LockWindowUpdate function in the Win32 API to release the UI lock. This is used by SM when you create a new element 
     ///   - SM locks the UI and switches to the new element in the background while the window is locked.
     /// </summary>
     /// <returns>Success of operation</returns>
-    public bool QuitSMUpdateLock()
+    public bool QuitSMUpdateLock();	
   }
 }
