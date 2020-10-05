@@ -36,6 +36,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements
   using System.Collections.Generic;
   using Builders;
   using Core;
+  using Interop.SuperMemo.Elements.Models;
   using Models;
   using Registry.Types;
   using Types;
@@ -48,7 +49,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements
     IElement Root { get; }
 
     /// <summary>Adds a new elements in the user's Collection</summary>
-    /// <param name="failed">Elements that failed to be created</param>
+    /// <param name="results">Details about the Success or error result for every element</param>
     /// <param name="options">Defines optional settings for creating the elements</param>
     /// <param name="builders">The new elements' definitions</param>
     /// <returns>Success of operation</returns>
@@ -58,6 +59,15 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements
     /// <param name="element"></param>
     /// <returns>Success of operation</returns>
     bool Delete(IElement element);
+
+    /// <summary>
+    /// Search for elements matching the given text <paramref name="query"/>.
+    /// </summary>
+    /// <param name="query">The text query. See <see href="https://mikegoatly.github.io/lifti/docs/searching/"/></param>
+    /// <param name="branch">The branch in which to search. Will use the root element if null</param>
+    /// <param name="includeBranchRoot">Whether to include the branch element in the search</param>
+    /// <returns></returns>
+    List<ElementTextSearchMatch> Search(string query, IElement branch = null, bool includeBranchRoot = true);
 
     /// <summary>Raised when a new element has been created. See <see cref="SMElementEventArgs" /></summary>
     event Action<SMElementEventArgs> OnElementCreated;
