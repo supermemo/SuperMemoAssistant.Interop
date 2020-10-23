@@ -19,15 +19,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2020/03/29 00:21
-// Modified On:  2020/04/07 07:07
-// Modified By:  Alexis
 
 #endregion
-
-
 
 
 
@@ -160,13 +153,52 @@ namespace SuperMemoAssistant.Extensions
     }
 
     /// <summary>
-    /// Safely raises the <paramref name="event"/> event. If a target from the invocation list throws a <see cref="RemotingException"/> it is forcefully unsubscribed for the event.
+    ///   Safely raises the <paramref name="event" /> event. If a target from the invocation list throws a
+    ///   <see cref="RemotingException" /> it is forcefully unsubscribed for the event.
+    /// </summary>
+    /// <param name="event">The event to raise</param>
+    /// <param name="eventName">Friendly name for the event</param>
+    /// <param name="unsubscribeDelegate">
+    ///   The action to run to unsubscribe the given delegate from the
+    ///   <paramref name="event" />
+    /// </param>
+    public static void InvokeRemote(
+      this Action    @event,
+      string         eventName,
+      Action<Action> unsubscribeDelegate)
+    {
+      foreach (var handler in @event.GetInvocationList().Cast<Action>())
+        try
+        {
+          handler();
+        }
+        catch (RemotingException remoteEx)
+        {
+          LogTo.Warning(remoteEx, "{EventName}: Remoting exception while notifying remote service - forcing unsubscribe", eventName);
+          unsubscribeDelegate?.Invoke(handler);
+        }
+        catch (NullReferenceException)
+        {
+          LogTo.Warning("Null handler called for event {EventName}.", eventName);
+        }
+        catch (Exception ex)
+        {
+          LogTo.Error(ex, "{EventName}: Exception while notifying remote service", eventName);
+        }
+    }
+
+    /// <summary>
+    ///   Safely raises the <paramref name="event" /> event. If a target from the invocation list throws a
+    ///   <see cref="RemotingException" /> it is forcefully unsubscribed for the event.
     /// </summary>
     /// <typeparam name="TParam1"></typeparam>
     /// <param name="event">The event to raise</param>
     /// <param name="eventName">Friendly name for the event</param>
     /// <param name="p1">The event argument</param>
-    /// <param name="unsubscribeDelegate">The action to run to unsubscribe the given delegate from the <paramref name="event"/></param>
+    /// <param name="unsubscribeDelegate">
+    ///   The action to run to unsubscribe the given delegate from the
+    ///   <paramref name="event" />
+    /// </param>
     public static void InvokeRemote<TParam1>(
       this Action<TParam1>    @event,
       string                  eventName,

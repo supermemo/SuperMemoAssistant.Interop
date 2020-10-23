@@ -2,6 +2,7 @@
 <Project Sdk="SuperMemoAssistant.Sdk.WindowsDesktop">
   <PropertyGroup Label="Build">
     <OutputType>Library</OutputType>
+    <RootNamespace>SuperMemoAssistant</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Deterministic>true</Deterministic>
     <UseWPF>true</UseWPF>
