@@ -27,6 +27,7 @@
 
 namespace SuperMemoAssistant.Interop.Interop.SuperMemo.Elements.Models
 {
+  using System;
   using SuperMemoAssistant.Interop.SuperMemo.Content.Components;
   using SuperMemoAssistant.Interop.SuperMemo.Elements.Types;
   using SuperMemoAssistant.Interop.SuperMemo.Registry.Members;
@@ -34,6 +35,7 @@ namespace SuperMemoAssistant.Interop.Interop.SuperMemo.Elements.Models
   /// <summary>
   /// Represents an element matching a certain text search query
   /// </summary>
+  [Serializable]
   public class ElementTextSearchMatch
   {
     #region Constructors
