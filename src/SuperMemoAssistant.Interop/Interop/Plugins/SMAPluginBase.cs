@@ -19,11 +19,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2020/03/29 00:21
-// Modified On:  2020/04/07 14:18
-// Modified By:  Alexis
 
 #endregion
 
@@ -46,6 +41,7 @@ namespace SuperMemoAssistant.Interop.Plugins
   using Services.IO.HotKeys;
   using Services.IO.Keyboard;
   using SuperMemo;
+  using SuperMemo.Core;
   using Sys.Remoting;
 
   /// <inheritdoc cref="SMAPluginBase{TPlugin}" />
@@ -53,6 +49,11 @@ namespace SuperMemoAssistant.Interop.Plugins
     where TPlugin : SMAPluginBase<TPlugin>
   {
     #region Properties & Fields - Non-Public
+
+    private ActionProxy<SMCollection> _onCollectionSelectedProxy;
+    private ActionProxy               _onSMStartedProxy;
+    private ActionProxy               _onSMStartingProxy;
+    private ActionProxy               _onSMStoppedProxy;
 
     /// <summary>Whether this object was disposed</summary>
     protected bool IsDisposed { get; private set; }
@@ -185,11 +186,15 @@ namespace SuperMemoAssistant.Interop.Plugins
       if (PluginMgr == null)
         throw new NullReferenceException($"{nameof(PluginMgr)} is null");
 
-      Svc.Plugin                  = this;
-      Svc.SMA                     = SMA;
-      Svc.CollectionConfiguration = new CollectionConfigurationService(Svc.SM.Collection, this);
+      Svc.Plugin = this;
+      Svc.SMA    = SMA;
 
-      PluginInit();
+      Svc.SMA.OnCollectionSelectedEvent += _onCollectionSelectedProxy = new ActionProxy<SMCollection>(OnCollectionSelected);
+      Svc.SMA.OnSMStartedEvent          += _onSMStartedProxy          = new ActionProxy(OnSMStarted);
+      Svc.SMA.OnSMStartingEvent         += _onSMStartingProxy         = new ActionProxy(OnSMStarting);
+      Svc.SMA.OnSMStoppedEvent          += _onSMStoppedProxy          = new ActionProxy(OnSMStopped);
+
+      OnPluginInitialized();
     }
 
     /// <inheritdoc />
@@ -246,7 +251,53 @@ namespace SuperMemoAssistant.Interop.Plugins
       Logger.ReloadAnotarLogger<TPlugin>();
     }
 
-    /// <summary>Creates the WPF application. Override to use a custom Application implementation</summary>
+    /// <summary>
+    ///   Triggered when the collection to be loaded in SM has been selected. If overriden, make sure to call base method.
+    ///   <see cref="ISuperMemoAssistant.OnCollectionSelectedEvent" />
+    /// </summary>
+    /// <param name="col">The selected collection</param>
+    protected virtual void OnCollectionSelected(SMCollection col)
+    {
+      Svc.CollectionConfiguration = new CollectionConfigurationService(col, this);
+
+      Svc.SMA.OnCollectionSelectedEvent -= _onCollectionSelectedProxy;
+    }
+
+    /// <summary>
+    ///   Triggered when the SM process is created. If overriden, make sure to call base method.
+    ///   <see cref="ISuperMemoAssistant.OnSMStartingEvent" />
+    /// </summary>
+    protected virtual void OnSMStarting()
+    {
+      Svc.SMA.OnSMStartingEvent -= _onSMStartingProxy;
+    }
+
+    /// <summary>
+    ///   Triggered when the SM process has been stopped. Make sure to provide a visual feedback for long-running tasks. If
+    ///   overriden, make sure to call base method. <see cref="ISuperMemoAssistant.OnSMStartedEvent" />
+    /// </summary>
+    /// <remarks>
+    ///   Warning: While SMA only allows a single instance of its executable to be run, the user can open the collection that
+    ///   was just closed by running the SuperMemo executable directly.
+    /// </remarks>
+    protected virtual void OnSMStarted()
+    {
+      Svc.SMA.OnSMStartedEvent -= _onSMStartedProxy;
+    }
+
+    /// <summary>
+    ///   Triggered when the SM process is fully started, and the collection loaded. If overriden, make sure to call base
+    ///   method. <see cref="ISuperMemoAssistant.OnSMStoppedEvent" />
+    /// </summary>
+    protected virtual void OnSMStopped()
+    {
+      Svc.SMA.OnSMStoppedEvent -= _onSMStoppedProxy;
+    }
+
+    /// <summary>
+    ///   Creates the WPF application. Override to use a custom Application implementation
+    ///   <see cref="ISuperMemoAssistant.OnCollectionSelectedEvent" />
+    /// </summary>
     /// <returns></returns>
     protected virtual Application CreateApplication()
     {
