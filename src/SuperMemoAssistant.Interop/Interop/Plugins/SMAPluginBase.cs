@@ -191,8 +191,10 @@ namespace SuperMemoAssistant.Interop.Plugins
 
       OnPluginInitialized();
 
-      if (Svc.SM.UI.ElementWdw.IsAvailable)
+      if (Svc.SM?.UI?.ElementWdw?.IsAvailable ?? false)
       {
+        Svc.CollectionConfiguration = new CollectionConfigurationService(Svc.SM.Collection, this);
+
         OnSMStarted();
 
         return;
