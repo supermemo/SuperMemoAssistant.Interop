@@ -267,7 +267,11 @@ namespace SuperMemoAssistant.Interop.Plugins
     {
       Svc.CollectionConfiguration = new CollectionConfigurationService(col, this);
 
-      Svc.SMA.OnCollectionSelectedEvent -= _onCollectionSelectedProxy;
+      if (_onCollectionSelectedProxy != null)
+      {
+        Svc.SMA.OnCollectionSelectedEvent -= _onCollectionSelectedProxy;
+        _onCollectionSelectedProxy        =  null;
+      }
     }
 
     /// <summary>
@@ -276,7 +280,11 @@ namespace SuperMemoAssistant.Interop.Plugins
     /// </summary>
     protected virtual void OnSMStarting()
     {
-      Svc.SMA.OnSMStartingEvent -= _onSMStartingProxy;
+      if (_onSMStartingProxy != null)
+      {
+        Svc.SMA.OnSMStartingEvent -= _onSMStartingProxy;
+        _onSMStartingProxy        =  null;
+      }
     }
     
     /// <summary>
@@ -285,9 +293,13 @@ namespace SuperMemoAssistant.Interop.Plugins
     /// </summary>
     protected virtual void OnSMStarted()
     {
-      Svc.SMA.OnSMStartedEvent -= _onSMStartedProxy;
+      if (_onSMStartedProxy != null)
+      {
+        Svc.SMA.OnSMStartedEvent -= _onSMStartedProxy;
+        _onSMStartedProxy = null;
+      }
     }
-    
+
     /// <summary>
     ///   Triggered when the SM process has been stopped. Make sure to provide a visual feedback for long-running tasks. If
     ///   overriden, make sure to call base method. <see cref="ISuperMemoAssistant.OnSMStoppedEvent" />
@@ -298,7 +310,11 @@ namespace SuperMemoAssistant.Interop.Plugins
     /// </remarks>
     protected virtual void OnSMStopped()
     {
-      Svc.SMA.OnSMStoppedEvent -= _onSMStoppedProxy;
+      if (_onSMStoppedProxy != null)
+      {
+        Svc.SMA.OnSMStoppedEvent -= _onSMStoppedProxy;
+        _onSMStoppedProxy        =  null;
+      }
     }
 
     /// <summary>
