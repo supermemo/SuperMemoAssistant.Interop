@@ -92,11 +92,11 @@ namespace SuperMemoAssistant.Interop.Plugins
         Svc.Configuration = new PluginConfigurationService(this);
         Svc.HotKeyManager = HotKeyManager.Instance.Initialize(Svc.Configuration, Svc.KeyboardHotKey);
 
-        LogTo.Debug("Plugin {AssemblyName} initialized", AssemblyName);
+        LogTo.Information("Plugin {AssemblyName} version {AssemblyVersion} initialized", AssemblyName, AssemblyVersion);
       }
       catch (Exception ex)
       {
-        LogTo.Error(ex, "Exception while initializing {Name}", GetType().Name);
+        LogTo.Error(ex, "Exception while initializing {AssemblyName} version {AssemblyVersion}", AssemblyName, AssemblyVersion);
         throw;
       }
     }
@@ -195,13 +195,13 @@ namespace SuperMemoAssistant.Interop.Plugins
       {
         Svc.CollectionConfiguration = new CollectionConfigurationService(Svc.SM.Collection, this);
 
-        OnSMStarted();
+        OnSMStarted(true);
 
         return;
       }
 
       Svc.SMA.OnCollectionSelectedEvent += _onCollectionSelectedProxy = new ActionProxy<SMCollection>(OnCollectionSelected);
-      Svc.SMA.OnSMStartedEvent          += _onSMStartedProxy          = new ActionProxy(OnSMStarted);
+      Svc.SMA.OnSMStartedEvent          += _onSMStartedProxy          = new ActionProxy(() => OnSMStarted(false));
       Svc.SMA.OnSMStartingEvent         += _onSMStartingProxy         = new ActionProxy(OnSMStarting);
       Svc.SMA.OnSMStoppedEvent          += _onSMStoppedProxy          = new ActionProxy(OnSMStopped);
     }
@@ -288,12 +288,16 @@ namespace SuperMemoAssistant.Interop.Plugins
         _onSMStartingProxy        =  null;
       }
     }
-    
+
     /// <summary>
     ///   Triggered when the SM process is fully started, and the collection loaded. If overriden, make sure to call base
     ///   method. <see cref="ISuperMemoAssistant.OnSMStartedEvent" />
     /// </summary>
-    protected virtual void OnSMStarted()
+    /// <param name="wasSMAlreadyStarted">
+    ///   Whether SM was already started when the Plugin was initialized (e.g. the Plugin was manually started through the
+    ///   Settings window).
+    /// </param>
+    protected virtual void OnSMStarted(bool wasSMAlreadyStarted)
     {
       if (_onSMStartedProxy != null)
       {
