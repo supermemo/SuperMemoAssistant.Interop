@@ -19,11 +19,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2020/03/29 00:21
-// Modified On:  2020/04/07 04:46
-// Modified By:  Alexis
 
 #endregion
 
@@ -179,5 +174,31 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     /// <param name="adjustPriority">Whether to adjust the priority on the interval</param>
     /// <returns>Success of operation</returns>
     bool ForceRepetitionAndResume(int interval, bool adjustPriority);
+
+    /// <summary>
+    ///   Freezes the element window. Useful for preventing user interaction when running background operations. Use with
+    ///   caution.
+    /// </summary>
+    /// <returns></returns>
+    bool EnterSMUpdateLock();
+
+    /// <summary>Unfreezes the element window see <see cref="EnterSMUpdateLock" />. Use with caution.</summary>
+    /// <returns></returns>
+    bool QuitSMUpdateLock();
+
+    /// <summary>Stops monitoring element changes (and propagating them), see <see cref="OnElementChanged" />.</summary>
+    /// <returns></returns>
+    bool EnterSMAUpdateLock();
+
+    /// <summary>
+    ///   Resumes monitoring element changes, see <see cref="EnterSMAUpdateLock" />. If <paramref name="updateValue" /> is
+    ///   true, and the element has changed, the <see cref="OnElementChanged" /> event will be fired.
+    /// </summary>
+    /// <param name="updateValue">
+    ///   Whether to check if the element has changed since <see cref="EnterSMAUpdateLock" /> was
+    ///   called.
+    /// </param>
+    /// <returns></returns>
+    bool QuitSMAUpdateLock(bool updateValue = false);
   }
 }

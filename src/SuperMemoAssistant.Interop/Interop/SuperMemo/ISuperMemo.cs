@@ -19,54 +19,82 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2020/01/13 16:38
-// Modified On:  2020/01/13 20:38
-// Modified By:  Alexis
 
 #endregion
 
 
 
 
-using System;
-using SuperMemoAssistant.Interop.SuperMemo.Content.Components;
-using SuperMemoAssistant.Interop.SuperMemo.Core;
-using SuperMemoAssistant.Interop.SuperMemo.Elements;
-using SuperMemoAssistant.Interop.SuperMemo.Registry.Types;
-using SuperMemoAssistant.Interop.SuperMemo.UI.Element;
-
 namespace SuperMemoAssistant.Interop.SuperMemo
 {
+  using System;
+  using Content.Components;
+  using Core;
+  using Elements;
+  using Registry.Types;
+  using UI.Element;
+
+  /// <summary>
+  /// The main SuperMemo service interface. All SM functionalities are accessed through this interface.
+  /// </summary>
   public interface ISuperMemo
   {
-    Version      AppVersion { get; }
+    /// <summary>The running SuperMemo executable's version</summary>
+    Version AppVersion { get; }
+
+    /// <summary>The loaded collection</summary>
     SMCollection Collection { get; }
 
+    /// <summary>SuperMemo executable process ID</summary>
     int ProcessId { get; }
 
+    /// <summary>Seems to prevent some confirmation dialogs from being displayed.</summary>
     bool IgnoreUserConfirmation { get; set; }
 
+    /// <summary>All SuperMemo registries</summary>
     ISuperMemoRegistry Registry { get; }
-    ISuperMemoUI       UI       { get; }
+
+    /// <summary>All SuperMemo windows and functionalities</summary>
+    ISuperMemoUI UI { get; }
   }
 
+  /// <summary>Lists SuperMemo registry and enables access to their functionalities.</summary>
   public interface ISuperMemoRegistry
   {
-    IElementRegistry   Element   { get; }
-    IBinaryRegistry    Binary    { get; }
+    /// <summary>The element registry</summary>
+    IElementRegistry Element { get; }
+
+    /// <summary>The binary registry (e.g. for pdf files)</summary>
+    IBinaryRegistry Binary { get; }
+
+    /// <summary>The component registry</summary>
     IComponentRegistry Component { get; }
-    IConceptRegistry   Concept   { get; }
-    ITextRegistry      Text      { get; }
-    IImageRegistry     Image     { get; }
-    ISoundRegistry     Sound     { get; }
-    IVideoRegistry     Video     { get; }
-    ITemplateRegistry  Template  { get; }
+
+    /// <summary>The concept registry</summary>
+    IConceptRegistry Concept { get; }
+
+    /// <summary>The Text registry</summary>
+    ITextRegistry Text { get; }
+
+    /// <summary>The image registry</summary>
+    IImageRegistry Image { get; }
+
+    /// <summary>The sound registry</summary>
+    ISoundRegistry Sound { get; }
+
+    /// <summary>The video registry</summary>
+    IVideoRegistry Video { get; }
+
+    /// <summary>The template registry</summary>
+    ITemplateRegistry Template { get; }
   }
 
+  /// <summary>Lists SuperMemo windows and enables access to their functionalities.</summary>
   public interface ISuperMemoUI
   {
+    /// <summary>
+    /// The element window (enable e.g. editing text, etc.)
+    /// </summary>
     IElementWdw ElementWdw { get; }
   }
 }
