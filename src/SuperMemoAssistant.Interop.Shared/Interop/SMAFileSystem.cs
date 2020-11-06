@@ -34,7 +34,9 @@ namespace SuperMemoAssistant.Interop
 {
   using System;
   using System.IO;
+  using Configs;
   using global::Extensions.System.IO;
+  using Newtonsoft.Json;
 
   /// <summary>Defines constants to access the various core files of SMA and its plugins</summary>
   public static class SMAFileSystem
@@ -47,6 +49,8 @@ namespace SuperMemoAssistant.Interop
     /// <summary>The config folder name for sma- and collection-specific configuration files</summary>
     public const string ConfigsFolder = "configs";
 
+    public const string PreInitConfigFileName = "supermemoassistant.json";
+
     /// <summary>SMA's root folder under %LocalAppData%</summary>
     public static DirectoryPath AppRootDir =>
       Path.Combine(
@@ -55,11 +59,7 @@ namespace SuperMemoAssistant.Interop
       );
 
     /// <summary>SMA's data folder (under user profile) TODO: Make this configurable</summary>
-    public static DirectoryPath AppDataRootDir =>
-      Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-        SMAConst.Name
-      );
+    public static DirectoryPath AppDataRootDir { get; } = GetAppDataRootDir();
 
     /// <summary>SMA's log folder</summary>
     public static DirectoryPath LogDir => AppDataRootDir.Combine("Logs");
@@ -97,6 +97,12 @@ namespace SuperMemoAssistant.Interop
     /// <summary>Path to Update.exe</summary>
     public static FilePath UpdaterExeFile => AppRootDir.CombineFile(SMAConst.Assembly.Updater);
 
+    public static FilePath PreInitConfigFile =>
+      Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+        PreInitConfigFileName
+      );
+
     public static FilePath TempErrorLog => Path.Combine(Path.GetTempPath(), "SuperMemoAssistant.log");
 
     #endregion
@@ -116,6 +122,43 @@ namespace SuperMemoAssistant.Interop
         return SMAExecutableInfo.Instance.DirectoryPath.CombineFile(filename);
 
       throw new InvalidOperationException("GetAppExeFilePath getter is only available for SuperMemoAssistant");
+    }
+
+    private static string GetAppDataRootDir()
+    {
+      var baseDirPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+      // ReSharper disable once InvertIf
+      if (PreInitConfigFile.Exists())
+      {
+        try
+        {
+          using var fs     = File.Open(PreInitConfigFile.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+          using var reader = new StreamReader(fs);
+
+          var preInitCfg = JsonConvert.DeserializeObject<SMAPreInitCfg>(reader.ReadToEnd());
+
+          if (preInitCfg != null && string.IsNullOrWhiteSpace(preInitCfg.AppDataDirPath) == false)
+          {
+            Directory.CreateDirectory(preInitCfg.AppDataDirPath);
+
+            if (Directory.Exists(preInitCfg.AppDataDirPath) == false)
+              File.WriteAllText(TempErrorLog.FullPath,
+                                $"Invalid AppData location : {preInitCfg.AppDataDirPath}. Reverting to default location.");
+
+            else
+              baseDirPath = preInitCfg.AppDataDirPath;
+          }
+        }
+        catch (Exception ex)
+        {
+          File.WriteAllText(TempErrorLog.FullPath, @$"An exception occured while reading SMA Pre Init configuration file. Reverting to default location.
+File location: {PreInitConfigFile.FullPath}
+Exception: {ex}");
+        }
+      }
+
+      return Path.Combine(baseDirPath, SMAConst.Name);
     }
 
     #endregion

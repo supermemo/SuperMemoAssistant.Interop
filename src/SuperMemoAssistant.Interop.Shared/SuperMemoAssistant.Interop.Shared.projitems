@@ -9,6 +9,7 @@
     <Import_RootNamespace>SuperMemoAssistant</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Interop\Configs\SMAPreInitCfg.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop\SMAConst.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop\SMAExecutableInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interop\SMAFileSystem.cs" />
