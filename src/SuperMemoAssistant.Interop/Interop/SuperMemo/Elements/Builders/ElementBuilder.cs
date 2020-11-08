@@ -36,6 +36,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
   using Content.Contents;
   using Models;
   using Registry.Members;
+  using SMA;
   using Types;
 
   /// <summary>Defines a new element: its properties, its location in the knowledge tree, how to create it, ...</summary>

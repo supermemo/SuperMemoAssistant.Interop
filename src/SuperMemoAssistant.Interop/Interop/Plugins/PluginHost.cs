@@ -19,11 +19,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2020/03/29 00:21
-// Modified On:  2020/04/07 09:05
-// Modified By:  Alexis
 
 #endregion
 
@@ -38,7 +33,7 @@ namespace SuperMemoAssistant.Interop.Plugins
   using System.Diagnostics.CodeAnalysis;
   using PluginManager.Interop.Contracts;
   using PluginManager.Interop.PluginHost;
-  using SuperMemo;
+  using SMA;
 
   /// <inheritdoc />
   [SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]

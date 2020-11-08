@@ -40,7 +40,7 @@ namespace SuperMemoAssistant.Interop.Plugins
   using Services.IO.Diagnostics;
   using Services.IO.HotKeys;
   using Services.IO.Keyboard;
-  using SuperMemo;
+  using SMA;
   using SuperMemo.Core;
   using Sys.Remoting;
 
@@ -302,7 +302,7 @@ namespace SuperMemoAssistant.Interop.Plugins
       if (_onSMStartedProxy != null)
       {
         Svc.SMA.OnSMStartedEvent -= _onSMStartedProxy;
-        _onSMStartedProxy = null;
+        _onSMStartedProxy        =  null;
       }
     }
 
@@ -323,9 +323,7 @@ namespace SuperMemoAssistant.Interop.Plugins
       }
     }
 
-    /// <summary>
-    ///   Creates the WPF application. Override to use a custom Application implementation
-    /// </summary>
+    /// <summary>Creates the WPF application. Override to use a custom Application implementation</summary>
     /// <returns></returns>
     protected virtual Application CreateApplication()
     {

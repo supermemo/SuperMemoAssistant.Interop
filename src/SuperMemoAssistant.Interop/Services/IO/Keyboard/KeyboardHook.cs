@@ -38,7 +38,7 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
   using System.Threading.Tasks;
   using Anotar.Serilog;
   using Extensions;
-  using Interop.SuperMemo;
+  using Interop.SMA;
   using Sys.IO.Devices;
   using Sys.Remoting;
 

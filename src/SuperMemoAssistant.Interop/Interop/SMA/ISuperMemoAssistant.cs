@@ -25,12 +25,13 @@
 
 
 
-namespace SuperMemoAssistant.Interop.SuperMemo
+namespace SuperMemoAssistant.Interop.SMA
 {
   using System;
   using System.Collections.Generic;
-  using Core;
-  using SMA.Notifications;
+  using Notifications;
+  using SuperMemo;
+  using SuperMemo.Core;
 
   /// <summary>SuperMemo Assistant service</summary>
   public interface ISuperMemoAssistant
