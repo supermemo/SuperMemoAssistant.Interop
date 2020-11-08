@@ -30,6 +30,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo
   using System;
   using System.Collections.Generic;
   using Core;
+  using SMA.Notifications;
 
   /// <summary>SuperMemo Assistant service</summary>
   public interface ISuperMemoAssistant
@@ -39,6 +40,9 @@ namespace SuperMemoAssistant.Interop.SuperMemo
 
     /// <summary>Available layout names</summary>
     IEnumerable<string> Layouts { get; }
+
+    /// <summary>The desktop notification manager</summary>
+    INotificationManager NotificationMgr { get; }
 
     /// <summary>Triggered when the collection to be loaded in SM has been selected.</summary>
     event Action<SMCollection> OnCollectionSelectedEvent;

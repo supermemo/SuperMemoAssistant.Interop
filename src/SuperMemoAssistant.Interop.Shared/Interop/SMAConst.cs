@@ -19,10 +19,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Modified On:  2020/03/22 16:11
-// Modified By:  Alexis
 
 #endregion
 
@@ -34,9 +30,7 @@ namespace SuperMemoAssistant.Interop
 {
   using System.Diagnostics.CodeAnalysis;
 
-  /// <summary>
-  /// Contains SMA-related constants (not to be mixed up with <see cref="SMConst"/>)
-  /// </summary>
+  /// <summary>Contains SMA-related constants (not to be mixed up with <see cref="SMConst" />)</summary>
   public static class SMAConst
   {
     #region Constants & Statics
@@ -53,6 +47,17 @@ namespace SuperMemoAssistant.Interop
     #endregion
 
 
+
+
+    /// <summary>API data</summary>
+    public static class API
+    {
+      #region Constants & Statics
+
+      public const string ToastNotificationPluginParameterName = "PluginSessionId";
+
+      #endregion
+    }
 
 
     /// <summary>Assemblies data</summary>

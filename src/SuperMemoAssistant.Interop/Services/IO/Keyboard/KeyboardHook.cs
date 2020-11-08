@@ -38,6 +38,7 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
   using System.Threading.Tasks;
   using Anotar.Serilog;
   using Extensions;
+  using Interop.SuperMemo;
   using Sys.IO.Devices;
   using Sys.Remoting;
 
@@ -312,7 +313,7 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
                                    lParam);
     }
 
-    private void OnSMAAvailable(Interop.SuperMemo.ISuperMemoAssistant sma)
+    private void OnSMAAvailable(ISuperMemoAssistant sma)
     {
       sma.OnSMStartingEvent += new ActionProxy(OnSMStartingEvent);
     }
