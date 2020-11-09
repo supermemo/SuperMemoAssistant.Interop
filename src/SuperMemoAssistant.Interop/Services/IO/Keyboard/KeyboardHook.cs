@@ -19,11 +19,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2020/03/29 00:21
-// Modified On:  2020/04/07 05:30
-// Modified By:  Alexis
 
 #endregion
 
@@ -64,6 +59,8 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
 
 
     #region Properties & Fields - Non-Public
+
+    private ActionProxy _elementWdwAvailableProxy;
 
     private IntPtr _elWdwHandle;
 
@@ -322,16 +319,22 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
 
     private void OnSMStartingEvent()
     {
-      Svc.SM.UI.ElementWdw.OnAvailable += new ActionProxy(OnElementWindowAvailable);
+      Svc.SM.UI.ElementWdw.OnAvailable += _elementWdwAvailableProxy = new ActionProxy(OnElementWindowAvailable);
 
-      if (Svc.SM.UI.ElementWdw.IsAvailable)
-        OnElementWindowAvailable();
+      if (!Svc.SM.UI.ElementWdw.IsAvailable)
+        return;
+
+      OnElementWindowAvailable();
+
+      Svc.SM.UI.ElementWdw.OnAvailable -= _elementWdwAvailableProxy;
     }
 
     private void OnElementWindowAvailable()
     {
       _elWdwHandle = Svc.SM.UI.ElementWdw.Handle;
       _smProcessId = Svc.SM.ProcessId;
+
+      Svc.SM.UI.ElementWdw.OnAvailable -= _elementWdwAvailableProxy;
     }
 
     #endregion
