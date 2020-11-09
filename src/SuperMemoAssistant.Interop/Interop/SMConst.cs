@@ -140,6 +140,9 @@ namespace SuperMemoAssistant.Interop
       /// <summary>The element window class name</summary>
       public const string ElementWindowClassName = "TElWind";
 
+      /// <summary>The content window class name</summary>
+      public const string ContentsWindowClassName = "TContents";
+
       /// <summary>The tree view class name (which coincides with the main window)</summary>
       public const string SMMainClassName = "TSMMain";
 

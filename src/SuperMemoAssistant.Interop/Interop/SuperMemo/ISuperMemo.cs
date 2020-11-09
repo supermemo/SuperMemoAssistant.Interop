@@ -36,6 +36,7 @@ using SuperMemoAssistant.Interop.SuperMemo.Core;
 using SuperMemoAssistant.Interop.SuperMemo.Elements;
 using SuperMemoAssistant.Interop.SuperMemo.Registry.Types;
 using SuperMemoAssistant.Interop.SuperMemo.UI.Element;
+using SuperMemoAssistant.Interop.SuperMemo.UI.Content;
 
 namespace SuperMemoAssistant.Interop.SuperMemo
 {
@@ -68,5 +69,6 @@ namespace SuperMemoAssistant.Interop.SuperMemo
   public interface ISuperMemoUI
   {
     IElementWdw ElementWdw { get; }
+    IContentWdw ContentWdw { get; }
   }
 }
