@@ -33,8 +33,8 @@
 namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
 {
   using System;
-  using Content.Components;
-  using Content.Controls;
+  using SuperMemoAssistant.Interop.SuperMemo.Content.Components;
+  using SuperMemoAssistant.Interop.SuperMemo.Content.Controls;
   using Core;
   using Elements.Models;
   using Elements.Types;
