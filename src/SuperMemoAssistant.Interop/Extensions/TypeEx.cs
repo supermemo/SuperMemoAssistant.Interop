@@ -28,24 +28,29 @@
 namespace SuperMemoAssistant.Extensions
 {
   using System;
-  using System.Reflection;
 
-  /// <summary>Extension methods relating to assembly</summary>
-  public static class AssemblyEx
+  /// <summary>Extends <see cref="Type" /></summary>
+  public static class TypeEx
   {
     #region Methods
 
-    public static string GetAssemblyVersion(this Type typeInAssembly)
+    /// <summary>Checks whether <paramref name="toCheck" /> extends <paramref name="generic" />.</summary>
+    /// <param name="toCheck">The derived type</param>
+    /// <param name="generic">The inherited unbound generic type</param>
+    /// <returns>Whether <paramref name="toCheck" /> inherits from <paramref name="generic" /></returns>
+    public static bool IsSubclassOfUnboundGeneric(this Type toCheck, Type generic)
     {
-      var assembly = typeInAssembly.Assembly;
-      var aivAttr  = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+      while (toCheck != null && toCheck != typeof(object))
+      {
+        var cur = toCheck.IsGenericType ? toCheck.GetGenericTypeDefinition() : toCheck;
 
-      return aivAttr.InformationalVersion;
-    }
+        if (generic == cur)
+          return true;
 
-    public static string GetAssemblyName(this Type typeInAssembly)
-    {
-      return typeInAssembly.Assembly.GetName().Name;
+        toCheck = toCheck.BaseType;
+      }
+
+      return false;
     }
 
     #endregion

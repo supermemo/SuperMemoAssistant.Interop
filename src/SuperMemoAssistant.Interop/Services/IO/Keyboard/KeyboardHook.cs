@@ -322,12 +322,13 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
     {
       Svc.SM.UI.ElementWdw.OnAvailable += _elementWdwAvailableProxy = new ActionProxy(OnElementWindowAvailable);
 
-      if (!Svc.SM.UI.ElementWdw.IsAvailable)
+      if (Svc.SM.UI.ElementWdw.IsAvailable == false)
         return;
 
       OnElementWindowAvailable();
 
-      Svc.SM.UI.ElementWdw.OnAvailable -= _elementWdwAvailableProxy;
+      if (_elementWdwAvailableProxy != null)
+        Svc.SM.UI.ElementWdw.OnAvailable -= _elementWdwAvailableProxy;
     }
 
     private void OnElementWindowAvailable()
@@ -335,7 +336,8 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
       _elWdwHandle = Svc.SM.UI.ElementWdw.Handle;
       _smProcessId = Svc.SM.ProcessId;
 
-      Svc.SM.UI.ElementWdw.OnAvailable -= _elementWdwAvailableProxy;
+      if (_elementWdwAvailableProxy != null)
+        Svc.SM.UI.ElementWdw.OnAvailable -= _elementWdwAvailableProxy;
     }
 
     #endregion
