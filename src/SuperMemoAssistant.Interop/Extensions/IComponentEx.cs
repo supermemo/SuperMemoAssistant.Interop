@@ -42,52 +42,52 @@ namespace SuperMemoAssistant.Extensions
 
     public static IComponentHtml AsWeb(this IComponent component)
     {
-      return (IComponentHtml)component;
+      return component as IComponentHtml;
     }
 
     public static IComponentImage AsImage(this IComponent component)
     {
-      return (IComponentImage)component;
+      return component as IComponentImage;
     }
 
     public static IComponentRtf AsRtf(this IComponent component)
     {
-      return (IComponentRtf)component;
+      return component as IComponentRtf;
     }
 
     public static IComponentShapeEllipse AsEllipse(this IComponent component)
     {
-      return (IComponentShapeEllipse)component;
+      return component as IComponentShapeEllipse;
     }
 
     public static IComponentShapeRectangle AsRectangle(this IComponent component)
     {
-      return (IComponentShapeRectangle)component;
+      return component as IComponentShapeRectangle;
     }
 
     public static IComponentShapeRoundedRectangle AsRoundedRectangle(this IComponent component)
     {
-      return (IComponentShapeRoundedRectangle)component;
+      return component as IComponentShapeRoundedRectangle;
     }
 
     public static IComponentSound AsSound(this IComponent component)
     {
-      return (IComponentSound)component;
+      return component as IComponentSound;
     }
 
     public static IComponentSpelling AsSpelling(this IComponent component)
     {
-      return (IComponentSpelling)component;
+      return component as IComponentSpelling;
     }
 
     public static IComponentText AsText(this IComponent component)
     {
-      return (IComponentText)component;
+      return component as IComponentText;
     }
 
     public static IComponentVideo AsVideo(this IComponent component)
     {
-      return (IComponentVideo)component;
+      return component as IComponentVideo;
     }
 
     #endregion
