@@ -34,25 +34,37 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements
 {
   using System;
   using System.Collections.Generic;
+  using System.Diagnostics.CodeAnalysis;
   using Builders;
   using Core;
   using Models;
   using Registry.Types;
+  using Sys.Remoting;
   using Types;
 
   /// <summary>The <see cref="IElement" /> registry</summary>
-  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
+  [SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
+  [SuppressMessage("Style", "VSTHRD200:Use \"Async\" suffix for async methods", Justification = "<Pending>")]
   public interface IElementRegistry : IRegistry<IElement>
   {
     /// <summary>The root element (id 1)</summary>
     IElement Root { get; }
 
     /// <summary>Adds a new elements in the user's Collection</summary>
-    /// <param name="failed">Elements that failed to be created</param>
+    /// <param name="results">Result for each element builder</param>
     /// <param name="options">Defines optional settings for creating the elements</param>
     /// <param name="builders">The new elements' definitions</param>
     /// <returns>Success of operation</returns>
     bool Add(out List<ElemCreationResult> results, ElemCreationFlags options, params ElementBuilder[] builders);
+
+
+    /// <summary>Adds a new elements in the user's Collection</summary>
+    /// <param name="options">Defines optional settings for creating the elements</param>
+    /// <param name="builders">The new elements' definitions</param>
+    /// <returns>Result for each element builder</returns>
+    RemoteTask<List<ElemCreationResult>> AddAsync(
+      ElemCreationFlags       options,
+      params ElementBuilder[] builders);
 
     /// <summary>Deletes the element <paramref name="element" /></summary>
     /// <param name="element"></param>

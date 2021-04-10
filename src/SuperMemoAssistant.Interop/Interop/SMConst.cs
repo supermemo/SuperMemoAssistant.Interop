@@ -19,15 +19,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2020/03/29 00:21
-// Modified On:  2020/04/07 01:00
-// Modified By:  Alexis
 
 #endregion
-
-
 
 
 
@@ -101,6 +94,11 @@ namespace SuperMemoAssistant.Interop
       /// </summary>
       public const string RegistryFolder = "registry";
 
+      /// <summary>
+      /// The recovery folder. Contains files that would otherwise automatically have been deleted (e.g. orphaned elements).
+      /// </summary>
+      public const string RecoverFolder = "recover";
+
       #endregion
     }
 
@@ -108,6 +106,7 @@ namespace SuperMemoAssistant.Interop
     public static class Files
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+      public const string EmptySlotsFile       = "emptyslots.dat";
       public const string BinaryMemFileName    = "program.mem";
       public const string BinaryRtxFileName    = "program.rtx";
       public const string ConceptMemFileName   = "concept.mem";
@@ -144,8 +143,7 @@ namespace SuperMemoAssistant.Interop
       public const string SMMainClassName = "TSMMain";
 
       /// <summary>The main menu class name, unreliable</summary>
-      [Obsolete("Unreliable")]
-      public const string MainMenuItemClassName = "#32768";
+      [Obsolete("Unreliable")] public const string MainMenuItemClassName = "#32768";
 
       #endregion
     }

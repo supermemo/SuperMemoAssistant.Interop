@@ -32,7 +32,10 @@
 
 namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
 {
+  using System;
+
   /// <summary>The element display state (e.g. Ctrl+E in element window)</summary>
+  [Serializable]
   public enum ElementDisplayState
   {
     /// <summary>"Edit" mode</summary>

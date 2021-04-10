@@ -44,6 +44,15 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
   [Serializable]
   public class ElementBuilder
   {
+    #region Properties & Fields - Non-Public
+
+    private int? _parentId;
+
+    #endregion
+
+
+
+
     #region Constructors
 
     /// <summary>Defines a new element</summary>
@@ -143,10 +152,26 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     public double Priority { get; private set; }
 
     /// <summary>Determines the element's parent element -- a.k.a which branch should this element belong to</summary>
-    public IElement Parent { get; private set; }
+    public int? ParentId
+    {
+      get => _parentId;
+      private set => _parentId = value == null ? null : (int?)Math.Max(1, value.Value);
+    }
+
+    /// <summary>Determines the element's parent element -- a.k.a which branch should this element belong to</summary>
+    public IElement Parent
+    {
+      set => ParentId = value.Id;
+    }
 
     /// <summary>Defines the element's concept</summary>
-    public IConcept Concept { get; private set; }
+    public int? ConceptId { get; private set; }
+
+    /// <summary>Defines the element's concept</summary>
+    public IConcept Concept
+    {
+      set => ConceptId = value.Id;
+    }
 
     /// <summary>Defines in which queue (learning, pending, ...) should the element be inserted</summary>
     public ElementStatus Status { get; private set; }
@@ -155,7 +180,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     public bool ForceGenerateTitle { get; private set; }
 
     /// <summary>Which concepts are associated this element</summary>
-    public List<IConcept> LinkedConcepts { get; } = new List<IConcept>();
+    public List<int> LinkedConcepts { get; } = new List<int>();
 
     #endregion
 
@@ -223,6 +248,15 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     }
 
     /// <summary>Determines the element's parent element -- a.k.a which branch should this element belong to</summary>
+    /// <param name="parentId"></param>
+    /// <returns></returns>
+    public ElementBuilder WithParent(int parentId)
+    {
+      ParentId = parentId;
+      return this;
+    }
+
+    /// <summary>Determines the element's parent element -- a.k.a which branch should this element belong to</summary>
     /// <param name="parent"></param>
     /// <returns></returns>
     public ElementBuilder WithParent(IElement parent)
@@ -266,7 +300,16 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     /// <returns></returns>
     public ElementBuilder AddLinkedConcepts(IEnumerable<IConcept> concepts)
     {
-      LinkedConcepts.AddRange(concepts);
+      LinkedConcepts.AddRange(concepts.Select(c => c.Id));
+      return this;
+    }
+
+    /// <summary>Associates this element with the given concepts</summary>
+    /// <param name="conceptIds"></param>
+    /// <returns></returns>
+    public ElementBuilder AddLinkedConcepts(IEnumerable<int> conceptIds)
+    {
+      LinkedConcepts.AddRange(conceptIds);
       return this;
     }
 
@@ -275,7 +318,16 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     /// <returns></returns>
     public ElementBuilder AddLinkedConcept(IConcept concept)
     {
-      LinkedConcepts.Add(concept);
+      LinkedConcepts.Add(concept.Id);
+      return this;
+    }
+
+    /// <summary>Associates this element with a concept</summary>
+    /// <param name="conceptId"></param>
+    /// <returns></returns>
+    public ElementBuilder AddLinkedConcept(int conceptId)
+    {
+      LinkedConcepts.Add(conceptId);
       return this;
     }
 
