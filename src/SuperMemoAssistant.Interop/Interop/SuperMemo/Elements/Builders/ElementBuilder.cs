@@ -155,13 +155,13 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     public int? ParentId
     {
       get => _parentId;
-      private set => _parentId = value == null ? null : (int?)Math.Max(1, value.Value);
+      private set => _parentId = value.HasValue ? Math.Max(1, value.Value) : null;
     }
 
     /// <summary>Determines the element's parent element -- a.k.a which branch should this element belong to</summary>
     public IElement Parent
     {
-      set => ParentId = value.Id;
+      set => ParentId = value?.Id;
     }
 
     /// <summary>Defines the element's concept</summary>
@@ -170,7 +170,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     /// <summary>Defines the element's concept</summary>
     public IConcept Concept
     {
-      set => ConceptId = value.Id;
+      set => ConceptId = value?.Id;
     }
 
     /// <summary>Defines in which queue (learning, pending, ...) should the element be inserted</summary>
