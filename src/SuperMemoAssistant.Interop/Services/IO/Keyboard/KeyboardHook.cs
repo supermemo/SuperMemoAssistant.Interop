@@ -61,13 +61,12 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
 
     #region Properties & Fields - Non-Public
 
-    private ActionProxy _elementWdwAvailableProxy;
-
-    private IntPtr _elWdwHandle;
+    //private ActionProxy _elementWdwAvailableProxy;
+    //private IntPtr _elWdwHandle;
+    //private int                        _smProcessId;
 
     private Native.KeyboardHookHandler _hookProc;
     private bool                       _isDisposed;
-    private int                        _smProcessId;
     private IntPtr                     _windowsHookHandle;
 
     private ConcurrentDictionary<HotKey, RegisteredHotKey> HotKeys { get; } =
@@ -109,7 +108,7 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
                                  $"Failed to adjust keyboard hooks for '{Process.GetCurrentProcess().ProcessName}'. Error {errorCode}: {new Win32Exception(Marshal.GetLastWin32Error()).Message}.");
       }
 
-      Svc.OnSMAAvailable += OnSMAAvailable;
+      //Svc.OnSMAAvailable += OnSMAAvailable;
     }
 
     /// <summary>Destructor</summary>
@@ -265,25 +264,25 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
             var foregroundWdwHandle = Native.GetForegroundWindow();
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            //if (_elWdwHandle == null || _elWdwHandle == IntPtr.Zero)
+            //{
+            //  LogTo.Warning("KeyboardHook: HotKey {0} requested with scope {1}, but _elWdwHandle is {2}. Trying to refresh.",
+            //                hk, Enum.GetName(typeof(HotKeyScopes), hkReg.Scopes), _elWdwHandle);
+
+            //  OnElementWindowAvailable();
+
+            //  // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            //  if (_elWdwHandle == null || _elWdwHandle == IntPtr.Zero)
+            //    scopeMatches = false;
+            //}
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (foregroundWdwHandle == null || foregroundWdwHandle == IntPtr.Zero)
             {
               scopeMatches = false;
             }
 
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            else if (_elWdwHandle == null || _elWdwHandle == IntPtr.Zero)
-            {
-              LogTo.Warning("KeyboardHook: HotKey {0} requested with scope {1}, but _elWdwHandle is {2}. Trying to refresh.",
-                            hk, Enum.GetName(typeof(HotKeyScopes), hkReg.Scopes), _elWdwHandle);
-
-              OnElementWindowAvailable();
-
-              // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-              if (_elWdwHandle == null || _elWdwHandle == IntPtr.Zero)
-                scopeMatches = false;
-            }
-
-            else if (hkReg.Scopes == HotKeyScopes.SMBrowser && foregroundWdwHandle != _elWdwHandle)
+            else if (hkReg.Scopes == HotKeyScopes.SMBrowser && foregroundWdwHandle != Svc.SM.UI.ElementWdw.Handle)
             {
               scopeMatches = false;
             }
@@ -292,7 +291,7 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
             {
               _ = Native.GetWindowThreadProcessId(foregroundWdwHandle, out var foregroundProcId);
 
-              if (foregroundProcId != _smProcessId)
+              if (foregroundProcId != Svc.SM.ProcessId)
                 scopeMatches = false;
             }
           }
@@ -313,6 +312,7 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
                                    lParam);
     }
 
+#if false
     private void OnSMAAvailable(ISuperMemoAssistant sma)
     {
       sma.OnSMStartingEvent += new ActionProxy(OnSMStartingEvent);
@@ -339,6 +339,7 @@ namespace SuperMemoAssistant.Services.IO.Keyboard
       if (_elementWdwAvailableProxy != null)
         Svc.SM.UI.ElementWdw.OnAvailable -= _elementWdwAvailableProxy;
     }
+#endif
 
     #endregion
 
