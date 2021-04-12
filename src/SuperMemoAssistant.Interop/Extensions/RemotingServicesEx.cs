@@ -183,7 +183,7 @@ namespace SuperMemoAssistant.Extensions
         }
         catch (Exception ex)
         {
-          LogTo.Error(ex, "{EventName}: Exception while notifying remote service", eventName);
+          LogTo.Warning(ex, "{EventName}: Exception while notifying remote service", eventName);
         }
     }
 
@@ -221,7 +221,7 @@ namespace SuperMemoAssistant.Extensions
         }
         catch (Exception ex)
         {
-          LogTo.Error(ex, "{EventName}: Exception while notifying remote service", eventName);
+          LogTo.Warning(ex, "{EventName}: Exception while notifying remote service", eventName);
         }
     }
 

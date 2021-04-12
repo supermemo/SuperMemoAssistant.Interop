@@ -76,6 +76,8 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
     #region Properties Impl - Public
 
     /// <inheritdoc />
+    public string UniqueId => Original.UniqueId;
+    /// <inheritdoc />
     public int Id => Original.Id;
     /// <inheritdoc />
     public string Title => Original.Title;

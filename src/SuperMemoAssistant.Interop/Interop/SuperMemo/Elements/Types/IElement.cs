@@ -38,6 +38,13 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
   /// <summary>Represents an element in SuperMemo. See <see cref="IElementRegistry" /></summary>
   public interface IElement
   {
+    /// <summary>
+    ///   <see cref="Id" /> does not reliably identify an element. SuperMemo re-uses ids when elements are deleted, therefore
+    ///   stored ids may reference different elements in the future.
+    /// </summary>
+    [Obsolete("Not implemented yet, returns the same as Id.")]
+    string UniqueId { get; }
+
     /// <summary>The element id, starting from 1. Element id 1 is the root element.</summary>
     int Id { get; }
 

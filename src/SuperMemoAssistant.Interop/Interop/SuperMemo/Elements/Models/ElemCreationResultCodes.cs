@@ -46,7 +46,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
     /// <summary>The parent branch has reached its maximum children capacity.</summary>
     ErrorTooManyChildren = 1 << 30,
 
-    /// <summary>An unknown error occured, check the logs for more information.</summary>
+    /// <summary>An unknown error occurred, check the logs for more information.</summary>
     ErrorUnknown = 1 << 31
   }
 }

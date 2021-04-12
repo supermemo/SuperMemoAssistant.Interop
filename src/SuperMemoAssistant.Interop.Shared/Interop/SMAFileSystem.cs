@@ -152,7 +152,7 @@ namespace SuperMemoAssistant.Interop
         }
         catch (Exception ex)
         {
-          File.WriteAllText(TempErrorLog.FullPath, @$"An exception occured while reading SMA Pre Init configuration file. Reverting to default location.
+          File.WriteAllText(TempErrorLog.FullPath, @$"An exception occurred while reading SMA Pre Init configuration file. Reverting to default location.
 File location: {PreInitConfigFile.FullPath}
 Exception: {ex}");
         }
