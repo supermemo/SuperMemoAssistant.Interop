@@ -36,6 +36,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
   using Content.Contents;
   using Models;
   using Registry.Members;
+  using Registry.Models;
   using SMA;
   using Types;
 
@@ -182,6 +183,11 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
       set => TemplateId = value?.Id;
     }
 
+    /// <summary>
+    /// The method used for apply <see cref="Template"/>
+    /// </summary>
+    public TemplateUseMode TemplateApplyMode { get; set; } = TemplateUseMode.Apply;
+
     /// <summary>Defines in which queue (learning, pending, ...) should the element be inserted</summary>
     public ElementStatus Status { get; private set; }
 
@@ -289,6 +295,15 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     public ElementBuilder WithTemplate(ITemplate template)
     {
       Template = template;
+      return this;
+    }
+
+    /// <summary>Defines how to apply <see cref="Template"/></summary>
+    /// <param name="applyMode"></param>
+    /// <returns></returns>
+    public ElementBuilder WithTemplateApplyMode(TemplateUseMode applyMode)
+    {
+      TemplateApplyMode = applyMode;
       return this;
     }
 
