@@ -35,6 +35,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
   using Elements.Types;
   using Learning;
   using Registry.Members;
+  using Registry.Models;
 
   /// <summary>SuperMemo Element Window service</summary>
   public interface IElementWdw : IWdw
@@ -206,7 +207,8 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     ///   window.
     /// </summary>
     /// <param name="templateId">The template to apply</param>
+    /// <param name="applyMode">Defines how the template will be applied</param>
     /// <returns>Whether the operation was successful</returns>
-    bool ApplyTemplate(int templateId);
+    bool ApplyTemplate(int templateId, TemplateUseMode applyMode = TemplateUseMode.Apply);
   }
 }
