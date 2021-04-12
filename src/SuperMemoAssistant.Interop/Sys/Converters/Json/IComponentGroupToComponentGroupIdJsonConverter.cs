@@ -28,38 +28,41 @@
 namespace SuperMemoAssistant.Sys.Converters.Json
 {
   using System;
+  using Interop.SuperMemo.Content;
   using Newtonsoft.Json;
   using Newtonsoft.Json.Linq;
+  using Services;
 
-  /// <summary>
-  ///   Forces deserializing any valid json object as a string
-  ///   https://stackoverflow.com/questions/29980580/deserialize-json-object-property-to-string
-  /// </summary>
-  public class JsonConverterObjectToString : JsonConverter
+  /// <summary>Converts an <see cref="IComponentGroup" /> to its integer id representation, and vice-versa.</summary>
+  /// <example>
+  ///   <code>
+  /// [JsonConverter(typeof(IComponentGroupToComponentGroupIdJsonConverter))]
+  /// public IComponentGroup ComponentGroup { get; set; }
+  /// </code>
+  /// </example>
+  // ReSharper disable once InconsistentNaming
+  public class IComponentGroupToComponentGroupIdJsonConverter : JsonConverter<IComponentGroup>
   {
     #region Methods Impl
 
     /// <inheritdoc />
-    public override bool CanConvert(Type objectType)
-    {
-      return objectType == typeof(JTokenType);
-    }
-
-    /// <inheritdoc />
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    public override IComponentGroup ReadJson(JsonReader      reader,
+                                             Type            objectType,
+                                             IComponentGroup existingValue,
+                                             bool            hasExistingValue,
+                                             JsonSerializer  serializer)
     {
       JToken token = JToken.Load(reader);
-      if (token.Type == JTokenType.Object)
-        return token.ToString();
 
-      return null;
+      return token.Type == JTokenType.Integer
+        ? Svc.SM.Registry.Component[token.ToObject<int>()]
+        : null;
     }
 
     /// <inheritdoc />
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, IComponentGroup value, JsonSerializer serializer)
     {
-      //serialize as actual JSON and not string data
-      var token = JToken.Parse(value.ToString());
+      var token = JToken.FromObject(value.Offset);
 
       writer.WriteToken(token.CreateReader());
     }

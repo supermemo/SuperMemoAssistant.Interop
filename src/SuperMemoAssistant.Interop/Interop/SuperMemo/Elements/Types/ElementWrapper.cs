@@ -124,6 +124,12 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
 
     /// <inheritdoc />
     public bool Done() => Original.Done();
+    
+    /// <inheritdoc />
+    public string ToJson()
+    {
+      return Original.ToJson();
+    }
 
     #endregion
 

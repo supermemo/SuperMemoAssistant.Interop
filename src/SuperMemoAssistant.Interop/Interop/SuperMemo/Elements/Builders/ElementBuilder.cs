@@ -173,6 +173,15 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
       set => ConceptId = value?.Id;
     }
 
+    /// <summary>Defines the element's template</summary>
+    public int? TemplateId { get; private set; }
+
+    /// <summary>Defines the element's template</summary>
+    public ITemplate Template
+    {
+      set => TemplateId = value?.Id;
+    }
+
     /// <summary>Defines in which queue (learning, pending, ...) should the element be inserted</summary>
     public ElementStatus Status { get; private set; }
 
@@ -271,6 +280,15 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     public ElementBuilder WithConcept(IConcept concept)
     {
       Concept = concept;
+      return this;
+    }
+
+    /// <summary>Defines the element's template</summary>
+    /// <param name="template"></param>
+    /// <returns></returns>
+    public ElementBuilder WithTemplate(ITemplate template)
+    {
+      Template = template;
       return this;
     }
 

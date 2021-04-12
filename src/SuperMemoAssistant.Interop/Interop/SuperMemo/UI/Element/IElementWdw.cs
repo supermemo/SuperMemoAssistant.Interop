@@ -200,5 +200,13 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     /// </param>
     /// <returns></returns>
     bool QuitSMAUpdateLock(bool updateValue = false);
+
+    /// <summary>
+    ///   Applies the template identified by <paramref name="templateId" /> to the currently displayed element in the element
+    ///   window.
+    /// </summary>
+    /// <param name="templateId">The template to apply</param>
+    /// <returns>Whether the operation was successful</returns>
+    bool ApplyTemplate(int templateId);
   }
 }

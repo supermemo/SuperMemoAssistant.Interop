@@ -19,11 +19,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
-// 
-// 
-// Created On:   2020/03/29 00:21
-// Modified On:  2020/04/07 06:13
-// Modified By:  Alexis
 
 #endregion
 
@@ -89,6 +84,10 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
 
     /// <summary>The children immediately underneath this element</summary>
     IEnumerable<IElement> Children { get; }
+
+    /// <summary>Returns a json representation of this element.</summary>
+    /// <returns>Json string</returns>
+    string ToJson();
 
     /// <summary>Displays this element in the <see cref="IElementWdw" /></summary>
     /// <returns>Success of operation</returns>

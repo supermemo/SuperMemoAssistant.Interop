@@ -28,38 +28,41 @@
 namespace SuperMemoAssistant.Sys.Converters.Json
 {
   using System;
+  using Interop.SuperMemo.Elements.Types;
   using Newtonsoft.Json;
   using Newtonsoft.Json.Linq;
+  using Services;
 
-  /// <summary>
-  ///   Forces deserializing any valid json object as a string
-  ///   https://stackoverflow.com/questions/29980580/deserialize-json-object-property-to-string
-  /// </summary>
-  public class JsonConverterObjectToString : JsonConverter
+  /// <summary>Converts an <see cref="IElement" /> to its integer id representation, and vice-versa.</summary>
+  /// <example>
+  ///   <code>
+  /// [JsonConverter(typeof(IElementToElementIdJsonConverter))]
+  /// public IElement Element { get; set; }
+  /// </code>
+  /// </example>
+  // ReSharper disable once InconsistentNaming
+  public class IElementToElementIdJsonConverter : JsonConverter<IElement>
   {
     #region Methods Impl
 
     /// <inheritdoc />
-    public override bool CanConvert(Type objectType)
-    {
-      return objectType == typeof(JTokenType);
-    }
-
-    /// <inheritdoc />
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    public override IElement ReadJson(JsonReader     reader,
+                                      Type           objectType,
+                                      IElement       existingValue,
+                                      bool           hasExistingValue,
+                                      JsonSerializer serializer)
     {
       JToken token = JToken.Load(reader);
-      if (token.Type == JTokenType.Object)
-        return token.ToString();
 
-      return null;
+      return token.Type == JTokenType.Integer
+        ? Svc.SM.Registry.Element[token.ToObject<int>()]
+        : null;
     }
 
     /// <inheritdoc />
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, IElement value, JsonSerializer serializer)
     {
-      //serialize as actual JSON and not string data
-      var token = JToken.Parse(value.ToString());
+      var token = JToken.FromObject(value.Id);
 
       writer.WriteToken(token.CreateReader());
     }
