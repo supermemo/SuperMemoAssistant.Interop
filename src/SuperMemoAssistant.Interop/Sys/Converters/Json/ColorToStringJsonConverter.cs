@@ -31,7 +31,7 @@ namespace SuperMemoAssistant.Sys.Converters.Json
   using System.Windows.Media;
   using Newtonsoft.Json;
 
-  internal class ColorToStringJsonConverter : JsonConverter<Color>
+  public class ColorToStringJsonConverter : JsonConverter<Color>
   {
     #region Methods Impl
 
