@@ -126,7 +126,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     public ElementType Type { get; }
 
     /// <summary>Defines the initial interval for the element</summary>
-    public int Interval { get; private set; }
+    public int Interval { get; private set; } = 1;
 
     /// <summary>The content definitions (e.g. text, images, ...)</summary>
     public List<ContentBase> Contents { get; } = new List<ContentBase>();
