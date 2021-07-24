@@ -129,6 +129,10 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     int GenerateCloze(bool memorize                  = true,
                       bool askUserToScheduleInterval = false);
 
+    bool AssignGrade(int grade);
+
+    bool ExecuteRepetition(bool topicsToo = true);
+
     /// <summary>Deletes the currently displayed element</summary>
     /// <returns>Success of operation</returns>
     bool Delete();
