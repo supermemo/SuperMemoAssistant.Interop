@@ -133,6 +133,8 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
 
     bool ExecuteRepetition(bool topicsToo = true);
 
+    bool BeginLearning(LearningMode mode);
+
     /// <summary>Deletes the currently displayed element</summary>
     /// <returns>Success of operation</returns>
     bool Delete();

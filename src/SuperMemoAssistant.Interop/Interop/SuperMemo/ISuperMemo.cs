@@ -56,6 +56,11 @@ namespace SuperMemoAssistant.Interop.SuperMemo
 
     /// <summary>All SuperMemo windows and functionalities</summary>
     ISuperMemoUI UI { get; }
+
+    /// <summary>
+    /// Exits SuperMemo (equivalent to exiting from SM's menu).
+    /// </summary>
+    void Exit();
   }
 
   /// <summary>Lists SuperMemo registry and enables access to their functionalities.</summary>
