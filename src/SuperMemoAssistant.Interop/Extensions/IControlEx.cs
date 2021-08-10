@@ -58,5 +58,10 @@ namespace SuperMemoAssistant.Extensions
     {
       return ctrl as IControlImage;
     }
+
+    public static IControlSound AsSound(this IControl ctrl)
+    {
+      return ctrl as IControlSound;
+    }
   }
 }

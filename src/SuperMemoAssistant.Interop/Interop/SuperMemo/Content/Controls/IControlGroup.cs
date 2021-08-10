@@ -47,8 +47,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Content.Controls
     IControlImage GetFirstImageControl();
     IControlRtf   GetFirstRtfControl();
     IControlText  GetFirstTextControl();
-
-    //IControlSound                 GetFirstSoundControl();
+    IControlSound GetFirstSoundControl();
     //IControlSpelling              GetFirstSpellingControl();
     //IControlVideo                 GetFirstVideoControl();
   }
