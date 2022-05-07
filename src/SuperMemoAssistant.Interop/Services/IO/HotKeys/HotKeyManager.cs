@@ -250,8 +250,10 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
 
       var hkData = CreateHotKeyData(id, description, scope != null, defaultHotKey, callback, enabled);
 
-      _idDataMap[id]      = hkData;
-      _defaultHotKeys[id] = defaultHotKey;
+      _idDataMap[id] = hkData;
+
+      if (defaultHotKey != null)
+        _defaultHotKeys[id] = defaultHotKey;
 
       if (hkData.ActualHotKey != null)
         _hotKeyDataMap[hkData.ActualHotKey] = hkData;
