@@ -85,7 +85,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
 
     public void OnActualHotKeyChanged(object before, object after)
     {
-      if (before == null || before == after)
+      if (before == after)
         return;
 
       HotKeyChanged?.Invoke(
