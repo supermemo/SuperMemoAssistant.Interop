@@ -258,7 +258,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
       if (hkData.ActualHotKey != null)
         _hotKeyDataMap[hkData.ActualHotKey] = hkData;
 
-      if (enabled && defaultHotKey != null && scope != null)
+      if (enabled && hkData.ActualHotKey != null && scope != null)
         _kbHookSvc.RegisterHotKey(hkData.ActualHotKey, callback, scope.Value);
 
       LogTo.Debug("Assigned default hotkey {DefaultHotKey} to {Id} ({Description}).", defaultHotKey, id, description);
