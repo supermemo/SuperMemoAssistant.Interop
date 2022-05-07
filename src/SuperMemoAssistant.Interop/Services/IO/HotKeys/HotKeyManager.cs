@@ -245,7 +245,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
       if (_idDataMap.ContainsKey(id))
         throw new ArgumentException($"Hotkey id {id} is already registered");
 
-      if (_defaultHotKeys.Reverse.ContainsKey(defaultHotKey))
+      if (defaultHotKey != null && _defaultHotKeys.Reverse.ContainsKey(defaultHotKey))
         throw new ArgumentException($"Default hotkey for {id} is already used by {_defaultHotKeys.Reverse[defaultHotKey]}");
 
       var hkData = CreateHotKeyData(id, description, scope != null, defaultHotKey, callback, enabled);
@@ -256,7 +256,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
       if (hkData.ActualHotKey != null)
         _hotKeyDataMap[hkData.ActualHotKey] = hkData;
 
-      if (enabled && scope != null)
+      if (enabled && defaultHotKey != null && scope != null)
         _kbHookSvc.RegisterHotKey(hkData.ActualHotKey, callback, scope.Value);
 
       LogTo.Debug("Assigned default hotkey {DefaultHotKey} to {Id} ({Description}).", defaultHotKey, id, description);
@@ -275,7 +275,7 @@ namespace SuperMemoAssistant.Services.IO.HotKeys
       if (_userHotKeyMap.ContainsKey(id))
         actualHotKey = _userHotKeyMap[id];
 
-      else if (_hotKeyDataMap.ContainsKey(defaultHotKey) == false)
+      else if (defaultHotKey != null && _hotKeyDataMap.ContainsKey(defaultHotKey) == false)
         actualHotKey = defaultHotKey;
 
       var hkData = new HotKeyData(
