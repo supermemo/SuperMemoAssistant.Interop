@@ -125,6 +125,9 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     /// <summary>The kind of element (e.g. article, item, task, ...)</summary>
     public ElementType Type { get; }
 
+    /// <summary>Defines the initial interval for the element</summary>
+    public int Interval { get; private set; } = 1;
+
     /// <summary>The content definitions (e.g. text, images, ...)</summary>
     public List<ContentBase> Contents { get; } = new List<ContentBase>();
 
@@ -295,6 +298,18 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Builders
     public ElementBuilder WithTemplate(ITemplate template)
     {
       Template = template;
+      return this;
+    }
+
+    /// <summary>Determines the element's initial interval</summary>
+    /// <param name="interval"></param>
+    /// <returns></returns>
+    public ElementBuilder WithInterval(int interval)
+    {
+      if (interval < 1)
+        interval = 1;
+
+      Interval = interval;
       return this;
     }
 
