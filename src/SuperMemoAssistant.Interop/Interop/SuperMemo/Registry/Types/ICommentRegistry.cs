@@ -1,4 +1,4 @@
-﻿#region License & Metadata
+#region License & Metadata
 
 // The MIT License (MIT)
 // 
@@ -19,19 +19,28 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
+// 
+// 
+// Created On:   2022/12/17 00:21
+// Modified On:  2022/12/17 04:51
+// Modified By:  Ki
 
 #endregion
 
 
 
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Content.Controls
+namespace SuperMemoAssistant.Interop.SuperMemo.Registry.Types
 {
-  using System;
+  using Members;
 
-  public interface IControlHtml : IControlTextBase
+  /// <summary>The <see cref="IText" /> registry</summary>
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
+  public interface ICommentRegistry : IRegistry<IComment>
   {
-    IntPtr? DocumentHwnd { get; }
-    public mshtml.IHTMLDocument2 Document { get; }
+    /// <summary>Adds a new text member to the registry</summary>
+    /// <param name="text">The text content</param>
+    /// <returns>The created registry member id, or -1 if the operation failed</returns>
+    int Add(string text);
   }
 }

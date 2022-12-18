@@ -22,8 +22,9 @@
 // 
 // 
 // Created On:   2020/03/29 00:21
-// Modified On:  2020/04/07 06:23
-// Modified By:  Alexis
+// Modified On:  2022/12/17 06:23
+// Modified By:  - Alexis
+//               - Ki
 
 #endregion
 
@@ -81,6 +82,8 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
     public int Id => Original.Id;
     /// <inheritdoc />
     public string Title => Original.Title;
+    /// <inheritdoc />
+    public string Comment => Original.Comment;
     /// <inheritdoc />
     public bool Deleted => Original.Deleted;
     /// <inheritdoc />

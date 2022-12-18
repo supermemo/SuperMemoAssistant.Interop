@@ -76,6 +76,9 @@ namespace SuperMemoAssistant.Interop.SuperMemo
     /// <summary>The Text registry</summary>
     ITextRegistry Text { get; }
 
+    /// <summary>The Comment registry</summary>
+    ICommentRegistry Comment { get; }
+
     /// <summary>The image registry</summary>
     IImageRegistry Image { get; }
 

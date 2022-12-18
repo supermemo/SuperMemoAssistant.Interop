@@ -1,4 +1,4 @@
-﻿#region License & Metadata
+#region License & Metadata
 
 // The MIT License (MIT)
 // 
@@ -25,13 +25,12 @@
 
 
 
-namespace SuperMemoAssistant.Interop.SuperMemo.Content.Controls
+namespace SuperMemoAssistant.Interop.SuperMemo.Registry.Members
 {
-  using System;
-
-  public interface IControlHtml : IControlTextBase
+  /// <summary>A text string from the text registry</summary>
+  public interface IComment : IRegistryMember
   {
-    IntPtr? DocumentHwnd { get; }
-    public mshtml.IHTMLDocument2 Document { get; }
+    /// <summary>The text member's text content</summary>
+    string Value { get; set; }
   }
 }

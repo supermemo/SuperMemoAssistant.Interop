@@ -33,6 +33,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
   using Core;
   using Models;
   using Registry.Members;
+  using SuperMemoAssistant.Interop.SuperMemo.Registry;
   using UI.Element;
 
   /// <summary>Represents an element in SuperMemo. See <see cref="IElementRegistry" /></summary>
@@ -50,6 +51,9 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Types
 
     /// <summary>The element's title (in the KT and registry)</summary>
     string Title { get; }
+
+    /// <summary>The element's comment (in the KT and registry)</summary>
+    string Comment { get; }
 
     /// <summary>Whether this element is marked as deleted.</summary>
     bool Deleted { get; }

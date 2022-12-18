@@ -137,6 +137,18 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     /// <returns>Success of operation</returns>
     bool Done();
 
+    // TODO docstring
+    bool DismissElement(int elNo);
+
+    // TODO docstring
+    bool NextRepetition();
+
+    // TODO docstring
+    bool BackButtonClick();
+
+    // TODO docstring
+    bool ForwardButtonClick();
+
     /// <summary>Raises an event when the element in the Element window changes</summary>
     event Action<SMDisplayedElementChangedEventArgs> OnElementChanged;
 
@@ -156,6 +168,40 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     /// <param name="interval">The new interval</param>
     /// <returns>Success of operation</returns>
     bool PostponeRepetition(int interval);
+
+    /// <summary>Changes the element grade</summary>
+    /// <param name="grade">The new grade</param>
+    /// <returns>Success of operation</returns>
+    bool SetGrade(int grade);
+ 
+    /// <summary>Gets the priority of the element with the element number</summary>
+    /// <param name="elementNumber">The element number</param>
+    /// <returns>The priority of the element; 0 if unsuccessful operation</returns>
+    float GetElementPriority(int elementNumber);
+ 
+    /// <summary>Gets data from the current element in string format</summary>
+    /// <returns>The data from the current element in string format</returns>
+    string GetElementAsText();
+ 
+    /// <summary>
+    ///   Begin Learning Mode. This might not always work as intended depending on the current
+    ///   <see cref="LearningMode" />
+    /// <param name="learningMode">The current learning mode?</param>
+    /// </summary>
+    /// <returns>Success of operation</returns>
+    bool BeginLearning(LearningMode learningMode);
+ 
+    // TODO Delete this
+    bool FindText();
+ 
+    // TODO give doc string
+    bool SetTitle(int elementId, string title);
+ 
+    // TODO give doc string
+    bool AppendComment(int elementId, string comment);
+ 
+    // TODO give doc string
+    bool SetPriority(int elementId, double priority);
 
     /// <summary>
     ///   Executes a repetition on the current element and postpones it for <paramref name="interval" /> days. If
