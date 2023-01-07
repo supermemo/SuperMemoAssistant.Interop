@@ -137,16 +137,21 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     /// <returns>Success of operation</returns>
     bool Done();
 
-    // TODO docstring
+    /// <summary>Dismisses the element</summary>
+    /// <param name="elNo">The element number</param>
+    /// <returns>Success of operation</returns>
     bool DismissElement(int elNo);
 
-    // TODO docstring
+    /// <summary>Executes the "Next Repetition" function used after grading in the Element window</summary>
+    /// <returns>Success of operation</returns>
     bool NextRepetition();
 
-    // TODO docstring
+    /// <summary>Navigates to the previous element in the navigator.</summary>
+    /// <returns>Success of operation</returns>
     bool BackButtonClick();
 
-    // TODO docstring
+    /// <summary>Navigates to the next element in the navigator.</summary>
+    /// <returns>Success of operation</returns>
     bool ForwardButtonClick();
 
     /// <summary>Raises an event when the element in the Element window changes</summary>
@@ -170,11 +175,11 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     bool PostponeRepetition(int interval);
 
     /// <summary>Changes the element grade</summary>
-    /// <param name="grade">The new grade</param>
+    /// <param name="grade">The new grade on a range from 0 to 4 inclusive (SM18)</param>
     /// <returns>Success of operation</returns>
     bool SetGrade(int grade);
  
-    /// <summary>Gets the priority of the element with the element number</summary>
+    /// <summary>Not yet implemented. Gets the priority of the element with the element number</summary>
     /// <param name="elementNumber">The element number</param>
     /// <returns>The priority of the element; 0 if unsuccessful operation</returns>
     float GetElementPriority(int elementNumber);
@@ -191,16 +196,29 @@ namespace SuperMemoAssistant.Interop.SuperMemo.UI.Element
     /// <returns>Success of operation</returns>
     bool BeginLearning(LearningMode learningMode);
  
-    // TODO Delete this
+    // <summary>
+    ///   Not yet implemented
+    /// </summary>
+    /// <returns>Success of operation</returns>
     bool FindText();
  
-    // TODO give doc string
+    /// <summary>
+    ///   Set the title of the Element internally. This change may not reflect on the
+    ///   current SM window until it is restarted. 
+    /// </summary>
+    /// <returns>Success of operation</returns>
     bool SetTitle(int elementId, string title);
  
-    // TODO give doc string
+    // <summary>
+    ///   Attach a new comment to the element. 
+    /// </summary> 
+    /// <returns>Success of operation</returns>
     bool AppendComment(int elementId, string comment);
  
-    // TODO give doc string
+    // <summary>
+    ///  Set the priority of the element from 0 to 100.
+    /// </summary>
+    /// <returns>Success of operation</returns>
     bool SetPriority(int elementId, double priority);
 
     /// <summary>
