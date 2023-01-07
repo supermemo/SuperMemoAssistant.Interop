@@ -122,6 +122,9 @@ namespace SuperMemoAssistant.Interop
       public const string TextMemFileName      = "text.mem";
       public const string TextRtfFileName      = "text.rtf";
       public const string TextRtxFileName      = "text.rtx";
+      public const string CommentMemFileName   = "comment.mem";
+      public const string CommentRtfFileName   = "comment.rtf";
+      public const string CommentRtxFileName   = "comment.rtx";
       public const string VideoMemFileName     = "video.mem";
       public const string VideoRtxFileName     = "video.rtx";
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

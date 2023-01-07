@@ -49,4 +49,14 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Learning
     Pending      = 9,
     Drill        = 10,
   }
+
+  //TODO: check these values and use in SetPriority
+  /*public enum Grade : int
+  {
+    Bad = 0,
+    Fail = 1,
+    Pass = 2,
+    Good = 3,
+    Great = 4,
+  }*/
 }

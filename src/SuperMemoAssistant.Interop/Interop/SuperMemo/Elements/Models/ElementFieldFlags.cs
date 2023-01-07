@@ -52,6 +52,7 @@ namespace SuperMemoAssistant.Interop.SuperMemo.Elements.Models
     Concept         = 1024,
     AFactor         = 2048,
     Deleted         = 4096,
+    Comment         = 8192,
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
   }
 }
